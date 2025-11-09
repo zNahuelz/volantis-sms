@@ -838,3 +838,4 @@ dist
 
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
+src/appsettings.json
