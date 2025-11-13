@@ -1,9 +1,8 @@
-import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import type { Route } from "../+types/root";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Inicio de Sesión - Volantis" },
+    { title: "Volantis - WELCOME" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }
@@ -11,7 +10,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   return (
     <div>
-      <h1>Hello World!</h1>
+      <h1>Welcome!</h1>
     </div>
   );
 }
