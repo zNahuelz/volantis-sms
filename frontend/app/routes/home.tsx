@@ -1,9 +1,9 @@
-import type { Route } from "../+types/root";
+import type { Route } from '../+types/root';
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Volantis - WELCOME" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: 'Volantis - WELCOME' },
+    { name: 'description', content: 'Welcome to React Router!' },
   ];
 }
 

@@ -1,5 +1,6 @@
-import ky from "ky";
-import { authStore } from "~/context/authContext";
+import ky from 'ky';
+import { authStore } from '~/context/authContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 let token: string | null = null;
 
@@ -8,12 +9,12 @@ export const setAuthToken = (newToken: string | null) => {
 };
 
 export const http = ky.create({
-  prefixUrl: "https://localhost:8000/api/v1",
+  prefixUrl: API_URL,
   hooks: {
     beforeRequest: [
       (request) => {
         if (token) {
-          request.headers.set("Authorization", `Bearer ${token}`);
+          request.headers.set('Authorization', `Bearer ${token}`);
         }
       },
     ],

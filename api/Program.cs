@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy
-            .WithOrigins("http://localhost:5173")
+            .WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -63,13 +63,13 @@ builder.Services.AddSingleton<IAuthorizationHandler, AbilityHandler>();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("CanListProducts", policy =>
-        policy.Requirements.Add(new AbilityRequirement("product:list")));
+    options.AddPolicy("CanListSuppliers", policy =>
+        policy.Requirements.Add(new AbilityRequirement("product:list", "sys:root")));
 
     options.AddPolicy("CanEditEmployees", policy =>
         policy.Requirements.Add(new AbilityRequirement("employee:edit")));
     options.AddPolicy("isAdmin", policy =>
-        policy.Requirements.Add(new AbilityRequirement("root:root")));
+        policy.Requirements.Add(new AbilityRequirement("sys:root")));
 });
 
 builder.Services.AddScoped<JwtService>();

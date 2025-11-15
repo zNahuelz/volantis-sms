@@ -1,8 +1,8 @@
-import { clsx } from "clsx";
-import { Icon as IconifyIcon } from "@iconify/react";
-import type { ComponentProps } from "react";
+import { clsx } from 'clsx';
+import { Icon as IconifyIcon } from '@iconify/react';
+import type { ComponentProps } from 'react';
 
-interface ButtonProps extends ComponentProps<"button"> {
+interface ButtonProps extends ComponentProps<'button'> {
   label?: string;
   color?: string;
   isLoading?: boolean;
@@ -12,12 +12,12 @@ interface ButtonProps extends ComponentProps<"button"> {
 
 export default function Button({
   label,
-  color = "btn-primary",
-  type = "button",
+  color = 'btn-primary',
+  type = 'button',
   disabled = false,
   icon,
   isLoading = false,
-  width = "w-auto",
+  width = 'w-auto',
   className,
   ...props
 }: ButtonProps) {
@@ -26,18 +26,18 @@ export default function Button({
       type={type}
       disabled={disabled || isLoading}
       className={clsx(
-        "btn flex items-center gap-2 transition-all duration-150",
+        'btn flex items-center gap-2 transition-all duration-150',
         color,
         width,
         {
-          "cursor-not-allowed": disabled || isLoading,
+          'cursor-not-allowed': disabled || isLoading,
         },
         className,
       )}
       {...props}
     >
       {isLoading && <span className="loading loading-dots loading-sm" />}
-      {icon && <IconifyIcon icon={icon} className="w-5 h-5" />}
+      {icon && <IconifyIcon icon={icon} className="h-5 w-5" />}
       {label && <span>{label}</span>}
     </button>
   );

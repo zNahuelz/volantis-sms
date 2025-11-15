@@ -1,11 +1,18 @@
-import Button from "~/components/Button";
-import Input from "~/components/Input";
-import { EmailIcon, PasswordIcon } from "~/constants/iconNames";
-import { EmailText, LoginButtonText, PasswordText } from "~/constants/strings";
-import { useForm } from "react-hook-form";
-import { loginService } from "../services/authService";
-import { useAuth } from "~/context/authContext";
-import { useNavigate } from "react-router";
+import Button from '~/components/Button';
+import Input from '~/components/Input';
+import { EmailIcon, PasswordIcon } from '~/constants/iconNames';
+import {
+  ClickHereText,
+  EmailText,
+  ForgotPasswordText,
+  LoginButtonText,
+  PasswordText,
+  RememberMe,
+} from '~/constants/strings';
+import { useForm } from 'react-hook-form';
+import { loginService } from '../services/authService';
+import { useAuth } from '~/context/authContext';
+import { useNavigate } from 'react-router';
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -16,38 +23,42 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
+    watch,
   } = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
+      rememberMe: false,
     },
   });
+
+  const rememberMe = watch('rememberMe');
 
   const onSubmit = async (data: any) => {
     try {
       const res = await loginService(data);
-      login(res.token, res.user);
-      navigate("/dashboard");
+      login(res.token, res.user, data.rememberMe);
+      navigate('/dashboard');
     } catch (err: any) {
-      setError("email", { message: "Credenciales incorrectas" });
-      setError("password", { message: "Credenciales incorrectas" });
+      setError('email', { message: 'Credenciales incorrectas' });
+      setError('password', { message: 'Credenciales incorrectas' });
     }
   };
 
   return (
-    <form className="space-y-3 w-full" onSubmit={handleSubmit(onSubmit)}>
+    <form className="w-full space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <Input
         width="w-full"
         icon={EmailIcon}
         placeholder={EmailText}
         error={!!errors.email}
         errorMessage={errors.email?.message}
-        {...register("email", {
-          required: "Debe ingresar un correo electrónico.",
+        {...register('email', {
+          required: 'Debe ingresar un correo electrónico.',
           pattern: {
             value: /\S+@\S+\.\S+/,
             message:
-              "Debe ingresar un correo electrónico con el formato email@dominio.com",
+              'Debe ingresar un correo electrónico con el formato email@dominio.com',
           },
         })}
       />
@@ -58,14 +69,28 @@ export default function LoginForm() {
         type="password"
         error={!!errors.password}
         errorMessage={errors.password?.message}
-        {...register("password", {
-          required: "Debe ingresar una contraseña.",
+        {...register('password', {
+          required: 'Debe ingresar una contraseña.',
           minLength: {
             value: 5,
-            message: "La contraseña debe tener al menos 5 carácteres.",
+            message: 'La contraseña debe tener al menos 5 carácteres.',
           },
         })}
       />
+      <label className="label cursor-pointer gap-2">
+        <input
+          type="checkbox"
+          className="checkbox checkbox-sm checkbox-primary"
+          {...register('rememberMe')}
+        />
+        {RememberMe}
+      </label>
+      <p className="mb-3 text-center text-sm">
+        {ForgotPasswordText}
+        <span className="text-primary/50 hover:text-primary font-bold">
+          {ClickHereText}
+        </span>
+      </p>
       <div className="flex flex-col items-center">
         <Button label={LoginButtonText} type="submit" />
       </div>

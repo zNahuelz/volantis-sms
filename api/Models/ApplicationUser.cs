@@ -7,10 +7,10 @@ namespace api.Models
     {
         [Required]
         [MaxLength(30)]
-        public string Names { get; set; }
+        public string Names { get; set; } = default!;
         [Required]
         [MaxLength(30)]
-        public string Surnames { get; set; }
+        public string Surnames { get; set; } = default!;
         public int StoreId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; }

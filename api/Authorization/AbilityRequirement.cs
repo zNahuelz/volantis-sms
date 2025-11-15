@@ -4,17 +4,29 @@ namespace api.Authorization
 {
     public class AbilityRequirement : IAuthorizationRequirement
     {
-        public string Ability { get; }
-        public AbilityRequirement(string ability) => Ability = ability;
+        public string[] Abilities { get; }
+
+        public AbilityRequirement(params string[] abilities)
+        {
+            Abilities = abilities;
+        }
     }
 
     public class AbilityHandler : AuthorizationHandler<AbilityRequirement>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AbilityRequirement requirement)
+        protected override Task HandleRequirementAsync(
+            AuthorizationHandlerContext context,
+            AbilityRequirement requirement)
         {
-            var hasAbility = context.User.HasClaim(c => c.Type == "Ability" && c.Value == requirement.Ability);
-            if (hasAbility)
+            var userAbilities = context.User
+                .Claims
+                .Where(c => c.Type == "Ability")
+                .Select(c => c.Value);
+
+            if (requirement.Abilities.Any(req => userAbilities.Contains(req)))
+            {
                 context.Succeed(requirement);
+            }
 
             return Task.CompletedTask;
         }

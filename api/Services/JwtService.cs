@@ -40,10 +40,14 @@ namespace api.Services
             {
                 claims.Add(new Claim("role", roleName.ToUpper()));
 
-                var role = await _roleManager.FindByNameAsync(roleName);
-                if (role != null)
+                var dbRole = await _context.Roles
+                    .Include(r => r.RoleAbilities)
+                        .ThenInclude(ra => ra.Ability)
+                    .FirstOrDefaultAsync(r => r.Name == roleName);
+
+                if (dbRole != null)
                 {
-                    foreach (var ra in role.RoleAbilities)
+                    foreach (var ra in dbRole.RoleAbilities)
                     {
                         claims.Add(new Claim("Ability", ra.Ability.Key));
                     }

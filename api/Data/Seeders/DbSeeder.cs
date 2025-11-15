@@ -17,6 +17,7 @@ namespace api.Data.Seeders
                 new PaymentTypeSeeder(),
                 new VoucherSeeder(),
                 new UserSeeder(),
+                new SupplierSeeder(),
             };
 
             foreach (var seeder in seeders)

@@ -1,10 +1,12 @@
-import { Navigate, Outlet } from "react-router";
-import { useAuth } from "~/context/authContext";
+import { Navigate, Outlet } from 'react-router';
+import { useAuth } from '~/context/authContext';
 
 export default function ProtectedRoute() {
-  const { user } = useAuth();
+  const { token } = useAuth();
 
-  if (!user) return <Navigate to="/" replace />;
+  if (!token) {
+    return <Navigate to="/" replace />;
+  }
 
   return <Outlet />;
 }
