@@ -1,0 +1,19 @@
+{
+  "plugins": ["prettier-plugin-edgejs"],
+  "semi": false,
+
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.js"],
+      "options": {
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": false,
+        "arrowParens": "always"
+      }
+    }
+  ]
+}

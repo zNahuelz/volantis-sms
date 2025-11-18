@@ -8,6 +8,7 @@ interface User {
   names: string;
   surnames: string;
   store: any;
+  role: any;
 }
 
 interface AuthContextType {
@@ -25,9 +26,8 @@ export const authStore = {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(
-    () => Cookies.get('AUTH_TOKEN') || null,
-  );
+  const [token, setToken] = useState<string | null>(() => Cookies.get('AUTH_TOKEN') || null);
+
   const [user, setUser] = useState<User | null>(() => {
     const userCookie = Cookies.get('USER_INFO');
     return userCookie ? JSON.parse(userCookie) : null;
@@ -38,36 +38,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAuthToken(token);
   }, [token]);
 
-  useEffect(() => {
-    if (!token) return;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const exp = payload.exp * 1000;
-      const now = Date.now();
-
-      if (now >= exp) {
-        logout();
-      } else {
-        const timeout = exp - now;
-        const timer = setTimeout(() => logout(), timeout);
-        return () => clearTimeout(timer);
-      }
-    } catch (e) {
-      console.error('JWT Inválido');
-    }
-  }, [token]);
-
-  const login = (newToken: string, newUser: User, remember: boolean) => {
-    setToken(newToken);
+  const login = (opaqueToken: string, newUser: User, remember: boolean) => {
+    setToken(opaqueToken);
     setUser(newUser);
-    setAuthToken(newToken);
+    setAuthToken(opaqueToken);
 
     if (remember) {
-      Cookies.set('AUTH_TOKEN', newToken, { expires: 7 });
+      Cookies.set('AUTH_TOKEN', opaqueToken, { expires: 7 });
       Cookies.set('USER_INFO', JSON.stringify(newUser), { expires: 7 });
     } else {
-      Cookies.set('AUTH_TOKEN', newToken);
+      Cookies.set('AUTH_TOKEN', opaqueToken);
       Cookies.set('USER_INFO', JSON.stringify(newUser));
     }
   };
@@ -76,7 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     setUser(null);
     setAuthToken(null);
-
     Cookies.remove('AUTH_TOKEN');
     Cookies.remove('USER_INFO');
   };
@@ -84,9 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   authStore.logout = logout;
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, token, login, logout }}>{children}</AuthContext.Provider>
   );
 };
 

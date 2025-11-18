@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 export default function GuestRoute() {
   const token = Cookies.get('AUTH_TOKEN');
 
-  if (token) return <Navigate to="/dashboard" replace />;
+  if (token) return <Navigate to='/dashboard' replace />;
 
   return <Outlet />;
 }

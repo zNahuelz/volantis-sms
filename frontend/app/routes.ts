@@ -10,15 +10,9 @@ export default [
       route('', 'routes/home.tsx'),
 
       route('supplier', 'features/suppliers/views/SuppliersListView.tsx'),
-      route(
-        'supplier/create',
-        'features/suppliers/views/SupplierCreateView.tsx',
-      ),
+      route('supplier/create', 'features/suppliers/views/SupplierCreateView.tsx'),
       route('supplier/:id', 'features/suppliers/views/SupplierDetailView.tsx'),
-      route(
-        'supplier/:id/edit',
-        'features/suppliers/views/SupplierEditView.tsx',
-      ),
+      route('supplier/:id/edit', 'features/suppliers/views/SupplierEditView.tsx'),
     ]),
   ]),
 ] satisfies RouteConfig;

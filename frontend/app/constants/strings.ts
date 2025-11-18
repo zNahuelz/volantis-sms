@@ -18,9 +18,10 @@ export const ActionsText = 'Acciones';
 export const SupplierListText = 'Listado de Proveedores';
 export const LoadingText = 'Cargando...';
 export const LoadingSuppliersText = 'Cargando proveedores...';
-export const SuppliersNotLoaded =
-  'No se encontraron proveedores con el criterío ingresado.';
+export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
+export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
+export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const NameText = 'Nombre';
 export const RucText = 'Ruc';
@@ -38,7 +39,7 @@ export const TableElementsMessage = (
   singularName: string,
   pluralName: string,
   total: number,
-  elements: number,
+  elements: number
 ) => {
   return `Mostrando ${elements} ${elements >= 1 ? pluralName : singularName} de un total de ${total}.`;
 };
@@ -47,4 +48,23 @@ export const RestoreText = 'Restaurar';
 export const DetailsText = 'Detalles';
 export const ForgotPasswordText = '¿Olvidaste tu contraseña? ';
 export const ClickHereText = 'Click aquí';
-export const RememberMe = 'Recuérdame';
+export const RememberMeText = 'Recuérdame';
+export const CreateSupplierText = 'Registro de Proveedor';
+export const EditSupplierText = 'Modificando Proveedor';
+export const AddressText = 'Dirección';
+export const SaveText = 'Guardar';
+export const SavingText = 'Guardando...';
+export const UpdateText = 'Actualizar';
+export const UpdatingText = 'Actualizando...';
+export const ClearText = 'Limpiar';
+export const CancelText = 'Cancelar';
+export const SupplierCreatedText = 'Proveedor registrado correctamente.';
+export const SupplierUpdatedText = 'Proveedor actualizado correctamente.';
+export const OkTagText = 'Operación completada';
+export const UsernameText = 'Nombre de Usuario';
+export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a otro proveedor.';
+export const ErrorTagText = 'Ha ocurrido un error';
+export const OpRollbackText = 'Operación cancelada';
+export const LoadingSupplierText = 'Cargando información de proveedor...';
+export const SupplierNotFound = 'Proveedor no encontrado.';
+export const IdText = '#';

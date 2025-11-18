@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import type { Supplier } from '~/types/supplier';
 import type { SupplierQuery } from '../services/supplierService';
@@ -50,6 +50,7 @@ export default function SuppliersListView() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -70,6 +71,7 @@ export default function SuppliersListView() {
 
   const loadSuppliers = async () => {
     setLoading(true);
+
     const query: SupplierQuery = {
       page,
       limit,
@@ -79,10 +81,13 @@ export default function SuppliersListView() {
       sortBy: undefined,
       sortDir: undefined,
     };
-    const response = await supplierService.list(query);
+
+    const response = await supplierService.index(query);
+
     setData(response.data);
-    setTotalPages(response.totalPages);
-    setTotalItems(response.totalItems);
+    setTotalPages(response.meta.lastPage);
+    setTotalItems(response.meta.total);
+
     setLoading(false);
   };
 
@@ -102,10 +107,10 @@ export default function SuppliersListView() {
       field: values.field,
       search: values.search,
     };
-    const response = await supplierService.list(query);
+    const response = await supplierService.index(query);
     setData(response.data);
-    setTotalPages(response.totalPages);
-    setTotalItems(response.totalItems);
+    setTotalPages(response.meta.lastPage);
+    setTotalItems(response.meta.total);
     setLoading(false);
   };
 
@@ -118,42 +123,37 @@ export default function SuppliersListView() {
   }, [selectedField]);
 
   return (
-    <div className="p-0 md:p-4">
-      <div className="mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between">
-        <NavLink
-          to="/dashboard/supplier/create"
-          className="btn btn-success w-full md:w-auto"
-        >
+    <div className='p-0 md:p-4'>
+      <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
+        <NavLink to='/dashboard/supplier/create' className='btn btn-success w-full md:w-auto'>
           {NewText}
         </NavLink>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full flex-col items-center space-y-2 md:flex md:w-auto md:flex-row md:items-center md:gap-2 md:space-y-0"
+          className='flex w-full flex-col items-center space-y-2 md:flex md:w-auto md:flex-row md:items-center md:gap-2 md:space-y-0'
         >
           <Select
             options={SUPPLIER_SEARCH_TYPES}
-            width="w-full md:w-50"
+            width='w-full md:w-50'
             {...register('field', { required: true })}
           />
 
           <Input
             icon={SearchIcon}
-            width="w-full md:w-50"
+            width='w-full md:w-50'
             disabled={!selectedField}
             {...register('search', {
               validate: (value) => {
                 if (!value) return 'Campo requerido';
-                if (selectedField === 'id')
-                  return /^[0-9]+$/.test(value) || 'Solo números';
+                if (selectedField === 'id') return /^[0-9]+$/.test(value) || 'Solo números';
                 if (selectedField === 'ruc') {
                   if (!/^[0-9]+$/.test(value)) return 'Solo números';
                   if (value.length < 11) return 'Min 11';
                   if (value.length > 15) return 'Max 15';
                   return true;
                 }
-                if (selectedField === 'name')
-                  return value.length >= 3 || 'Min 3 caracteres';
+                if (selectedField === 'name') return value.length >= 3 || 'Min 3 caracteres';
                 return true;
               },
             })}
@@ -161,18 +161,18 @@ export default function SuppliersListView() {
 
           <Button
             label={SearchText}
-            type="submit"
-            width="w-full md:w-auto"
-            color="btn-info"
+            type='submit'
+            width='w-full md:w-auto'
+            color='btn-info'
             disabled={!isValid}
           />
 
           <Button
             icon={ReloadIcon}
-            width="w-full md:w-auto"
-            color="btn-neutral"
+            width='w-full md:w-auto'
+            color='btn-neutral'
             title={ReloadText}
-            type="button"
+            type='button'
             onClick={reloadSuppliers}
           />
         </form>
@@ -184,19 +184,22 @@ export default function SuppliersListView() {
         <SupplierTable
           data={data}
           actions={(row) => (
-            <div className="join-horizontal join">
+            <div className='join-horizontal join'>
               <Button
-                className="join-item btn-sm"
-                color="btn-primary"
+                className='join-item btn-sm'
+                color='btn-primary'
                 icon={DetailsIcon}
                 title={DetailsText}
               />
 
               <Button
-                className="join-item btn-sm"
-                color="btn-accent"
+                className='join-item btn-sm'
+                color='btn-accent'
                 icon={EditIcon}
                 title={EditText}
+                onClick={() => {
+                  navigate(`/dashboard/supplier/${row.id}/edit`);
+                }}
               />
 
               <Button
@@ -221,13 +224,13 @@ export default function SuppliersListView() {
         }}
       />
 
-      <h1 className="mt-1 text-center font-medium">
+      <h1 className='mt-1 text-center font-medium'>
         {data.length >= 1
           ? TableElementsMessage(
               SupplierText.toLowerCase(),
               SuppliersText.toLowerCase(),
               totalItems,
-              data.length,
+              data.length
             )
           : ''}
       </h1>

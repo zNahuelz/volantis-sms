@@ -24,18 +24,13 @@ export default function Input({
           'input input-bordered flex items-center gap-2',
           { 'input-error': error },
           className,
-          width,
+          width
         )}
       >
-        {icon && <IconifyIcon icon={icon} className="text-xl opacity-50" />}
-        <input
-          {...props}
-          className={clsx('grow bg-transparent outline-none')}
-        />
+        {icon && <IconifyIcon icon={icon} className='text-xl opacity-50' />}
+        <input {...props} className={clsx('grow bg-transparent outline-none')} />
       </label>
-      {errorMessage && (
-        <span className="text-error text-sm">{errorMessage}</span>
-      )}
+      {errorMessage && <span className='text-error text-sm'>{errorMessage}</span>}
     </div>
   );
 }

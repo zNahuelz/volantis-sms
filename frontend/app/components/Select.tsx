@@ -17,15 +17,10 @@ export default function Select({
   ...props
 }: SelectProps) {
   return (
-    <div className="w-full">
+    <div className='w-full'>
       <select
         {...props}
-        className={clsx(
-          'select select-bordered',
-          { 'select-error': error },
-          width,
-          className,
-        )}
+        className={clsx('select select-bordered', { 'select-error': error }, width, className)}
       >
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -34,9 +29,7 @@ export default function Select({
         ))}
       </select>
 
-      {errorMessage && (
-        <span className="text-error text-sm">{errorMessage}</span>
-      )}
+      {errorMessage && <span className='text-error text-sm'>{errorMessage}</span>}
     </div>
   );
 }

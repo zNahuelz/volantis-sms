@@ -25,13 +25,9 @@ export function Paginator({
   };
 
   return (
-    <div className="mt-3 flex flex-col items-center space-y-2 md:flex-row md:justify-between md:gap-2 md:space-y-0">
-      <div className="join">
-        <button
-          className="btn join-item"
-          disabled={page <= 1}
-          onClick={() => goToPage(page - 1)}
-        >
+    <div className='mt-3 flex flex-col items-center space-y-2 md:flex-row md:justify-between md:gap-2 md:space-y-0'>
+      <div className='join'>
+        <button className='btn join-item' disabled={page <= 1} onClick={() => goToPage(page - 1)}>
           <Icon icon={ArrowLeftIcon}></Icon>
         </button>
 
@@ -42,15 +38,11 @@ export function Paginator({
           1
         </button>
 
-        {totalPages > 2 && (
-          <button className="btn join-item btn-disabled">...</button>
-        )}
+        {totalPages > 2 && <button className='btn join-item btn-disabled'>...</button>}
 
         {totalPages > 1 && (
           <button
-            className={`btn join-item ${
-              page === totalPages ? 'btn-active' : ''
-            }`}
+            className={`btn join-item ${page === totalPages ? 'btn-active' : ''}`}
             onClick={() => goToPage(totalPages)}
           >
             {totalPages}
@@ -58,7 +50,7 @@ export function Paginator({
         )}
 
         <button
-          className="btn join-item"
+          className='btn join-item'
           disabled={page >= totalPages}
           onClick={() => goToPage(page + 1)}
         >
@@ -67,7 +59,7 @@ export function Paginator({
       </div>
 
       <select
-        className="select w-60 md:w-50"
+        className='select w-60 md:w-50'
         value={limit}
         onChange={(e) => onLimitChange(Number(e.target.value))}
       >

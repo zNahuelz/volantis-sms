@@ -32,12 +32,12 @@ export default function Button({
         {
           'cursor-not-allowed': disabled || isLoading,
         },
-        className,
+        className
       )}
       {...props}
     >
-      {isLoading && <span className="loading loading-dots loading-sm" />}
-      {icon && <IconifyIcon icon={icon} className="h-5 w-5" />}
+      {isLoading && <span className='loading loading-dots loading-sm' />}
+      {icon && <IconifyIcon icon={icon} className='h-5 w-5' />}
       {label && <span>{label}</span>}
     </button>
   );

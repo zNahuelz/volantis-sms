@@ -7,7 +7,8 @@ import {
   ForgotPasswordText,
   LoginButtonText,
   PasswordText,
-  RememberMe,
+  RememberMeText,
+  UsernameText,
 } from '~/constants/strings';
 import { useForm } from 'react-hook-form';
 import { loginService } from '../services/authService';
@@ -26,7 +27,7 @@ export default function LoginForm() {
     watch,
   } = useForm({
     defaultValues: {
-      email: '',
+      username: '',
       password: '',
       rememberMe: false,
     },
@@ -37,36 +38,31 @@ export default function LoginForm() {
   const onSubmit = async (data: any) => {
     try {
       const res = await loginService(data);
-      login(res.token, res.user, data.rememberMe);
+      login(res.token.token, res.user, data.rememberMe);
       navigate('/dashboard');
     } catch (err: any) {
-      setError('email', { message: 'Credenciales incorrectas' });
+      setError('username', { message: 'Credenciales incorrectas' });
       setError('password', { message: 'Credenciales incorrectas' });
     }
   };
 
   return (
-    <form className="w-full space-y-3" onSubmit={handleSubmit(onSubmit)}>
+    <form className='w-full space-y-3' onSubmit={handleSubmit(onSubmit)}>
       <Input
-        width="w-full"
+        width='w-full'
         icon={EmailIcon}
-        placeholder={EmailText}
-        error={!!errors.email}
-        errorMessage={errors.email?.message}
-        {...register('email', {
+        placeholder={UsernameText}
+        error={!!errors.username}
+        errorMessage={errors.username?.message}
+        {...register('username', {
           required: 'Debe ingresar un correo electrónico.',
-          pattern: {
-            value: /\S+@\S+\.\S+/,
-            message:
-              'Debe ingresar un correo electrónico con el formato email@dominio.com',
-          },
         })}
       />
       <Input
-        width="w-full"
+        width='w-full'
         icon={PasswordIcon}
         placeholder={PasswordText}
-        type="password"
+        type='password'
         error={!!errors.password}
         errorMessage={errors.password?.message}
         {...register('password', {
@@ -77,22 +73,20 @@ export default function LoginForm() {
           },
         })}
       />
-      <label className="label cursor-pointer gap-2">
+      <label className='label cursor-pointer gap-2'>
         <input
-          type="checkbox"
-          className="checkbox checkbox-sm checkbox-primary"
+          type='checkbox'
+          className='checkbox checkbox-sm checkbox-primary'
           {...register('rememberMe')}
         />
-        {RememberMe}
+        {RememberMeText}
       </label>
-      <p className="mb-3 text-center text-sm">
+      <p className='mb-3 text-center text-sm'>
         {ForgotPasswordText}
-        <span className="text-primary/50 hover:text-primary font-bold">
-          {ClickHereText}
-        </span>
+        <span className='text-primary/50 hover:text-primary font-bold'>{ClickHereText}</span>
       </p>
-      <div className="flex flex-col items-center">
-        <Button label={LoginButtonText} type="submit" />
+      <div className='flex flex-col items-center'>
+        <Button label={LoginButtonText} type='submit' />
       </div>
     </form>
   );
