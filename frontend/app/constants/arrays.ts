@@ -10,3 +10,9 @@ export const SUPPLIER_SEARCH_TYPES = [
   { label: 'POR RUC', value: 'ruc' },
   { label: 'POR NOMBRE', value: 'name' },
 ];
+
+export const DEFAULT_STATUS_TYPES = [
+  { label: 'TODOS', value: 'all' },
+  { label: 'SOLO HABILITADOS', value: 'available' },
+  { label: 'SOLO DESHABILITADOS', value: 'deleted' },
+];

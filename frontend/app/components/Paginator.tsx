@@ -10,6 +10,9 @@ type PaginatorProps = {
   onPageChange: (page: number) => void;
   onLimitChange: (limit: number) => void;
   limits?: { label: string; value: number }[];
+  status: string;
+  onStatusChange: (status: string) => void;
+  statusTypes?: { label: string; value: string }[];
 };
 
 export function Paginator({
@@ -19,51 +22,68 @@ export function Paginator({
   onPageChange,
   onLimitChange,
   limits = PAGINATION_LIMITS,
+  status,
+  onStatusChange,
+  statusTypes = [],
 }: PaginatorProps) {
   const goToPage = (p: number) => {
     if (p >= 1 && p <= totalPages && p !== page) onPageChange(p);
   };
 
   return (
-    <div className='mt-3 flex flex-col items-center space-y-2 md:flex-row md:justify-between md:gap-2 md:space-y-0'>
-      <div className='join'>
-        <button className='btn join-item' disabled={page <= 1} onClick={() => goToPage(page - 1)}>
-          <Icon icon={ArrowLeftIcon}></Icon>
-        </button>
-
-        <button
-          className={`btn join-item ${page === 1 ? 'btn-active' : ''}`}
-          onClick={() => goToPage(1)}
-        >
-          1
-        </button>
-
-        {totalPages > 2 && <button className='btn join-item btn-disabled'>...</button>}
-
-        {totalPages > 1 && (
-          <button
-            className={`btn join-item ${page === totalPages ? 'btn-active' : ''}`}
-            onClick={() => goToPage(totalPages)}
-          >
-            {totalPages}
+    <div className='mt-3 flex flex-col items-center space-y-2 md:flex-row md:justify-between md:space-y-0 w-full md:w-auto'>
+      <div className='flex flex-col items-center space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-3 w-full md:w-auto'>
+        <div className='join'>
+          <button className='btn join-item' disabled={page <= 1} onClick={() => goToPage(page - 1)}>
+            <Icon icon={ArrowLeftIcon} />
           </button>
-        )}
 
-        <button
-          className='btn join-item'
-          disabled={page >= totalPages}
-          onClick={() => goToPage(page + 1)}
+          <button
+            className={`btn join-item ${page === 1 ? 'btn-active' : ''}`}
+            onClick={() => goToPage(1)}
+          >
+            1
+          </button>
+
+          {totalPages > 2 && <button className='btn join-item btn-disabled'>...</button>}
+
+          {totalPages > 1 && (
+            <button
+              className={`btn join-item ${page === totalPages ? 'btn-active' : ''}`}
+              onClick={() => goToPage(totalPages)}
+            >
+              {totalPages}
+            </button>
+          )}
+
+          <button
+            className='btn join-item'
+            disabled={page >= totalPages}
+            onClick={() => goToPage(page + 1)}
+          >
+            <Icon icon={ArrowRightIcon} />
+          </button>
+        </div>
+
+        <select
+          className='select md:w-50 w-full'
+          value={limit}
+          onChange={(e) => onLimitChange(Number(e.target.value))}
         >
-          <Icon icon={ArrowRightIcon}></Icon>
-        </button>
+          {limits.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <select
-        className='select w-60 md:w-50'
-        value={limit}
-        onChange={(e) => onLimitChange(Number(e.target.value))}
+        className='select md:w-50 w-full'
+        value={status}
+        onChange={(e) => onStatusChange(e.target.value)}
       >
-        {limits.map((opt) => (
+        {statusTypes.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>

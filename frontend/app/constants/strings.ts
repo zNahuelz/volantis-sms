@@ -1,3 +1,5 @@
+import type { Supplier } from '~/types/supplier';
+
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
 
@@ -68,3 +70,9 @@ export const OpRollbackText = 'Operación cancelada';
 export const LoadingSupplierText = 'Cargando información de proveedor...';
 export const SupplierNotFound = 'Proveedor no encontrado.';
 export const IdText = '#';
+export const SupplierStatusChangeMessage = (supplier: Supplier) => {
+  return `¿Está seguro de ${supplier.deletedAt != null ? 'restaurar' : 'eliminar'} el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
+};
+export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
+export const SupplierStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';

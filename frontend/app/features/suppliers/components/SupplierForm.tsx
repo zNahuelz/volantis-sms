@@ -85,14 +85,7 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
       if (err?.errors && Array.isArray(err.errors)) {
         err.errors.forEach((e: any) => {
           const field = e.field as keyof SupplierFormData;
-          setError(field, { message: e.message });
-        });
-        return;
-      }
-
-      if (err?.message) {
-        setError('ruc', {
-          message: SupplierRucTakenText,
+          setError(field, { message: field === 'ruc' ? SupplierRucTakenText : e.message });
         });
         return;
       }

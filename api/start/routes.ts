@@ -37,6 +37,9 @@ router
         router
           .put('/:id', [SuppliersController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:update'])]);
+        router
+          .delete('/:id', [SuppliersController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:destroy'])]);
       })
       .prefix('supplier');
 

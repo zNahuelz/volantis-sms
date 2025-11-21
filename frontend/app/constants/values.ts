@@ -1,1 +1,9 @@
 export const swalDismissalTime = 1000;
+export const PrimaryColor = '#007bff';
+export const SecondaryColor = '#6c757d';
+export const AccentColor = '#3c8dbc';
+export const NeutralColor = '#001f3f';
+export const InfoColor = '#17a2b8';
+export const SuccessColor = '#28a745';
+export const WarningColor = '#ffc107';
+export const ErrorColor = '#dc3545';

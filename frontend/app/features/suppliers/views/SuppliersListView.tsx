@@ -11,19 +11,26 @@ import Input from '~/components/Input';
 import Select from '~/components/Select';
 import Button from '~/components/Button';
 import { Paginator } from '~/components/Paginator';
-import { SUPPLIER_SEARCH_TYPES } from '~/constants/arrays';
+import { DEFAULT_STATUS_TYPES, SUPPLIER_SEARCH_TYPES } from '~/constants/arrays';
 
 import {
+  CancelText,
   DeleteText,
   DetailsText,
   EditText,
+  ErrorTagText,
   LoadingSuppliersText,
   NewText,
+  OkTagText,
+  OpRollbackText,
   ReloadText,
   RestoreText,
   SearchText,
   SupplierListText,
   SuppliersListAreaText,
+  SupplierStatusChangeMessage,
+  SupplierStatusUpdatedText,
+  SupplierStatusUpdateFailedText,
   SuppliersText,
   SupplierText,
   TableElementsMessage,
@@ -38,6 +45,8 @@ import {
   SearchIcon,
 } from '~/constants/iconNames';
 import clsx from 'clsx';
+import Swal from 'sweetalert2';
+import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: SuppliersListAreaText }];
@@ -50,6 +59,7 @@ export default function SuppliersListView() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('all');
   const navigate = useNavigate();
 
   const {
@@ -76,7 +86,7 @@ export default function SuppliersListView() {
       page,
       limit,
       search: '',
-      status: undefined,
+      status: status === 'all' ? undefined : status,
       field: undefined,
       sortBy: undefined,
       sortDir: undefined,
@@ -106,6 +116,7 @@ export default function SuppliersListView() {
       limit,
       field: values.field,
       search: values.search,
+      status: status === 'all' ? undefined : status,
     };
     const response = await supplierService.index(query);
     setData(response.data);
@@ -114,9 +125,56 @@ export default function SuppliersListView() {
     setLoading(false);
   };
 
+  const showStatusChangeModal = async (supplier: Supplier) => {
+    const result = await Swal.fire({
+      title: 'Confirmar operación',
+      html: SupplierStatusChangeMessage(supplier),
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: SuccessColor,
+      cancelButtonColor: ErrorColor,
+      confirmButtonText:
+        supplier.deletedAt != null ? RestoreText.toUpperCase() : DeleteText.toUpperCase(),
+      cancelButtonText: CancelText.toUpperCase(),
+    });
+
+    if (result.isConfirmed) {
+      await performStatusChange(supplier.id!);
+    }
+  };
+
+  const performStatusChange = async (id: number) => {
+    try {
+      const res = await supplierService.destroy(id);
+      Swal.fire({
+        title: OkTagText,
+        html: !res.message ? SupplierStatusUpdatedText : res.message,
+        icon: 'success',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) reloadSuppliers();
+      });
+    } catch (error) {
+      Swal.fire({
+        title: ErrorTagText,
+        html: SupplierStatusUpdateFailedText,
+        icon: 'error',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    }
+  };
+
   useEffect(() => {
     loadSuppliers();
   }, [page, limit]);
+
+  useEffect(() => {
+    loadSuppliers();
+  }, [status]);
 
   useEffect(() => {
     resetField('search');
@@ -207,6 +265,7 @@ export default function SuppliersListView() {
                 color={row.deletedAt ? 'btn-warning' : 'btn-error'}
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
+                onClick={() => showStatusChangeModal(row)}
               />
             </div>
           )}
@@ -222,6 +281,12 @@ export default function SuppliersListView() {
           setLimit(newLimit);
           setPage(1);
         }}
+        status={status}
+        onStatusChange={(newStatus) => {
+          setStatus(newStatus);
+          setPage(1);
+        }}
+        statusTypes={DEFAULT_STATUS_TYPES}
       />
 
       <h1 className='mt-1 text-center font-medium'>

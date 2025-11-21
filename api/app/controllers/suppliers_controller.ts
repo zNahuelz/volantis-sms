@@ -3,6 +3,7 @@ import Supplier from '../models/supplier.js';
 import { CreateSupplierValidator } from '../validators/create_supplier.js';
 import db from '@adonisjs/lucid/services/db';
 import { UpdateSupplierValidator } from '../validators/update_supplier.js';
+import { DateTime } from 'luxon';
 
 export default class SuppliersController {
   public async store({ request, response }: HttpContext) {
@@ -152,12 +153,24 @@ export default class SuppliersController {
       return response.badRequest({
         message:
           'Error durante la actualización del proveedor. Intente nuevamente o comuniquese con administración.',
-        error: error.messages || error.message,
+        errors: error.messages || error.message,
       });
     }
   }
 
   public async destroy({ request, response }: HttpContext) {
-    return response.ok('');
+    const id = request.param('id');
+    const supplier = await Supplier.query().where('id', id).first();
+
+    if (!supplier) {
+      return response.notFound({ message: `Proveedor de ID: ${id} no encontrado.` });
+    }
+
+    await supplier.merge({ deletedAt: supplier.deletedAt != null ? null : DateTime.utc() }).save();
+
+    return response.ok({
+      message: `Visibilidad de provedor de ID: ${id} actualizada correctamente.`,
+      supplier,
+    });
   }
 }
