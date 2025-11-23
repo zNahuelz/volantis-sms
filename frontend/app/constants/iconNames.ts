@@ -24,3 +24,4 @@ export const SaveIcon = 'ic:sharp-save';
 export const UpdateIcon = 'ic:sharp-save-all';
 export const ClearIcon = 'ic:sharp-document-scanner';
 export const CancelIcon = 'ic:sharp-cancel-presentation';
+export const GoBackIcon = 'ic:baseline-subdirectory-arrow-left';

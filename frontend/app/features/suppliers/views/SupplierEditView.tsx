@@ -56,12 +56,14 @@ export default function SupplierEditView() {
   }
 
   return (
-    <div>
-      <h1 className='mb-2 text-center text-2xl font-semibold'>
-        {EditSupplierText} #{id}
-      </h1>
-      <div className='flex flex-col items-center'>
-        <div className='card bg-base-100 border-secondary/20 flex w-full flex-col items-center border p-6 shadow-xl md:w-[600px]'>
+    <div className='md:m-5 md:flex md:flex-col md:items-center'>
+      <div className='border-accent border md:w-[800px]'>
+        <div className='bg-linear-to-r from-accent to-accent/70 text-white font-bold text-center md:text-start'>
+          <h1 className='p-1 md:ms-3'>
+            {EditSupplierText} #{id}
+          </h1>
+        </div>
+        <div className='p-4'>
           <SupplierForm
             defaultValues={supplier}
             onSubmit={(data) => supplierService.update(Number(id!), data)}

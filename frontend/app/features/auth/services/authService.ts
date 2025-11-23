@@ -15,3 +15,7 @@ export const loginService = async (data: {
     user: any;
   }>();
 };
+
+export const logoutService = async () => {
+  return http.post('auth/logout').json<{ message: string }>();
+};

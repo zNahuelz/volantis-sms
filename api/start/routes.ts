@@ -12,6 +12,7 @@ import AuthController from '../app/controllers/auth_controller.js';
 import { middleware } from './kernel.js';
 import RoleController from '../app/controllers/role_controller.js';
 import SuppliersController from '../app/controllers/suppliers_controller.js';
+import StorageController from '../app/controllers/storage_controller.js';
 
 router
   .group(() => {
@@ -22,6 +23,12 @@ router
         router.get('profile', [AuthController, 'profile']).use(middleware.auth());
       })
       .prefix('auth');
+
+    router
+      .group(() => {
+        router.get('/profile-picture/:file', [StorageController, 'show']);
+      })
+      .prefix('storage');
 
     router
       .group(() => {

@@ -1,12 +1,14 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { setAuthToken } from '~/api/httpWrapper';
+import { logoutService } from '~/features/auth/services/authService';
 
 interface User {
   id: string;
   email: string;
   names: string;
   surnames: string;
+  profilePicture?: string | null;
   store: any;
   role: any;
 }
@@ -52,7 +54,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await logoutService();
+    } catch {}
     setToken(null);
     setUser(null);
     setAuthToken(null);

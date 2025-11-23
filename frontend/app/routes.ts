@@ -9,6 +9,8 @@ export default [
     route('', 'layouts/DashboardLayout.tsx', [
       route('', 'routes/home.tsx'),
 
+      route('profile', 'features/auth/views/ProfileView.tsx'),
+
       route('supplier', 'features/suppliers/views/SuppliersListView.tsx'),
       route('supplier/create', 'features/suppliers/views/SupplierCreateView.tsx'),
       route('supplier/:id', 'features/suppliers/views/SupplierDetailView.tsx'),

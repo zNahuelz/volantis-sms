@@ -1,15 +1,18 @@
 import { Icon } from '@iconify/react';
 import { NavLink } from 'react-router';
 import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
 import { HomeIcon, LogoutIcon, SaleIcon, SettingsIcon, SupplierIcon } from '~/constants/iconNames';
 import {
   AppDescription,
   AppName,
+  ClosingSessionText,
   HomeText,
   ListText,
   LogoutText,
   NewSaleText,
   NewText,
+  PleaseWaitText,
   SettingText,
   SuppliersText,
 } from '~/constants/strings';
@@ -19,8 +22,16 @@ export default function Sidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    Swal.fire({
+      title: ClosingSessionText,
+      text: PleaseWaitText,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => Swal.showLoading(),
+    });
+    await logout();
+    Swal.close();
     navigate('/');
   };
 

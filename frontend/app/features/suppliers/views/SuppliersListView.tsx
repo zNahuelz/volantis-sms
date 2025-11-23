@@ -15,6 +15,7 @@ import { DEFAULT_STATUS_TYPES, SUPPLIER_SEARCH_TYPES } from '~/constants/arrays'
 
 import {
   CancelText,
+  ConfirmActionText,
   DeleteText,
   DetailsText,
   EditText,
@@ -127,7 +128,7 @@ export default function SuppliersListView() {
 
   const showStatusChangeModal = async (supplier: Supplier) => {
     const result = await Swal.fire({
-      title: 'Confirmar operación',
+      title: ConfirmActionText,
       html: SupplierStatusChangeMessage(supplier),
       icon: 'question',
       showCancelButton: true,
@@ -248,6 +249,9 @@ export default function SuppliersListView() {
                 color='btn-primary'
                 icon={DetailsIcon}
                 title={DetailsText}
+                onClick={() => {
+                  navigate(`/dashboard/supplier/${row.id}`);
+                }}
               />
 
               <Button

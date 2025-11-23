@@ -9,10 +9,12 @@ export function meta({}: Route.MetaArgs) {
 
 export default function SupplierCreateView() {
   return (
-    <div>
-      <h1 className='mb-2 text-center text-2xl font-semibold'>{CreateSupplierText}</h1>
-      <div className='flex flex-col items-center'>
-        <div className='card bg-base-100 border-secondary/20 flex w-full flex-col items-center border p-6 shadow-xl md:w-[600px]'>
+    <div className='md:m-5 md:flex md:flex-col md:items-center'>
+      <div className='border-success border md:w-[800px]'>
+        <div className='bg-linear-to-r from-success to-success/75 text-white font-bold text-center md:text-start'>
+          <h1 className='p-1 md:ms-3'>{CreateSupplierText}</h1>
+        </div>
+        <div className='p-4'>
           <SupplierForm onSubmit={(data) => supplierService.create(data)}></SupplierForm>
         </div>
       </div>

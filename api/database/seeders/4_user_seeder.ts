@@ -24,6 +24,7 @@ export default class extends BaseSeeder {
       email: 'admin@site.com',
       password: 'admin',
       roleId: adminRole.id,
+      profilePicture: 'admin_default_pfp.png',
       storeId: 1,
     });
 
@@ -34,6 +35,7 @@ export default class extends BaseSeeder {
       email: 'manager@volantis.com',
       password: 'manager',
       roleId: managerRole.id,
+      profilePicture: 'manager_default_pfp.png',
       storeId: 1,
     });
 
@@ -44,6 +46,7 @@ export default class extends BaseSeeder {
       email: 'seller@volantis.com',
       password: 'seller0',
       roleId: sellerRole.id,
+      profilePicture: 'seller_default_pfp.png',
       storeId: 1,
     });
   }

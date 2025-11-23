@@ -23,6 +23,7 @@ export const LoadingSuppliersText = 'Cargando proveedores...';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
 export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
+export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
 export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const NameText = 'Nombre';
@@ -30,6 +31,7 @@ export const RucText = 'Ruc';
 export const PhoneText = 'Teléfono';
 export const CreatedAtText = 'Fecha de Creación';
 export const UpdatedAtText = 'Ult. Mod.';
+export const DeletedAtText = 'Fecha de Eliminación';
 export const StateText = 'Estado';
 export const EditText = 'Modificar';
 export const DeleteText = 'Eliminar';
@@ -70,9 +72,20 @@ export const OpRollbackText = 'Operación cancelada';
 export const LoadingSupplierText = 'Cargando información de proveedor...';
 export const SupplierNotFound = 'Proveedor no encontrado.';
 export const IdText = '#';
+export const IdTextAlt = 'ID';
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
   return `¿Está seguro de ${supplier.deletedAt != null ? 'restaurar' : 'eliminar'} el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
 };
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
 export const SupplierStatusUpdateFailedText =
   'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';
+export const ConfirmActionText = 'Confirmar Operación';
+export const LoggingInText = 'Ingresando...';
+export const InvalidCredentialsText =
+  'Inicio de sesión fallido, verifique sus credenciales e intente nuevamente.';
+export const LoginErrorText =
+  'Error durante el inicio de sesión, intente nuevamente. Si el problema persiste comuniquese con administración';
+export const ClosingSessionText = 'Cerrando sesión...';
+export const PleaseWaitText = 'Por favor espere';
+export const GoBackText = 'Átras';
+export const SupplierDetailText = 'Detalle de Proveedor';
