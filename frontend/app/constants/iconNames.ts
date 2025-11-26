@@ -25,3 +25,7 @@ export const UpdateIcon = 'ic:sharp-save-all';
 export const ClearIcon = 'ic:sharp-document-scanner';
 export const CancelIcon = 'ic:sharp-cancel-presentation';
 export const GoBackIcon = 'ic:baseline-subdirectory-arrow-left';
+export const SuccessIcon = 'ic:baseline-check-circle-outline';
+export const ErrorIcon = 'ic:baseline-report-gmailerrorred';
+export const InfoIcon = 'ic:outline-info';
+export const WarningIcon = 'ic:baseline-warning-amber';

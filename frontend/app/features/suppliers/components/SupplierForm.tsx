@@ -12,6 +12,7 @@ import {
   PhoneIcon,
   RucIcon,
   SaveIcon,
+  UpdateIcon,
 } from '~/constants/iconNames';
 import {
   AddressText,
@@ -215,7 +216,7 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }
-            icon={SaveIcon}
+            icon={isEdit ? UpdateIcon : SaveIcon}
             color='btn-success'
           />
         </div>

@@ -20,6 +20,8 @@ router
       .group(() => {
         router.post('login', [AuthController, 'login']);
         router.post('logout', [AuthController, 'logout']);
+        router.post('update-email', [AuthController, 'updateEmail']).use(middleware.auth());
+        router.post('update-password', [AuthController, 'updatePassword']).use(middleware.auth());
         router.get('profile', [AuthController, 'profile']).use(middleware.auth());
       })
       .prefix('auth');

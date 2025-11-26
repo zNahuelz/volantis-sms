@@ -1,6 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import User from '../models/user.js';
 import { LoginValidator } from '../validators/login.js';
+import { UpdateUserEmailValidator } from '../validators/update_user_email.js';
+import db from '@adonisjs/lucid/services/db';
+import { UpdateUserPasswordValidator } from '../validators/update_user_password.js';
 
 export default class AuthController {
   async login({ request, response, auth }: HttpContext) {
@@ -30,6 +33,11 @@ export default class AuthController {
         role: {
           id: user.role.id,
           name: user.role.name,
+          abilities: user.role.abilities.map((e) => ({
+            key: e.key,
+            name: e.name,
+            description: e.description,
+          })),
         },
         store: user.store
           ? {
@@ -58,6 +66,79 @@ export default class AuthController {
     }
   }
 
+  public async updateEmail({ auth, request, response }: HttpContext) {
+    const user = auth.user;
+
+    if (!user) {
+      return response.unauthorized({ message: 'Token expirado o inválido.' });
+    }
+
+    try {
+      const data = await request.validateUsing(UpdateUserEmailValidator, {
+        meta: { userId: user.id },
+      });
+
+      await db.transaction(async (trx) => {
+        user.useTransaction(trx);
+        user.email = data.newEmail.trim().toUpperCase();
+        await user.save();
+      });
+
+      return response.ok({
+        message: 'Correo electrónico actualizado correctamente.',
+        email: user.email,
+      });
+    } catch (error) {
+      return response.badRequest({
+        message:
+          'Error durante la actualización de correo electrónico. Intente nuevamente o comuníquese con administración.',
+        errors: error.messages || error.message,
+      });
+    }
+  }
+
+  public async updatePassword({ auth, request, response }: HttpContext) {
+    const user = auth.user;
+
+    if (!user) {
+      return response.unauthorized({ message: 'Token expirado o inválido.' });
+    }
+
+    try {
+      const { oldPassword, newPassword } = await request.validateUsing(UpdateUserPasswordValidator);
+
+      const isValidOldPassword = await user.verifyPassword(oldPassword);
+      if (!isValidOldPassword) {
+        return response.badRequest({
+          message: 'La contraseña actual es incorrecta, intente nuevamente.',
+        });
+      }
+
+      await db.transaction(async (trx) => {
+        user.useTransaction(trx);
+        user.password = newPassword;
+        await user.save();
+
+        const tokens = await User.accessTokens.all(user);
+        await Promise.all(
+          tokens.map((token) => {
+            User.accessTokens.delete(user, token.identifier);
+          })
+        );
+      });
+
+      return response.ok({
+        message: 'Contraseña actualizada correctamente.',
+      });
+    } catch (error) {
+      return response.badRequest({
+        message:
+          'Error durante la actualización de contraseña. Intente nuevamente o comuníquese con administración.',
+        errors: error.messages || error.message,
+      });
+    }
+  }
+
   public async profile({ auth, response }: HttpContext) {
     const user = auth.user;
 
@@ -65,14 +146,13 @@ export default class AuthController {
       return response.unauthorized({ message: 'Token expirado o inválido.' });
     }
 
-    await user.load('role');
+    await user.load('store');
+    await user.load('role', (roleQuery) => {
+      roleQuery.preload('abilities');
+    });
 
     const userData = {
       ...user.serialize(),
-      token: {
-        isExpired: auth.user?.currentAccessToken?.isExpired,
-        abilities: auth.user?.currentAccessToken?.abilities,
-      },
     };
 
     return response.ok(userData);

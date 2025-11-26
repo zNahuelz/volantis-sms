@@ -7,6 +7,9 @@ export const LoginText = 'Inicio de Sesión';
 export const LoginButtonText = 'Iniciar Sesión';
 export const EmailText = 'Correo Electrónico';
 export const PasswordText = 'Contraseña';
+export const CurrentPasswordText = 'Contraseña actual';
+export const NewPasswordText = 'Nueva contraseña';
+export const RepeatPasswordText = 'Repetir contraseña';
 export const HomeText = 'Inicio';
 export const NewSaleText = 'Nueva venta';
 export const SuppliersText = 'Proveedores';
@@ -89,3 +92,28 @@ export const ClosingSessionText = 'Cerrando sesión...';
 export const PleaseWaitText = 'Por favor espere';
 export const GoBackText = 'Átras';
 export const SupplierDetailText = 'Detalle de Proveedor';
+export const NamesText = 'Nombres';
+export const SurnamesText = 'Apellidos';
+export const SurnameText = 'Apellido';
+export const RoleText = 'Rol';
+export const AssignedStoreText = 'Tienda Asignada';
+export const AdminAssignedStoreText =
+  'Los usuarios con el rol de administrador pueden realizar operaciones en todas las tiendas a pesar de estar asignados a la sucursal principal.';
+export const DescriptionText = 'Descripción';
+export const ProfileAreaText = `Mi Perfil - ${AppName}`;
+export const EmptyAbilityListText =
+  'El rol del usuario no cuenta con permisos asignados. Comuniquese con administración.';
+export const CurrentEmailText = 'Correo electrónico actual';
+export const NewEmailText = 'Nuevo correo electrónico';
+export const ConfirmEmailText = 'Repetir correo electrónico';
+export const ServerErrorText =
+  'Error interno del servidor, operación cancelada. Vuelva a intentarlo o comuniquese con administración';
+export const UserEmailUpdatedText = (email: string) => {
+  return `Correo electrónico actualizado correctamente. <br> <strong>NUEVO CORREO ELECTRÓNICO: </strong>${email}`;
+};
+export const UpdatePasswordAlertText =
+  'Actualizar su contraseña requerira que vuelva a iniciar sesión posteriormente. Además, se cerraran todas las sesiones existentes de su cuenta.';
+export const UserPasswordUpdatedText =
+  'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
+export const RegisterDateText = 'Fecha de Registro';
+export const UserUpdatedAtText = 'Ult. Mod. al Usuario';

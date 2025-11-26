@@ -44,7 +44,7 @@ export default function LoginForm() {
     setServerError('');
     try {
       const res = await loginService(data);
-      login(res.token.token, res.user, data.rememberMe);
+      login(res.token.token, res.user, data.rememberMe, res.user.role.abilities);
       navigate('/dashboard');
     } catch (err: any) {
       if (err?.errors && Array.isArray(err.errors)) {

@@ -132,44 +132,45 @@ export default function SupplierDetailView() {
         <div className='grid grid-cols-1 md:grid-cols-4 gap-2 p-4'>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{IdTextAlt}</legend>
-            <Input value={supplier.id}></Input>
+            <Input value={supplier.id} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{NameText}</legend>
-            <Input value={supplier.name}></Input>
+            <Input value={supplier.name} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{RucText.toUpperCase()}</legend>
-            <Input value={supplier.ruc}></Input>
+            <Input value={supplier.ruc} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{PhoneText}</legend>
-            <Input value={supplier.phone}></Input>
+            <Input value={supplier.phone} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{EmailText}</legend>
-            <Input value={supplier.email}></Input>
+            <Input value={supplier.email} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset md:col-span-3'>
             <legend className='fieldset-legend'>{AddressText}</legend>
-            <Input value={supplier.address}></Input>
+            <Input value={supplier.address} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{CreatedAtText}</legend>
-            <Input value={formatAsDatetime(supplier.createdAt)}></Input>
+            <Input value={formatAsDatetime(supplier.createdAt)} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{UpdatedAtText}</legend>
-            <Input value={formatAsDatetime(supplier.updatedAt)}></Input>
+            <Input value={formatAsDatetime(supplier.updatedAt)} readOnly></Input>
           </fieldset>
           <fieldset className={`fieldset ${!supplier.deletedAt ? 'hidden' : ''}`}>
             <legend className='fieldset-legend'>{DeletedAtText}</legend>
-            <Input value={formatAsDatetime(supplier.deletedAt)}></Input>
+            <Input value={formatAsDatetime(supplier.deletedAt)} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{StateText}</legend>
             <Input
               value={supplier.deletedAt ? IsDeletedText.toUpperCase() : IsActiveText.toUpperCase()}
+              readOnly
               className={supplier.deletedAt ? 'text-error font-bold' : 'text-success font-bold'}
             ></Input>
           </fieldset>

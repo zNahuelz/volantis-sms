@@ -1,4 +1,5 @@
 export const swalDismissalTime = 1000;
+export const longSwalDismissalTime = 1500;
 export const PrimaryColor = '#007bff';
 export const SecondaryColor = '#6c757d';
 export const AccentColor = '#3c8dbc';

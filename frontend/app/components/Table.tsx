@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { ActionsText, EmptyListText, IsActiveText, IsDeletedText } from '~/constants/strings';
 import { formatAsDatetime } from '~/utils/helpers';
@@ -13,25 +14,45 @@ type TableProps<T> = {
   data: T[];
   errorMessage?: string;
   actions?: (row: T) => React.ReactNode;
+  className?: string;
+  size?: string;
+  showActions?: boolean;
 };
 
-export function Table<T>({ columns, data, errorMessage = EmptyListText, actions }: TableProps<T>) {
+export function Table<T>({
+  columns,
+  data,
+  errorMessage = EmptyListText,
+  actions,
+  className,
+  size,
+  showActions = true,
+}: TableProps<T>) {
   return (
-    <div className='rounded-box border-base-content/5 bg-base-100 overflow-x-auto border'>
-      <table className='table'>
+    <div
+      className={clsx(
+        'rounded-box border-base-content/5 bg-base-100 overflow-x-auto border',
+        className
+      )}
+    >
+      <table className={clsx('table', size)}>
         <thead>
           <tr className='font-bold text-black'>
             {columns.map((col) => (
               <th key={String(col.key)}>{col.label}</th>
             ))}
-            <th className='text-center'>{ActionsText}</th>
+
+            {showActions && <th className='text-center'>{ActionsText}</th>}
           </tr>
         </thead>
 
         <tbody>
           {(!data || data.length === 0) && (
             <tr>
-              <td colSpan={columns.length + 1} className='py-4 text-center text-lg font-light'>
+              <td
+                colSpan={columns.length + (showActions ? 1 : 0)}
+                className='py-4 text-center text-lg font-light'
+              >
                 {errorMessage}
               </td>
             </tr>
@@ -65,7 +86,9 @@ export function Table<T>({ columns, data, errorMessage = EmptyListText, actions 
                 return <td key={String(col.key)}>{String(value ?? '')}</td>;
               })}
 
-              <td className='flex items-center justify-center'>{actions && actions(row)}</td>
+              {showActions && (
+                <td className='flex items-center justify-center'>{actions && actions(row)}</td>
+              )}
             </tr>
           ))}
         </tbody>
