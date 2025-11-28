@@ -1,11 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const UPLOAD_ROOT = path.resolve('uploads/profile_pictures');
 
 export default class StorageController {
-  async show({ params, response }: HttpContext) {
+  async showProfilePicture({ params, response }: HttpContext) {
     const fileName = params.file;
 
     if (!/^[a-zA-Z0-9._-]+$/.test(fileName)) {
@@ -29,5 +30,48 @@ export default class StorageController {
     }
 
     return response.download(safePath);
+  }
+
+  public async updateProfilePicture({ request, auth, response }: HttpContext) {
+    const user = auth.user;
+    if (!user) return response.unauthorized();
+
+    const file = request.file('picture', {
+      size: '5mb',
+      extnames: ['jpg', 'jpeg', 'png', 'webp'],
+    });
+
+    if (!file) {
+      return response.badRequest({ error: 'Error en la subida del archivo.' });
+    }
+
+    if (!file.isValid) {
+      return response.badRequest(file.errors);
+    }
+
+    const randomName = crypto.randomBytes(32).toString('hex');
+    const newFilename = `${randomName}.${file.extname}`;
+
+    const finalPath = path.join(UPLOAD_ROOT, newFilename);
+
+    await fs.mkdir(UPLOAD_ROOT, { recursive: true });
+
+    await fs.writeFile(finalPath, await fs.readFile(file.tmpPath!));
+
+    await fs.rm(file.tmpPath!, { force: true });
+
+    if (user.profilePicture) {
+      const oldPath = path.join(UPLOAD_ROOT, user.profilePicture);
+      await fs.rm(oldPath, { force: true });
+    }
+
+    user.profilePicture = newFilename;
+    await user.save();
+
+    return response.ok({
+      message: 'Foto de perfil actualizada correctamente.',
+      url: `/storage/profile/${newFilename}`,
+      file: newFilename,
+    });
   }
 }

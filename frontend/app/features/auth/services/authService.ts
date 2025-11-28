@@ -36,3 +36,14 @@ export const updatePasswordService = async (oldPassword: string, newPassword: st
     .post('auth/update-password', { json: { oldPassword: oldPassword, newPassword: newPassword } })
     .json<{ message: string }>();
 };
+
+export const updateProfilePictureService = async (file: File) => {
+  const form = new FormData();
+  form.append('picture', file);
+
+  return http
+    .post('storage/profile-picture', {
+      body: form,
+    })
+    .json<{ message: string; url: string; file: string }>();
+};

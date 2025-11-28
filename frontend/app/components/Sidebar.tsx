@@ -2,7 +2,14 @@ import { Icon } from '@iconify/react';
 import { NavLink } from 'react-router';
 import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
-import { HomeIcon, LogoutIcon, SaleIcon, SettingsIcon, SupplierIcon } from '~/constants/iconNames';
+import {
+  HomeIcon,
+  LogoutIcon,
+  SaleIcon,
+  SettingsIcon,
+  SupplierIcon,
+  SystemIcon,
+} from '~/constants/iconNames';
 import {
   AppDescription,
   AppName,
@@ -15,6 +22,8 @@ import {
   PleaseWaitText,
   SettingText,
   SuppliersText,
+  SystemText,
+  SystemUsersText,
 } from '~/constants/strings';
 import { useAuth } from '~/context/authContext';
 
@@ -86,6 +95,25 @@ export default function Sidebar() {
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {ListText}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={SystemIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{SystemText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/user'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {SystemUsersText}
                   </NavLink>
                 </li>
               </ul>

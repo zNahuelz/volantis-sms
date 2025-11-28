@@ -2,6 +2,7 @@ import type { Supplier } from '~/types/supplier';
 
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
+export const AppVersion = 'Dev. Env.';
 
 export const LoginText = 'Inicio de Sesión';
 export const LoginButtonText = 'Iniciar Sesión';
@@ -117,3 +118,12 @@ export const UserPasswordUpdatedText =
   'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
 export const RegisterDateText = 'Fecha de Registro';
 export const UserUpdatedAtText = 'Ult. Mod. al Usuario';
+export const CurrenAvatarText = 'Foto de perfil actual';
+export const PreviewText = 'Vista previa';
+export const NoFileSelected = 'Sin archivo seleccionado';
+export const UserAvatarUpdatedText =
+  'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
+export const SystemText = 'Sistema';
+export const SystemUsersText = 'Gest. Usuarios';
+export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
+export const WelcomeAreaText = `Dashboard - ${AppName}`;

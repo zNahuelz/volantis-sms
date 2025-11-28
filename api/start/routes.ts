@@ -28,7 +28,10 @@ router
 
     router
       .group(() => {
-        router.get('/profile-picture/:file', [StorageController, 'show']);
+        router.get('/profile-picture/:file', [StorageController, 'showProfilePicture']);
+        router
+          .post('/profile-picture', [StorageController, 'updateProfilePicture'])
+          .use(middleware.auth());
       })
       .prefix('storage');
 

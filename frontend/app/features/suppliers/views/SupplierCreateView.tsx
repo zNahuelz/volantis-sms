@@ -1,7 +1,7 @@
 import { CreateSupplierAreaText, CreateSupplierText } from '~/constants/strings';
 import SupplierForm from '../components/SupplierForm';
-import type { Route } from '.react-router/types/app/routes/+types/home';
 import { supplierService } from '../services/supplierService';
+import type { Route } from '.react-router/types/app/+types/root';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: CreateSupplierAreaText }];

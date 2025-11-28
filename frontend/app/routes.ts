@@ -7,7 +7,7 @@ export default [
 
   route('/dashboard', 'features/auth/components/ProtectedRoute.tsx', [
     route('', 'layouts/DashboardLayout.tsx', [
-      route('', 'routes/home.tsx'),
+      route('', 'features/shared/views/WelcomeView.tsx'),
 
       route('profile', 'features/auth/views/ProfileView.tsx'),
 
@@ -15,6 +15,8 @@ export default [
       route('supplier/create', 'features/suppliers/views/SupplierCreateView.tsx'),
       route('supplier/:id', 'features/suppliers/views/SupplierDetailView.tsx'),
       route('supplier/:id/edit', 'features/suppliers/views/SupplierEditView.tsx'),
+
+      route('user', 'features/users/views/UsersListView.tsx'),
     ]),
   ]),
 ] satisfies RouteConfig;

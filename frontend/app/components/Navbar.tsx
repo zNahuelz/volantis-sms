@@ -1,6 +1,14 @@
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router';
-import { EmptyNotificationsIcon, MenuIcon } from '~/constants/iconNames';
+import {
+  AdminIcon,
+  CustomRoleIcon,
+  EmptyNotificationsIcon,
+  ManagerIcon,
+  MenuIcon,
+  SellerIcon,
+  UnknownRoleIcon,
+} from '~/constants/iconNames';
 import { ClosingSessionText, LogoutText, PleaseWaitText, SettingText } from '~/constants/strings';
 import { useAuth } from '~/context/authContext';
 import defaultPfp from '../../assets/images/defaultPfp.png';
@@ -35,6 +43,25 @@ export default function Navbar() {
       <div className='navbar-center hidden lg:flex'></div>
 
       <div className='navbar-end gap-2'>
+        <div className='btn btn-circle btn-ghost' title={user?.role?.name ?? 'USUARIO SIN ROL'}>
+          <div className='indicator'>
+            <Icon
+              icon={
+                user?.role?.name === 'ADMINISTRADOR'
+                  ? AdminIcon
+                  : user?.role?.name === 'VENDEDOR'
+                    ? SellerIcon
+                    : user?.role?.name === 'GERENTE'
+                      ? ManagerIcon
+                      : user?.role == null
+                        ? UnknownRoleIcon
+                        : CustomRoleIcon
+              }
+              className='h-5 w-5 text-info'
+            />
+          </div>
+        </div>
+
         <div className='dropdown dropdown-end'>
           <div tabIndex={0} role='button' className='btn btn-circle btn-ghost'>
             <div className='indicator'>
