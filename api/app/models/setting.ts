@@ -5,7 +5,7 @@ export default class Setting extends BaseModel {
   @column({ isPrimary: true })
   declare id: number;
 
-  @column()
+  @column({ columnName: '_key' })
   declare key: string;
 
   @column()

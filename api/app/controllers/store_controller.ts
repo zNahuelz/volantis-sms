@@ -1,38 +1,35 @@
 import type { HttpContext } from '@adonisjs/core/http';
-import Supplier from '../models/supplier.js';
-import { CreateSupplierValidator } from '../validators/create_supplier.js';
+import { CreateStoreValidator } from '../validators/create_store.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateSupplierValidator } from '../validators/update_supplier.js';
+import Store from '../models/store.js';
+import { UpdateStoreValidator } from '../validators/update_store.js';
 import { DateTime } from 'luxon';
 
-export default class SuppliersController {
+export default class StoreController {
   public async store({ request, response }: HttpContext) {
-    const data = await request.validateUsing(CreateSupplierValidator);
-
+    const data = await request.validateUsing(CreateStoreValidator);
     try {
-      const supplier = await db.transaction(async (trx) => {
-        const newSupplier = await Supplier.create(
+      const store = await db.transaction(async (trx) => {
+        const newStore = await Store.create(
           {
             name: data.name.trim().toUpperCase(),
             ruc: data.ruc.trim(),
-            phone: data.phone.trim(),
-            email: data.email.trim().toUpperCase(),
             address: data.address.trim().toUpperCase(),
+            phone: data.phone.trim(),
           },
           { client: trx }
         );
-
-        return newSupplier;
+        return newStore;
       });
 
       return response.created({
-        message: 'Proveedor registrado correctamente',
-        supplier,
+        message: 'Tienda registrada correctamente.',
+        store,
       });
     } catch (error) {
       return response.badRequest({
         message:
-          'Error durante el registro de proveedor, operación cancelada. Intente nuevamente o comuniquese con administración.',
+          'Error durante el registro de tienda, operación cancelada. Intente nuevamente o comuniquese con administración.',
         error: error.messages || error.message,
       });
     }
@@ -40,16 +37,14 @@ export default class SuppliersController {
 
   public async show({ request, response }: HttpContext) {
     const id = request.param('id');
-
-    const supplier = await Supplier.find(id);
-
-    if (!supplier) {
+    const store = await Store.find(id);
+    if (!store) {
       return response.notFound({
-        message: 'Proveedor no encontrado',
+        message: `Tienda de ID: ${id} no encontrada.`,
       });
     }
 
-    return response.ok(supplier);
+    return response.ok(store);
   }
 
   public async index({ request, response }: HttpContext) {
@@ -57,37 +52,36 @@ export default class SuppliersController {
       const page = request.input('page', 1);
       const limit = request.input('limit', 10);
       const search = request.input('search', '');
-      const searchBy = request.input('searchBy', 'all'); // 'id' | 'ruc' | 'name' | 'all'
+      const searchBy = request.input('searchBy', 'all'); // 'id' | 'name' | 'ruc' | 'address' | 'all'
       const status = request.input('status', 'available'); // 'available' | 'deleted' | 'all'
-      const orderBy = request.input('orderBy', 'updatedAt');
+      const orderBy = request.input('orderBy', 'createdAt');
       const orderDir = request.input('orderDir', 'desc'); // 'asc' | 'desc'
 
-      const query = Supplier.query();
-
+      const query = Store.query();
       if (search) {
         query.where((q) => {
           switch (searchBy) {
             case 'id':
               q.where('id', search);
               break;
-            case 'ruc':
-              q.whereILike('ruc', `%${search}%`);
-              break;
             case 'name':
-              q.whereILike('name', `%${search}%`);
+              q.where('names', search);
+              break;
+            case 'ruc':
+              q.where('ruc', search);
+              break;
+            case 'address':
+              q.where('address', search);
               break;
             case 'all':
             default:
               q.whereILike('name', `%${search}%`)
                 .orWhereILike('ruc', `%${search}%`)
-                .orWhereILike('email', `%${search}%`)
-                .orWhereILike('phone', `%${search}%`)
                 .orWhereILike('address', `%${search}%`);
               break;
           }
         });
       }
-
       switch (status) {
         case 'deleted':
           query.whereNotNull('deleted_at');
@@ -99,13 +93,14 @@ export default class SuppliersController {
           break;
       }
 
-      const suppliers = await query.orderBy(orderBy, orderDir).paginate(page, limit);
+      query.preload('sales');
 
-      suppliers.baseUrl(request.url());
-      return response.ok(suppliers);
+      const stores = await query.orderBy(orderBy, orderDir).paginate(page, limit);
+      stores.baseUrl(request.url());
+      return response.ok(stores);
     } catch (error) {
       return response.internalServerError({
-        message: 'Error en el listado de proveedores, intente nuevamente.',
+        message: 'Error en el listado de tiendas, intente nuevamente.',
         error: error.message,
       });
     }
@@ -115,23 +110,22 @@ export default class SuppliersController {
     const id = request.param('id');
 
     try {
-      const data = await request.validateUsing(UpdateSupplierValidator, {
-        meta: { supplierId: id },
+      const data = await request.validateUsing(UpdateStoreValidator, {
+        meta: { storeId: id },
       });
 
-      const supplier = await db.transaction(async (trx) => {
-        const model = await Supplier.find(id, { client: trx });
+      const store = await db.transaction(async (trx) => {
+        const model = await Store.find(id, { client: trx });
 
         if (!model) {
-          throw new Error('SUPPLIER_NOT_FOUND');
+          throw new Error('STORE_NOT_FOUND');
         }
 
         model.merge({
           name: data.name.trim().toUpperCase(),
           ruc: data.ruc.trim(),
-          phone: data.phone.trim(),
-          email: data.email.trim().toUpperCase(),
           address: data.address.trim().toUpperCase(),
+          phone: data.phone.trim(),
         });
 
         await model.useTransaction(trx).save();
@@ -140,19 +134,19 @@ export default class SuppliersController {
       });
 
       return response.ok({
-        message: 'Proveedor actualizado correctamente',
-        supplier,
+        message: 'Tienda actualizada correctamente',
+        store,
       });
     } catch (error) {
-      if (error.message === 'SUPPLIER_NOT_FOUND') {
+      if (error.message === 'STORE_NOT_FOUND') {
         return response.notFound({
-          message: `Proveedor de ID: ${id} no encontrado, actualización cancelada.`,
+          message: `Tienda de ID: ${id} no encontrada, actualización cancelada.`,
         });
       }
 
       return response.badRequest({
         message:
-          'Error durante la actualización del proveedor. Intente nuevamente o comuniquese con administración.',
+          'Error durante la actualización de la tienda. Intente nuevamente o comuniquese con administración.',
         errors: error.messages || error.message,
       });
     }
@@ -160,17 +154,17 @@ export default class SuppliersController {
 
   public async destroy({ request, response }: HttpContext) {
     const id = request.param('id');
-    const supplier = await Supplier.query().where('id', id).first();
-
-    if (!supplier) {
-      return response.notFound({ message: `Proveedor de ID: ${id} no encontrado.` });
+    const store = await Store.find(id);
+    if (!store) {
+      return response.notFound({
+        message: `Tienda de ID: ${id} no encontrada.`,
+      });
     }
 
-    await supplier.merge({ deletedAt: supplier.deletedAt != null ? null : DateTime.utc() }).save();
-
+    await store.merge({ deletedAt: store.deletedAt != null ? null : DateTime.utc() }).save();
     return response.ok({
-      message: `Visibilidad de provedor de ID: ${id} actualizada correctamente.`,
-      supplier,
+      message: `Tienda de ID: ${id} actualizada correctamente.`,
+      store,
     });
   }
 }

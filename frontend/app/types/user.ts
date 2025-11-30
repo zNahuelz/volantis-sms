@@ -6,6 +6,7 @@ export interface User {
   id?: number;
   names?: string;
   surnames?: string;
+  dni?: string;
   username?: string;
   email?: string;
   profilePicture?: string | null;

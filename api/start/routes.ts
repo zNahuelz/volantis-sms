@@ -11,8 +11,13 @@ import router from '@adonisjs/core/services/router';
 import AuthController from '../app/controllers/auth_controller.js';
 import { middleware } from './kernel.js';
 import RoleController from '../app/controllers/role_controller.js';
-import SuppliersController from '../app/controllers/suppliers_controller.js';
 import StorageController from '../app/controllers/storage_controller.js';
+import SupplierController from '../app/controllers/supplier_controller.js';
+import UserController from '../app/controllers/user_controller.js';
+import CustomerController from '../app/controllers/customer_controller.js';
+import PresentationController from '../app/controllers/presentation_controller.js';
+import StoreController from '../app/controllers/store_controller.js';
+import SettingController from '../app/controllers/setting_controller.js';
 
 router
   .group(() => {
@@ -28,6 +33,89 @@ router
 
     router
       .group(() => {
+        router
+          .post('/', [CustomerController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:store'])]);
+        router
+          .get('/', [CustomerController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:index'])]);
+        router
+          .put('/:id', [CustomerController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:update'])]);
+        router
+          .get('/:id', [CustomerController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:show'])]);
+        router
+          .delete('/:id', [CustomerController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:destroy'])]);
+      })
+      .prefix('customer');
+
+    router
+      .group(() => {
+        router
+          .post('/', [PresentationController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:store'])]);
+        router
+          .get('/', [PresentationController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:index'])]);
+        router
+          .put('/:id', [PresentationController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:update'])]);
+        router
+          .get('/:id', [PresentationController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:show'])]);
+        router
+          .delete('/:id', [PresentationController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:destroy'])]);
+      })
+      .prefix('presentation');
+
+    router
+      .group(() => {
+        router
+          .post('/', [SettingController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:store'])]);
+        router
+          .get('/:id', [SettingController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:show'])]);
+        router
+          .get('/key/:key', [SettingController, 'showByKey'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:showByKey'])]);
+        router
+          .get('/', [SettingController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:index'])]);
+        router
+          .put('/:id', [SettingController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:update'])]);
+        router
+          .delete('/:id', [SettingController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:destroy'])]);
+      })
+      .prefix('setting');
+
+    router
+      .group(() => {
+        router
+          .post('/', [SupplierController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:store'])]);
+        router
+          .get('/:id', [SupplierController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:show'])]);
+        router
+          .get('/', [SupplierController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:index'])]);
+        router
+          .put('/:id', [SupplierController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:update'])]);
+        router
+          .delete('/:id', [SupplierController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:destroy'])]);
+      })
+      .prefix('supplier');
+
+    router
+      .group(() => {
         router.get('/profile-picture/:file', [StorageController, 'showProfilePicture']);
         router
           .post('/profile-picture', [StorageController, 'updateProfilePicture'])
@@ -38,28 +126,54 @@ router
     router
       .group(() => {
         router
-          .post('/', [SuppliersController, 'store'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:store'])]);
+          .post('/', [StoreController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:store'])]);
         router
-          .get('/:id', [SuppliersController, 'show'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:show'])]);
+          .get('/:id', [StoreController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:show'])]);
         router
-          .get('/', [SuppliersController, 'index'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:index'])]);
+          .get('/', [StoreController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:index'])]);
         router
-          .put('/:id', [SuppliersController, 'update'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:update'])]);
+          .put('/:id', [StoreController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:update'])]);
         router
-          .delete('/:id', [SuppliersController, 'destroy'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:destroy'])]);
+          .delete('/:id', [StoreController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:destroy'])]);
       })
-      .prefix('supplier');
+      .prefix('store');
+
+    router
+      .group(() => {
+        router
+          .post('/', [UserController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:store'])]);
+        router
+          .get('/', [UserController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:index'])]);
+        router
+          .put('/:id', [UserController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:update'])]);
+        router
+          .get('/:id', [UserController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:show'])]);
+        router
+          .delete('/:id', [UserController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:destroy'])]);
+      })
+      .prefix('user');
 
     router
       .group(() => {
         router
           .get('/', [RoleController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:index', 'user:create'])]);
+        router
+          .get('/:id', [RoleController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:show'])]);
+        router
+          .delete('/:id', [RoleController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:destroy'])]);
       })
       .prefix('role');
   })

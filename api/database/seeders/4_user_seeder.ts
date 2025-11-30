@@ -20,6 +20,7 @@ export default class extends BaseSeeder {
     await User.create({
       names: 'Administrador',
       surnames: '------',
+      dni: '00000123',
       username: 'admin',
       email: 'admin@site.com',
       password: 'admin',
@@ -31,6 +32,7 @@ export default class extends BaseSeeder {
     await User.create({
       names: 'Gerente',
       surnames: '------',
+      dni: '00000234',
       username: 'manager',
       email: 'manager@volantis.com',
       password: 'manager',
@@ -42,6 +44,7 @@ export default class extends BaseSeeder {
     await User.create({
       names: 'Vendedor',
       surnames: '------',
+      dni: '00000567',
       username: 'seller0',
       email: 'seller@volantis.com',
       password: 'seller0',
