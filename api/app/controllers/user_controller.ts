@@ -17,7 +17,7 @@ export default class UserController {
             dni: data.dni.trim(),
             username: `${data.names.trim().toUpperCase()[0]}${data.surnames.trim().toUpperCase()[0]}${data.dni.trim()}-${new Date().getHours()}`,
             email: data.email.trim().toUpperCase(),
-            password: data.password,
+            password: data.dni.trim(),
             profilePicture: null,
             roleId: data.roleId,
             storeId: data.storeId,
@@ -60,7 +60,7 @@ export default class UserController {
       const page = request.input('page', 1);
       const limit = request.input('limit', 10);
       const search = request.input('search', '');
-      const searchBy = request.input('searchBy', 'all'); // 'id' | 'names' | 'username' | 'email' | 'all'
+      const searchBy = request.input('searchBy', 'all'); // 'id' | 'names' | 'username' | 'email' | 'dni' | 'all'
       const status = request.input('status', 'available'); // 'available' | 'deleted' | 'all'
       const orderBy = request.input('orderBy', 'createdAt');
       const orderDir = request.input('orderDir', 'desc'); // 'asc' | 'desc'
@@ -73,13 +73,16 @@ export default class UserController {
               q.where('id', search);
               break;
             case 'names':
-              q.where('names', search);
+              q.whereILike('names', `%${search}%`);
               break;
             case 'username':
-              q.where('username', search);
+              q.whereILike('username', `%${search}%`);
               break;
             case 'email':
-              q.where('email', search);
+              q.whereILike('email', `%${search}%`);
+              break;
+            case 'dni':
+              q.whereILike('dni', `%${search}%`);
               break;
             case 'all':
             default:

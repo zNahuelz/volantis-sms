@@ -46,6 +46,15 @@ export default class RoleController {
     }
   }
 
+  public async list({ response }: HttpContext) {
+    const roles = await Role.query()
+      .whereNull('deleted_at')
+      .preload('abilities')
+      .orderBy('updated_at');
+
+    return response.ok(roles);
+  }
+
   public async destroy({ request, response }: HttpContext) {
     const id = request.param('id');
     const role = await Role.find(id);

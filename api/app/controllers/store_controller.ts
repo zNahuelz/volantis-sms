@@ -106,6 +106,11 @@ export default class StoreController {
     }
   }
 
+  public async list({ response }: HttpContext) {
+    const stores = await Store.query().whereNull('deleted_at').orderBy('updated_at');
+    return response.ok(stores);
+  }
+
   public async update({ request, response }: HttpContext) {
     const id = request.param('id');
 

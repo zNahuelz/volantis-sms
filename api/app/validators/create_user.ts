@@ -18,8 +18,6 @@ export const CreateUserValidator = vine.compile(
       caseInsensitive: true,
     }),
 
-    password: vine.string().trim().minLength(5).maxLength(20),
-
     profilePicture: vine.string().optional(),
 
     roleId: vine.number().exists({ table: 'roles', column: 'id' }),

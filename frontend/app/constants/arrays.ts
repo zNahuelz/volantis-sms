@@ -11,6 +11,14 @@ export const SUPPLIER_SEARCH_TYPES = [
   { label: 'POR NOMBRE', value: 'name' },
 ];
 
+export const USER_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR DNI', value: 'dni' },
+  { label: 'POR NOMBRES', value: 'names' },
+  { label: 'POR NOMBRE DE USUARIO', value: 'username' },
+  { label: 'POR CORREO ELECTRÓNICO', value: 'email' },
+];
+
 export const DEFAULT_STATUS_TYPES = [
   { label: 'TODOS', value: 'all' },
   { label: 'SOLO HABILITADOS', value: 'available' },

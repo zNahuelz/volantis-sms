@@ -34,12 +34,13 @@ import type { Supplier } from '~/types/supplier';
 import { formatAsDatetime, isInteger } from '~/utils/helpers';
 import { supplierService } from '../services/supplierService';
 import { useEffect, useState } from 'react';
-import type { Route } from '.react-router/types/app/routes/+types/home';
+
 import Input from '~/components/Input';
 import Button from '~/components/Button';
 import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import type { Route } from '.react-router/types/app/+types/root';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: SupplierDetailAreaText }];

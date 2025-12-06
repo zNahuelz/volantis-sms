@@ -1,4 +1,3 @@
-import type { Route } from '.react-router/types/app/routes/+types/home';
 import {
   EditSupplierAreaText,
   EditSupplierText,
@@ -11,7 +10,8 @@ import { useNavigate, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Loading from '~/components/Loading';
 import { isInteger } from '~/utils/helpers';
-import Swal from 'sweetalert2';
+import type { Route } from '.react-router/types/app/+types/root';
+
 export function meta({}: Route.MetaArgs) {
   return [{ title: EditSupplierAreaText }];
 }

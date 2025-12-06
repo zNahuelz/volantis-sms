@@ -17,6 +17,7 @@ export default [
       route('supplier/:id/edit', 'features/suppliers/views/SupplierEditView.tsx'),
 
       route('user', 'features/users/views/UsersListView.tsx'),
+      route('user/:id', 'features/users/views/UserDetailView.tsx'),
     ]),
   ]),
 ] satisfies RouteConfig;

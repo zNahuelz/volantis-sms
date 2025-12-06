@@ -35,3 +35,5 @@ export const UnknownRoleIcon = 'ic:sharp-nearby-error';
 export const SellerIcon = 'ic:sharp-all-inbox';
 export const ManagerIcon = 'ic:outline-admin-panel-settings';
 export const CustomRoleIcon = 'ic:sharp-badge';
+export const CloseIcon = 'ic:baseline-close';
+export const DniIcon = 'ic:sharp-medical-information';

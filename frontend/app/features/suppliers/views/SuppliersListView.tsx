@@ -3,7 +3,6 @@ import { NavLink, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import type { Supplier } from '~/types/supplier';
 import type { SupplierQuery } from '../services/supplierService';
-import type { Route } from '.react-router/types/app/routes/+types/home';
 import { supplierService } from '../services/supplierService';
 import SupplierTable from '../components/SupplierTable';
 import Loading from '~/components/Loading';
@@ -48,6 +47,7 @@ import {
 import clsx from 'clsx';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import type { Route } from '.react-router/types/app/+types/root';
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: SuppliersListAreaText }];
@@ -60,7 +60,7 @@ export default function SuppliersListView() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState('available');
   const navigate = useNavigate();
 
   const {
@@ -87,7 +87,7 @@ export default function SuppliersListView() {
       page,
       limit,
       search: '',
-      status: status === 'all' ? undefined : status,
+      status: status,
       field: undefined,
       sortBy: undefined,
       sortDir: undefined,
@@ -117,7 +117,7 @@ export default function SuppliersListView() {
       limit,
       field: values.field,
       search: values.search,
-      status: status === 'all' ? undefined : status,
+      status: status,
     };
     const response = await supplierService.index(query);
     setData(response.data);

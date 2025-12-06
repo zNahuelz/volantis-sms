@@ -135,6 +135,9 @@ router
           .get('/', [StoreController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'store:index'])]);
         router
+          .get('/index/all', [StoreController, 'list'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:list', 'user:create'])]);
+        router
           .put('/:id', [StoreController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'store:update'])]);
         router
@@ -166,11 +169,14 @@ router
     router
       .group(() => {
         router
-          .get('/', [RoleController, 'index'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:index', 'user:create'])]);
-        router
           .get('/:id', [RoleController, 'show'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:show'])]);
+        router
+          .get('/', [RoleController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:index'])]);
+        router
+          .get('/index/all', [RoleController, 'list'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:list', 'user:create'])]);
         router
           .delete('/:id', [RoleController, 'destroy'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:destroy'])]);

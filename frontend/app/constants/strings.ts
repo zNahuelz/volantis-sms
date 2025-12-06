@@ -1,4 +1,5 @@
 import type { Supplier } from '~/types/supplier';
+import type { User } from '~/types/user';
 
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
@@ -24,7 +25,9 @@ export const ActionsText = 'Acciones';
 export const SupplierListText = 'Listado de Proveedores';
 export const LoadingText = 'Cargando...';
 export const LoadingSuppliersText = 'Cargando proveedores...';
+export const LoadingUsersText = 'Cargando usuarios...';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
+export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
 export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
 export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
@@ -39,6 +42,7 @@ export const DeletedAtText = 'Fecha de Eliminación';
 export const StateText = 'Estado';
 export const EditText = 'Modificar';
 export const DeleteText = 'Eliminar';
+export const DisableText = 'Deshabilitar';
 export const IsActiveText = 'Habilitado';
 export const IsDeletedText = 'Deshabilitado';
 export const SearchText = 'Buscar';
@@ -80,9 +84,15 @@ export const IdTextAlt = 'ID';
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
   return `¿Está seguro de ${supplier.deletedAt != null ? 'restaurar' : 'eliminar'} el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
 };
+export const UserStatusChangeMessage = (user: User) => {
+  return `Está seguro de ${user.deletedAt != null ? 'restaurar' : 'deshabilitar'} al siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni}`;
+};
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
+export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
 export const SupplierStatusUpdateFailedText =
   'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';
+export const UserStatusUpdateFailedText =
+  'Fallo la actualización de estado de cuenta de usuario. Intente nuevamente o comuniquese con administración.';
 export const ConfirmActionText = 'Confirmar Operación';
 export const LoggingInText = 'Ingresando...';
 export const InvalidCredentialsText =
@@ -95,6 +105,7 @@ export const GoBackText = 'Átras';
 export const SupplierDetailText = 'Detalle de Proveedor';
 export const NamesText = 'Nombres';
 export const SurnamesText = 'Apellidos';
+export const DniText = 'Dni';
 export const SurnameText = 'Apellido';
 export const RoleText = 'Rol';
 export const AssignedStoreText = 'Tienda Asignada';
@@ -127,3 +138,26 @@ export const SystemText = 'Sistema';
 export const SystemUsersText = 'Gest. Usuarios';
 export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
 export const WelcomeAreaText = `Dashboard - ${AppName}`;
+export const UserText = 'Usuario';
+export const UsersText = 'Usuarios';
+export const LoadingForm = 'Cargando formulario...';
+export const FormLoadFailed =
+  'Error durante la carga del formulario, intente nuevamente o comuniquese con administración';
+export const UserUpdatedText = 'Usuario actualizado correctamente.';
+export const UserCreatedText =
+  'Usuario registrado correctamente. Se ha enviado un correo electrónico con la información del usuario. Recuerde que la contraseña por defecto es el DNI del empleado.';
+export const UserRegisterText = 'Registro de Usuario';
+export const UserEditText = 'Modificar Usuario';
+export const InvalidStoreIdText =
+  'La tienda seleccionada no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
+export const InvalidRoleIdText =
+  'El rol seleccionado no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
+export const UserDniTakenText =
+  'El DNI ingresado ya se encuentra asignado a otro usuario, comuniquese con administración.';
+export const UserEmailTaken =
+  'El correo electrónico ingresado ya se encuentra asignado a otro usuario, comuniquese con administración';
+export const UsernameChangeDisabledOnEditText =
+  'Modificar el DNI del empleado no actualizará su nombre de usuario, tal cambio puede realizarse de forma personal desde el apartado "Mi Perfil".';
+export const LoadingUserText = 'Cargando usuario...';
+export const UserNotFoundText = 'Usuario no encontrado.';
+export const UserDetailText = 'Detalle de Usuario';
