@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import type { Customer } from '~/types/customer';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 
@@ -25,10 +27,13 @@ export const ActionsText = 'Acciones';
 export const SupplierListText = 'Listado de Proveedores';
 export const LoadingText = 'Cargando...';
 export const LoadingSuppliersText = 'Cargando proveedores...';
+export const LoadingCustomersText = 'Cargando clientes...';
 export const LoadingUsersText = 'Cargando usuarios...';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
+export const CustomersNotLoaded = 'No se encontraron clientes con el criterío ingresado.';
 export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
+export const CustomersListAreaText = `Listado de Clientes - ${AppName}`;
 export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
 export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
 export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
@@ -53,7 +58,7 @@ export const TableElementsMessage = (
   total: number,
   elements: number
 ) => {
-  return `Mostrando ${elements} ${elements >= 1 ? pluralName : singularName} de un total de ${total}.`;
+  return `Mostrando ${elements} ${elements > 1 ? pluralName : singularName} de un total de ${total}.`;
 };
 export const SupplierText = 'Proveedor';
 export const RestoreText = 'Restaurar';
@@ -62,6 +67,7 @@ export const ForgotPasswordText = '¿Olvidaste tu contraseña? ';
 export const ClickHereText = 'Click aquí';
 export const RememberMeText = 'Recuérdame';
 export const CreateSupplierText = 'Registro de Proveedor';
+export const CreateCustomerText = 'Registro de Cliente';
 export const EditSupplierText = 'Modificando Proveedor';
 export const AddressText = 'Dirección';
 export const SaveText = 'Guardar';
@@ -82,15 +88,31 @@ export const SupplierNotFound = 'Proveedor no encontrado.';
 export const IdText = '#';
 export const IdTextAlt = 'ID';
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
-  return `¿Está seguro de ${supplier.deletedAt != null ? 'restaurar' : 'eliminar'} el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
+  return `¿Está seguro de <strong>${supplier.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
 };
 export const UserStatusChangeMessage = (user: User) => {
-  return `Está seguro de ${user.deletedAt != null ? 'restaurar' : 'deshabilitar'} al siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni}`;
+  return `¿Está seguro de <strong>${user.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> al siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni}`;
+};
+export const CustomerStatusChangeMessage = (customer: Customer) => {
+  return `¿Está seguro de <strong>${customer.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente cliente? <br> <strong>ID:</strong> ${customer.id} <br> <strong>NOMBRE:</strong> ${customer.names} <br> <strong>DNI:</strong> ${customer.dni}`;
+};
+export const RemoveProfilePictureMessage = (user: User) => {
+  return `¿Está seguro que desea <strong>restablecer</strong> la foto de perfil del siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> <strong>Esta acción no se puede revertir.</strong>`;
+};
+export const ResetPasswordRemotelyMessage = (user: User) => {
+  return `¿Está seguro que desea <strong>restablecer</strong> la contraseña del siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> <strong>La nueva contraseña será el DNI del usuario (de estar disponible) o la fecha actual (DÍA-MES-AÑO): ${dayjs().format('DDMMYYYY')}</strong>`;
 };
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
+export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
 export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
+export const UserProfilePictureRemovedText =
+  'Foto de perfil del usuario restablecida correctamente.';
+export const UserPasswordResetSuccesfullyText =
+  'Contraseña del usuario restablecida correctamente, sus sesiones han sido cerradas automáticamente.';
 export const SupplierStatusUpdateFailedText =
   'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';
+export const CustomerStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del cliente. Intente nuevamente o comuniquese con administración.';
 export const UserStatusUpdateFailedText =
   'Fallo la actualización de estado de cuenta de usuario. Intente nuevamente o comuniquese con administración.';
 export const ConfirmActionText = 'Confirmar Operación';
@@ -137,6 +159,7 @@ export const UserAvatarUpdatedText =
 export const SystemText = 'Sistema';
 export const SystemUsersText = 'Gest. Usuarios';
 export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
+export const CreateCustomerAreaText = `Registro de Cliente - ${AppName}`;
 export const WelcomeAreaText = `Dashboard - ${AppName}`;
 export const UserText = 'Usuario';
 export const UsersText = 'Usuarios';
@@ -161,3 +184,22 @@ export const UsernameChangeDisabledOnEditText =
 export const LoadingUserText = 'Cargando usuario...';
 export const UserNotFoundText = 'Usuario no encontrado.';
 export const UserDetailText = 'Detalle de Usuario';
+export const StoreText = 'Tienda';
+export const StoreAddressText = 'Dirección de la Tienda';
+export const RemoveProfilePictureText = 'Restablecer foto de perfil';
+export const ResetPasswordText = 'Reiniciar contraseña';
+export const SendPasswordRecoveryText = 'Enviar e-mail de recuperación';
+export const EditRoleText = 'Editar rol';
+export const UserDetailAreaText = `Detalle de Usuario -  ${AppName}`;
+export const ConfirmText = 'Confirmar';
+export const CustomersText = 'Clientes';
+export const CustomerText = 'Cliente';
+export const CustomerUpdatedText = 'Cliente actualizado correctamente.';
+export const CustomerCreatedText = 'Cliente registrado correctamente.';
+export const CustomerDniTakenText = 'El DNI ingresado ya se encuentra asignado a otro cliente.';
+export const EditCustomerAreaText = `Editar Cliente - ${AppName}`;
+export const EditCustomerText = 'Modificando Cliente';
+export const CustomerNotFoundText = 'Cliente no encontrado';
+export const LoadingCustomerText = 'Cargando información de cliente...';
+export const CustomerDetailAreaText = `Detalle de Cliente - ${AppName}`;
+export const CustomerDetailText = 'Detalle de Cliente';

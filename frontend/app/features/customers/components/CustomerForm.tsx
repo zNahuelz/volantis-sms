@@ -7,10 +7,10 @@ import {
   AddressIcon,
   CancelIcon,
   ClearIcon,
+  DniIcon,
   EmailIcon,
   NameIcon,
   PhoneIcon,
-  RucIcon,
   SaveIcon,
   UpdateIcon,
 } from '~/constants/iconNames';
@@ -18,38 +18,40 @@ import {
   AddressText,
   CancelText,
   ClearText,
+  CustomerCreatedText,
+  CustomerDniTakenText,
+  CustomerUpdatedText,
+  DniText,
   EmailText,
   ErrorTagText,
-  NameText,
+  NamesText,
   OkTagText,
   OpRollbackText,
   PhoneText,
-  RucText,
   SaveText,
   SavingText,
-  SupplierCreatedText,
-  SupplierRucTakenText,
-  SupplierUpdatedText,
+  SurnamesText,
   UpdateText,
   UpdatingText,
 } from '~/constants/strings';
 import { swalDismissalTime } from '~/constants/values';
 
-export interface SupplierFormData {
-  name: string;
-  ruc: string;
+export interface CustomerFormData {
+  names: string;
+  surnames: string;
+  address: string;
   phone: string;
   email: string;
-  address: string;
+  dni: string;
 }
 
-interface SupplierFormProps {
-  defaultValues?: Partial<SupplierFormData>;
-  onSubmit: (data: SupplierFormData) => Promise<any>;
+interface CustomerFormProps {
+  defaultValues?: Partial<CustomerFormData>;
+  onSubmit: (data: CustomerFormData) => Promise<any>;
 }
 
-export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormProps) {
-  const isEdit = Boolean(defaultValues?.name);
+export default function CustomerForm({ defaultValues, onSubmit }: CustomerFormProps) {
+  const isEdit = Boolean(defaultValues?.names);
 
   const {
     register,
@@ -57,7 +59,7 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
     reset,
     formState: { errors, isSubmitting },
     setError,
-  } = useForm<SupplierFormData>({
+  } = useForm<CustomerFormData>({
     defaultValues,
   });
 
@@ -67,13 +69,13 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
     }
   }, [defaultValues, reset]);
 
-  const submitHandler = async (data: SupplierFormData) => {
+  const submitHandler = async (data: CustomerFormData) => {
     try {
       await onSubmit(data).then(() => {
         Swal.fire({
           icon: 'success',
           title: OkTagText,
-          html: isEdit ? SupplierUpdatedText : SupplierCreatedText,
+          html: isEdit ? CustomerUpdatedText : CustomerCreatedText,
           timer: swalDismissalTime,
           showConfirmButton: false,
         }).then((r) => {
@@ -85,8 +87,8 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
     } catch (err: any) {
       if (err?.errors && Array.isArray(err.errors)) {
         err.errors.forEach((e: any) => {
-          const field = e.field as keyof SupplierFormData;
-          setError(field, { message: field === 'ruc' ? SupplierRucTakenText : e.message });
+          const field = e.field as keyof CustomerFormData;
+          setError(field, { message: field === 'dni' ? CustomerDniTakenText : e.message });
         });
         return;
       }
@@ -102,7 +104,6 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
       });
     }
   };
-
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
@@ -110,32 +111,53 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
     >
       <Input
         disabled={isSubmitting}
-        placeholder={NameText}
+        placeholder={NamesText}
         icon={NameIcon}
-        {...register('name', {
-          required: 'El nombre es obligatorio.',
+        {...register('names', {
+          required: 'Los nombres son obligatorios.',
           validate: {
             notBlank: (v) =>
-              v.trim().length > 0 || 'El nombre no puede estar vacío ni contener solo espacios.',
-            noLeadingSpace: (v) => !v.startsWith(' ') || 'El nombre no debe comenzar con espacios.',
+              v.trim().length > 0 || 'Los nombres no pueden estar vacío ni contener solo espacios.',
+            noLeadingSpace: (v) =>
+              !v.startsWith(' ') || 'Los nombres no deben comenzar con espacios.',
           },
-          maxLength: { value: 100, message: 'Máximo 100 caracteres.' },
+          minLength: { value: 3, message: 'Minímo 3 caracteres.' },
+          maxLength: { value: 30, message: 'Máximo 30 caracteres.' },
         })}
-        errorMessage={errors.name?.message}
+        errorMessage={errors.names?.message}
       />
 
       <Input
         disabled={isSubmitting}
-        placeholder={RucText.toUpperCase()}
-        icon={RucIcon}
-        {...register('ruc', {
-          required: 'El RUC es obligatorio.',
+        placeholder={SurnamesText}
+        icon={NameIcon}
+        {...register('surnames', {
+          required: 'Los apellidos son obligatorios.',
+          validate: {
+            notBlank: (v) =>
+              v.trim().length > 0 ||
+              'Los apellidos no pueden estar vacío ni contener solo espacios.',
+            noLeadingSpace: (v) =>
+              !v.startsWith(' ') || 'Los apellidos no deben comenzar con espacios.',
+          },
+          minLength: { value: 3, message: 'Minímo 3 caracteres.' },
+          maxLength: { value: 30, message: 'Máximo 30 caracteres.' },
+        })}
+        errorMessage={errors.surnames?.message}
+      />
+
+      <Input
+        disabled={isSubmitting}
+        placeholder={DniText.toUpperCase()}
+        icon={DniIcon}
+        {...register('dni', {
+          required: 'El DNI es obligatorio.',
           pattern: {
-            value: /^\d{11}$/,
-            message: 'El RUC debe contener exactamente 11 dígitos.',
+            value: /^\d{8,15}$/,
+            message: 'El DNI debe contener exactamente 8 dígitos.',
           },
         })}
-        errorMessage={errors.ruc?.message}
+        errorMessage={errors.dni?.message}
       />
 
       <Input
@@ -167,25 +189,22 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
         errorMessage={errors.email?.message}
       />
 
-      <div className='col-span-full'>
-        <Input
-          disabled={isSubmitting}
-          placeholder={AddressText}
-          icon={AddressIcon}
-          {...register('address', {
-            required: 'La dirección es obligatoria.',
-            validate: {
-              notBlank: (v) =>
-                v.trim().length > 0 ||
-                'La dirección no puede estar vacía ni contener solo espacios.',
-              noLeadingSpace: (v) =>
-                !v.startsWith(' ') || 'La dirección no debe comenzar con espacios.',
-            },
-            maxLength: { value: 150, message: 'Máximo 150 caracteres.' },
-          })}
-          errorMessage={errors.address?.message}
-        />
-      </div>
+      <Input
+        disabled={isSubmitting}
+        placeholder={AddressText}
+        icon={AddressIcon}
+        {...register('address', {
+          required: 'La dirección es obligatoria.',
+          validate: {
+            notBlank: (v) =>
+              v.trim().length > 0 || 'La dirección no puede estar vacía ni contener solo espacios.',
+            noLeadingSpace: (v) =>
+              !v.startsWith(' ') || 'La dirección no debe comenzar con espacios.',
+          },
+          maxLength: { value: 150, message: 'Máximo 150 caracteres.' },
+        })}
+        errorMessage={errors.address?.message}
+      />
 
       <div className='col-span-full flex w-full flex-col items-center md:w-auto'>
         <div className='join md:join-horizontal join-vertical w-full md:w-auto'>

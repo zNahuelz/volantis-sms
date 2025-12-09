@@ -7,41 +7,77 @@ import Loading from '~/components/Loading';
 import {
   CancelText,
   ConfirmActionText,
+  ConfirmText,
   CreatedAtText,
   DeleteText,
   DeletedAtText,
+  DescriptionText,
   DisableText,
   DniText,
+  EditRoleText,
   EditText,
   EmailText,
+  EmptyAbilityListText,
   ErrorTagText,
   GoBackText,
   IdTextAlt,
   IsActiveText,
   IsDeletedText,
   LoadingUserText,
+  NameText,
   NamesText,
   OkTagText,
+  RemoveProfilePictureMessage,
+  RemoveProfilePictureText,
+  ResetPasswordRemotelyMessage,
+  ResetPasswordText,
   RestoreText,
   RoleText,
+  SendPasswordRecoveryText,
+  ServerErrorText,
   StateText,
+  StoreAddressText,
+  StoreText,
   SurnamesText,
   UpdatedAtText,
+  UserDetailAreaText,
   UserDetailText,
   UserEditText,
   UserNotFoundText,
+  UserPasswordResetSuccesfullyText,
+  UserProfilePictureRemovedText,
   UserStatusChangeMessage,
   UserStatusUpdateFailedText,
   UserStatusUpdatedText,
+  UsernameText,
 } from '~/constants/strings';
 import Input from '~/components/Input';
 import Button from '~/components/Button';
-import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
+import {
+  DeleteIcon,
+  EditIcon,
+  EditRoleIcon,
+  GoBackIcon,
+  RemoveProfilePictureIcon,
+  ResetPasswordIcon,
+  RestoreIcon,
+  SendPasswordRecoveryIcon,
+} from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
 import Modal from '~/components/Modal';
 import UserForm from '../components/UserForm';
 import { useAuth } from '~/context/authContext';
+import defaultPfp from '../../../../assets/images/defaultPfp.png';
+import Alert from '~/components/Alert';
+import { Table, type Column } from '~/components/Table';
+import type { Ability } from '~/types/ability';
+import type { Route } from '.react-router/types/app/+types/root';
+const API_URL = import.meta.env.VITE_API_URL;
+
+export function meta({}: Route.MetaArgs) {
+  return [{ title: UserDetailAreaText }];
+}
 
 export default function UserDetailView() {
   const { id } = useParams();
@@ -52,8 +88,12 @@ export default function UserDetailView() {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const columns: Column<Ability>[] = [
+    { key: 'name', label: NameText },
+    { key: 'description', label: DescriptionText },
+  ];
+
   const { user: _user } = useAuth();
-  //TODO: ADD OTHER FIELDS AND ICON.
 
   useEffect(() => {
     const loadUser = async () => {
@@ -118,6 +158,90 @@ export default function UserDetailView() {
     }
   };
 
+  const showRemoveProfilePictureModal = async (user: User) => {
+    const result = await Swal.fire({
+      title: ConfirmActionText,
+      html: RemoveProfilePictureMessage(user),
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: SuccessColor,
+      cancelButtonColor: ErrorColor,
+      confirmButtonText: ConfirmText.toUpperCase(),
+      cancelButtonText: CancelText.toUpperCase(),
+    });
+
+    if (result.isConfirmed) {
+      await performProfilePictureRemoval(user.id!);
+    }
+  };
+
+  const performProfilePictureRemoval = async (id: number) => {
+    try {
+      await userService.removeProfilePicture(id);
+      Swal.fire({
+        title: OkTagText,
+        html: UserProfilePictureRemovedText,
+        icon: 'success',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    } catch (error) {
+      Swal.fire({
+        title: ErrorTagText,
+        html: ServerErrorText,
+        icon: 'error',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    }
+  };
+
+  const showResetPasswordRemotelyModal = async (user: User) => {
+    const result = await Swal.fire({
+      title: ConfirmActionText,
+      html: ResetPasswordRemotelyMessage(user),
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: SuccessColor,
+      cancelButtonColor: ErrorColor,
+      confirmButtonText: ConfirmText.toUpperCase(),
+      cancelButtonText: CancelText.toUpperCase(),
+    });
+
+    if (result.isConfirmed) {
+      await performRemotelyPasswordReset(user.id!);
+    }
+  };
+
+  const performRemotelyPasswordReset = async (id: number) => {
+    try {
+      await userService.resetPasswordRemotely(id);
+      Swal.fire({
+        title: OkTagText,
+        html: UserPasswordResetSuccesfullyText,
+        icon: 'success',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    } catch (error) {
+      Swal.fire({
+        title: ErrorTagText,
+        html: ServerErrorText,
+        icon: 'error',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    }
+  };
+
   if (loading) {
     return <Loading loadMessage={LoadingUserText}></Loading>;
   }
@@ -135,6 +259,24 @@ export default function UserDetailView() {
           </h1>
         </div>
         <div className='grid grid-cols-1 md:grid-cols-4 gap-2 p-4'>
+          <div className='col-span-full flex flex-col items-center'>
+            <img
+              alt='User Avatar'
+              className='rounded-box shadow-lg border-black border rounded-full max-w-[120px]'
+              src={
+                user?.profilePicture != null
+                  ? `${API_URL}/storage/profile-picture/${user?.profilePicture}`
+                  : defaultPfp
+              }
+              onContextMenu={(e) => e.preventDefault()}
+              onError={(e) => {
+                if (e.currentTarget.src !== defaultPfp) {
+                  e.currentTarget.src = defaultPfp;
+                }
+              }}
+            />
+            <p className='font-semibold'>Foto de Perfil</p>
+          </div>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{IdTextAlt}</legend>
             <Input value={user.id} readOnly></Input>
@@ -148,6 +290,10 @@ export default function UserDetailView() {
             <Input value={user.surnames} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
+            <legend className='fieldset-legend'>{UsernameText}</legend>
+            <Input value={user.username} readOnly></Input>
+          </fieldset>
+          <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{DniText.toUpperCase()}</legend>
             <Input value={user.dni} readOnly></Input>
           </fieldset>
@@ -158,6 +304,14 @@ export default function UserDetailView() {
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{RoleText}</legend>
             <Input value={user?.role?.name} readOnly></Input>
+          </fieldset>
+          <fieldset className='fieldset'>
+            <legend className='fieldset-legend'>{StoreText}</legend>
+            <Input value={user?.store?.name} readOnly></Input>
+          </fieldset>
+          <fieldset className='fieldset'>
+            <legend className='fieldset-legend'>{StoreAddressText}</legend>
+            <Input value={user?.store?.address} readOnly></Input>
           </fieldset>
           <fieldset className='fieldset'>
             <legend className='fieldset-legend'>{CreatedAtText}</legend>
@@ -179,6 +333,34 @@ export default function UserDetailView() {
               className={user.deletedAt ? 'text-error font-bold' : 'text-success font-bold'}
             ></Input>
           </fieldset>
+          <div className={`${!user.deletedAt ? 'hidden' : 'md:col-span-full'} `}></div>
+          <Button
+            label={RemoveProfilePictureText}
+            color='btn-primary'
+            icon={RemoveProfilePictureIcon}
+            onClick={() => showRemoveProfilePictureModal(user)}
+          ></Button>
+          <Button
+            label={ResetPasswordText}
+            color='btn-secondary'
+            icon={ResetPasswordIcon}
+            onClick={() => showResetPasswordRemotelyModal(user)}
+          ></Button>
+          <Button
+            label={SendPasswordRecoveryText}
+            color='btn-info'
+            icon={SendPasswordRecoveryIcon}
+          ></Button>
+          <Button label={EditRoleText} color='btn-neutral' icon={EditRoleIcon}></Button>
+          <div className='col-span-full md:col-span-2 md:col-start-2'>
+            <Table
+              columns={columns}
+              data={user.role?.abilities!}
+              size='table-sm'
+              showActions={false}
+              errorMessage={EmptyAbilityListText}
+            ></Table>
+          </div>
         </div>
 
         <div className='flex flex-col items-center ps-4 pe-4 pb-4 w-full md:w-auto'>

@@ -21,7 +21,7 @@ export default class AuthController {
     const token = await auth
       .use('api')
       .createToken(user, abilities, { expiresIn: rememberMe ? '7 days' : '24 hours' });
-    return {
+    return response.ok({
       token,
       user: {
         id: user.id,
@@ -49,7 +49,7 @@ export default class AuthController {
             }
           : null,
       },
-    };
+    });
   }
 
   public async logout({ auth, response }: HttpContext) {
@@ -134,6 +134,48 @@ export default class AuthController {
       return response.badRequest({
         message:
           'Error durante la actualización de contraseña. Intente nuevamente o comuníquese con administración.',
+        errors: error.messages || error.message,
+      });
+    }
+  }
+
+  public async resetPassword({ request, response }: HttpContext) {
+    const id = request.param('id');
+    const user = await User.find(id);
+    if (!user) {
+      return response.notFound({
+        message: `Usuario de ID: ${id} no encontrado.`,
+      });
+    }
+
+    try {
+      await db.transaction(async (trx) => {
+        user.useTransaction(trx);
+        if (user.dni != null && user.dni.length >= 5 && user.dni.length <= 15) {
+          await user.merge({ password: user.dni.trim() }).save();
+        } else {
+          await user
+            .merge({
+              password: `${new Date().getDay().toString()}${(new Date().getMonth() + 1).toString()}${new Date().getFullYear().toString()}`,
+            })
+            .save();
+        }
+
+        const tokens = await User.accessTokens.all(user);
+        await Promise.all(
+          tokens.map((token) => {
+            User.accessTokens.delete(user, token.identifier);
+          })
+        );
+      });
+
+      return response.ok({
+        message: 'Contraseña restablecida correctamente.',
+      });
+    } catch (error) {
+      return response.badRequest({
+        message:
+          'Error durante el restablecimiento de contraseña. Intente nuevamente o comuníquese con administración.',
         errors: error.messages || error.message,
       });
     }

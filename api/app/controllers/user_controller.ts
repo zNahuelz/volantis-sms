@@ -48,7 +48,7 @@ export default class UserController {
         message: `Usuario de ID: ${id} no encontrado.`,
       });
     }
-
+    await user.load('store');
     await user.load('role', (roleQuery) => {
       roleQuery.preload('abilities');
     });

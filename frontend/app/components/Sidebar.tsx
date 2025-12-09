@@ -3,6 +3,7 @@ import { NavLink } from 'react-router';
 import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import {
+  CustomerIcon,
   HomeIcon,
   LogoutIcon,
   SaleIcon,
@@ -14,6 +15,7 @@ import {
   AppDescription,
   AppName,
   ClosingSessionText,
+  CustomersText,
   HomeText,
   ListText,
   LogoutText,
@@ -72,6 +74,33 @@ export default function Sidebar() {
               <Icon icon={SaleIcon} className='text-lg leading-none'></Icon>
               <span className='font-medium'>{NewSaleText}</span>
             </button>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={CustomerIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{CustomersText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/customer/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {NewText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/customer'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ListText}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
           </li>
 
           <li>

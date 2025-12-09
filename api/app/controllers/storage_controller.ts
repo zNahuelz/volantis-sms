@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import User from '../models/user.js';
 
 const UPLOAD_ROOT = path.resolve('uploads/profile_pictures');
 
@@ -72,6 +73,27 @@ export default class StorageController {
       message: 'Foto de perfil actualizada correctamente.',
       url: `/storage/profile/${newFilename}`,
       file: newFilename,
+    });
+  }
+
+  public async removeProfilePicture({ request, response }: HttpContext) {
+    const id = request.param('id');
+    const user = await User.find(id);
+    if (!user) {
+      return response.notFound({
+        message: `Usuario de ID: ${id} no encontrado.`,
+      });
+    }
+
+    if (user.profilePicture) {
+      const oldPath = path.join(UPLOAD_ROOT, user.profilePicture);
+      await fs.rm(oldPath, { force: true });
+    }
+    if (user.profilePicture != null) {
+      await user.merge({ profilePicture: null }).save();
+    }
+    return response.ok({
+      message: `Foto de perfil del usuario de ID: ${id} restablecida correctamente.`,
     });
   }
 }

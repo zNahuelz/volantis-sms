@@ -75,7 +75,7 @@ export default class CustomerController {
               q.where('id', search);
               break;
             case 'names':
-              q.where('names', search);
+              q.whereILike('names', `%${search}%`);
               break;
             case 'dni':
               q.where('dni', search);

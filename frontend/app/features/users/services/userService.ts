@@ -32,6 +32,14 @@ class UserService extends BaseService<User, UserQuery, UserResponse> {
       sortDir: 'orderDir',
     });
   }
+
+  removeProfilePicture(id: number | string) {
+    return http.delete(`storage/profile-picture/${id}`).json();
+  }
+
+  resetPasswordRemotely(id: number | string) {
+    return http.post(`auth/reset-password-r/${id}`).json();
+  }
 }
 
 export const userService = new UserService();

@@ -27,6 +27,9 @@ router
         router.post('logout', [AuthController, 'logout']);
         router.post('update-email', [AuthController, 'updateEmail']).use(middleware.auth());
         router.post('update-password', [AuthController, 'updatePassword']).use(middleware.auth());
+        router
+          .post('reset-password-r/:id', [AuthController, 'resetPassword'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'auth:remotePasswordReset'])]);
         router.get('profile', [AuthController, 'profile']).use(middleware.auth());
       })
       .prefix('auth');
@@ -120,6 +123,9 @@ router
         router
           .post('/profile-picture', [StorageController, 'updateProfilePicture'])
           .use(middleware.auth());
+        router
+          .delete('/profile-picture/:id', [StorageController, 'removeProfilePicture'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'user:removeProfilePicture'])]);
       })
       .prefix('storage');
 
