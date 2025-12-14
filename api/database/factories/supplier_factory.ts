@@ -6,7 +6,7 @@ export const SupplierFactory = factory
     return {
       name: faker.company.name(),
       ruc: `${faker.helpers.arrayElement(['10', '20'])}${faker.string.numeric(9)}`,
-      phone: faker.phone.number({ style: 'national' }),
+      phone: `${faker.helpers.arrayElement(['991', '992', '993', '994', '999'])}${faker.string.numeric(6)}`,
       email: faker.internet.email({ provider: 'supplier.com' }),
       address: `${faker.location.street()} ${faker.location.city()}`,
     };

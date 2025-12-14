@@ -24,6 +24,7 @@ import {
   PleaseWaitText,
   SettingText,
   SuppliersText,
+  SystemAbilitiesText,
   SystemRolesText,
   SystemText,
   SystemUsersText,
@@ -152,6 +153,14 @@ export default function Sidebar() {
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {SystemRolesText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/ability'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {SystemAbilitiesText}
                   </NavLink>
                 </li>
               </ul>

@@ -4,7 +4,7 @@ import { ActionsText, EmptyListText, IsActiveText, IsDeletedText } from '~/const
 import { formatAsDatetime } from '~/utils/helpers';
 
 export type Column<T> = {
-  key: keyof T;
+  key: string;
   label: string;
   render?: (row: T) => React.ReactNode;
 };

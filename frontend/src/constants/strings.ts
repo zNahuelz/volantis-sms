@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import type { Customer } from '~/types/customer';
+import type { Role } from '~/types/role';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 
@@ -35,7 +36,9 @@ export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingre
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
 export const CustomersListAreaText = `Listado de Clientes - ${AppName}`;
 export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
+export const CreateRoleAreaText = `Registro de Rol - ${AppName}`;
 export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
+export const RoleDetailAreaText = `Detalle de Rol - ${AppName}`;
 export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const NameText = 'Nombre';
@@ -96,12 +99,16 @@ export const UserStatusChangeMessage = (user: User) => {
 export const CustomerStatusChangeMessage = (customer: Customer) => {
   return `¿Está seguro de <strong>${customer.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente cliente? <br> <strong>ID:</strong> ${customer.id} <br> <strong>NOMBRE:</strong> ${customer.names} <br> <strong>DNI:</strong> ${customer.dni}`;
 };
+export const RoleStatusChangeMessage = (role: Role) => {
+  return `¿Está seguro de <strong>${role.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente rol? <br> <strong>ID:</strong> ${role.id} <br> <strong>NOMBRE:</strong> ${role.name}`;
+};
 export const RemoveProfilePictureMessage = (user: User) => {
   return `¿Está seguro que desea <strong>restablecer</strong> la foto de perfil del siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> <strong>Esta acción no se puede revertir.</strong>`;
 };
 export const ResetPasswordRemotelyMessage = (user: User) => {
   return `¿Está seguro que desea <strong>restablecer</strong> la contraseña del siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> <strong>La nueva contraseña será el DNI del usuario (de estar disponible) o la fecha actual (DÍA-MES-AÑO): ${dayjs().format('DDMMYYYY')}</strong>`;
 };
+
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
 export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
 export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
@@ -158,7 +165,8 @@ export const UserAvatarUpdatedText =
   'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
 export const SystemText = 'Sistema';
 export const SystemUsersText = 'Gest. Usuarios';
-export const SystemRolesText = 'Gest. Roles y Permisos';
+export const SystemRolesText = 'Gest. Roles';
+export const SystemAbilitiesText = 'Gest. Permisos';
 export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
 export const RolesListAreaText = `Listado de Roles - ${AppName}`;
 export const CreateCustomerAreaText = `Registro de Cliente - ${AppName}`;
@@ -209,3 +217,20 @@ export const _404Text =
   'Oops! El módulo no existe o no está disponible. Comuniquese con administración o verifique la URL.';
 export const HereText = 'aquí';
 export const _404AreaText = `Módulo no encontrado - ${AppName}`;
+export const RolesNotLoadedText = 'No se encontraron roles con el criterío ingresado.';
+export const LoadingRolesText = 'Cargando roles...';
+export const TotalSystemRolesText = (amount: number) => {
+  return `El sistema cuenta con ${amount} roles registrados.`;
+};
+export const RoleStatusUpdatedText = 'Visibilidad de rol actualizada correctamente.';
+export const RoleStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del rol. Intente nuevamente o comuniquese con administración.';
+export const CreateRoleText = 'Registro de Rol';
+export const LoadingRoleText = 'Cargando información de rol';
+export const RoleNotFound = 'Rol no encontrado.';
+export const EditRoleAreaText = `Editar Rol - ${AppName}`;
+export const RoleCreatedText = 'Rol registrado correctamente.';
+export const RoleUpdatedText = 'Rol actualizado correctamente.';
+export const RoleNameTaken = 'El nombre ingresado ya pertenece a un rol registrado.';
+export const RoleDetailText = 'Detalle de Rol';
+export const LinkedAbilitiesText = 'Permisos Asociados';

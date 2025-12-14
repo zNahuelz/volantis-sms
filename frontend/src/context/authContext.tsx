@@ -10,7 +10,7 @@ interface AuthContextType {
   token: string | null;
   abilities: Ability[] | null;
   login: (token: string, user: User, rememberMe: boolean, abilities: Ability[]) => void;
-  logout: () => void;
+  logout: (expiredToken?: boolean) => void;
   refreshUser: (newUser: User, abilities: Ability[]) => void;
 }
 
@@ -19,7 +19,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const authStore = {
   token: null as string | null,
   abilities: null as Ability[] | null,
-  logout: () => {},
+  logout: (expiredToken?: boolean) => {},
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -68,9 +68,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.set('USER_ABILITIES', JSON.stringify(abilities), { expires: 7 });
   };
 
-  const logout = async () => {
+  const logout = async (expiredToken?: boolean) => {
     try {
-      await logoutService();
+      if (!expiredToken) {
+        await logoutService();
+      }
     } catch {}
     setToken(null);
     setUser(null);

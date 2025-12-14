@@ -3,13 +3,16 @@ import LoginView from './features/auth/views/LoginView';
 import GuestRoute from './features/auth/components/GuestRoute';
 import {
   CreateCustomerAreaText,
+  CreateRoleAreaText,
   CreateSupplierAreaText,
   CustomerDetailAreaText,
   CustomersListAreaText,
   EditCustomerAreaText,
+  EditRoleAreaText,
   EditSupplierAreaText,
   LoginAreaText,
   ProfileAreaText,
+  RoleDetailAreaText,
   RolesListAreaText,
   SupplierDetailAreaText,
   SuppliersListAreaText,
@@ -35,6 +38,11 @@ import UserDetailView from './features/users/views/UserDetailView';
 import { AbilityRoute } from './features/auth/components/AbilityRoute';
 import ViewNotFound from './components/ViewNotFound';
 import RolesListView from './features/roles/views/RolesListView';
+import RoleCreateView from './features/roles/views/RoleCreateView';
+import { EditRoleIcon } from './constants/iconNames';
+import RoleEditView from './features/roles/views/RoleEditView';
+import RoleDetailView from './features/roles/views/RoleDetailView';
+import AbilitiesListView from './features/abilities/views/AbilitiesListView';
 
 export const router = createBrowserRouter([
   {
@@ -141,13 +149,49 @@ export const router = createBrowserRouter([
               },
             ],
           },
+          //Role routes...
           {
             path: 'role',
             children: [
               {
-                element: <AbilityRoute></AbilityRoute>,
+                element: <AbilityRoute />,
                 handle: { title: RolesListAreaText, abilities: ['sys:admin', 'role:index'] },
                 children: [{ index: true, Component: RolesListView }],
+              },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreateRoleAreaText,
+                  abilities: ['sys:admin', 'role:create'],
+                },
+                children: [{ index: true, Component: RoleCreateView }],
+              },
+              {
+                path: ':id',
+                element: <AbilityRoute />,
+                handle: {
+                  title: RoleDetailAreaText,
+                  abilities: ['sys:admin', 'role:detail'],
+                },
+                children: [{ index: true, Component: RoleDetailView }],
+              },
+              {
+                path: ':id/edit',
+                element: <AbilityRoute />,
+                handle: { title: EditRoleAreaText, abilities: ['sys:admin', 'role:edit'] },
+                children: [{ index: true, Component: RoleEditView }],
+              },
+            ],
+          },
+          //Ability Routes...
+          {
+            path: 'ability',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: { title: RolesListAreaText, abilities: ['sys:admin', 'ability:index'] },
+                children: [{ index: true, Component: AbilitiesListView }],
               },
             ],
           },

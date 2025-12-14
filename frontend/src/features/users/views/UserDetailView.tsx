@@ -346,7 +346,15 @@ export default function UserDetailView() {
             color='btn-info'
             icon={SendPasswordRecoveryIcon}
           ></Button>
-          <Button label={EditRoleText} color='btn-neutral' icon={EditRoleIcon}></Button>
+          <Button
+            label={EditRoleText}
+            color='btn-neutral'
+            icon={EditRoleIcon}
+            disabled={!user.role}
+            onClick={() => {
+              navigate(`/dashboard/role/${user.role?.id}/edit`);
+            }}
+          ></Button>
           <div className='col-span-full md:col-span-2 md:col-start-2'>
             <Table
               columns={columns}

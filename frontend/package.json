@@ -10,6 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.2.9",
     "@iconify/react": "^6.0.2",
     "clsx": "^2.1.1",
     "daisyui": "^5.5.13",

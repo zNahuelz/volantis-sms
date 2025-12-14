@@ -18,9 +18,26 @@ import CustomerController from '../app/controllers/customer_controller.js';
 import PresentationController from '../app/controllers/presentation_controller.js';
 import StoreController from '../app/controllers/store_controller.js';
 import SettingController from '../app/controllers/setting_controller.js';
+import AbilityController from '../app/controllers/ability_controller.js';
 
 router
   .group(() => {
+    router
+      .group(() => {
+        router
+          .get('/:id', [AbilityController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'ability:show'])]);
+        router
+          .get('/', [AbilityController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'ability:index'])]);
+        router
+          .get('/index/all', [AbilityController, 'list'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'ability:list', 'role:create']),
+          ]);
+      })
+      .prefix('ability');
     router
       .group(() => {
         router.post('login', [AuthController, 'login']);
@@ -175,6 +192,9 @@ router
     router
       .group(() => {
         router
+          .post('/', [RoleController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:store'])]);
+        router
           .get('/:id', [RoleController, 'show'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:show'])]);
         router
@@ -183,6 +203,9 @@ router
         router
           .get('/index/all', [RoleController, 'list'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:list', 'user:create'])]);
+        router
+          .put('/:id', [RoleController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:update'])]);
         router
           .delete('/:id', [RoleController, 'destroy'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:destroy'])]);

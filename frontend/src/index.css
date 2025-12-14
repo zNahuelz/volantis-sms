@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@fontsource/roboto';
 @plugin 'daisyui';
 @plugin 'daisyui/theme' {
   name: 'spacelab';
@@ -33,4 +34,12 @@
   --border: 1px;
   --depth: 1;
   --noise: 1;
+}
+@layer base {
+  :root {
+    --font-sans: 'Roboto', ui-sans-serif, system-ui;
+  }
+  body {
+    font-family: var(--font-sans);
+  }
 }

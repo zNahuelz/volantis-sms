@@ -1,15 +1,16 @@
 import { http } from '~/api/httpWrapper';
 import { BaseService } from '~/services/baseService';
+import type { Ability } from '~/types/ability';
 import type { Role } from '~/types/role';
 
-export interface RoleMeta {
+export interface AbilityMeta {
   total: number;
   perPage: number;
   currentPage: number;
   lastPage: number;
 }
 
-export interface RoleQuery {
+export interface AbilityQuery {
   search?: string;
   field?: string;
   status?: string;
@@ -19,14 +20,14 @@ export interface RoleQuery {
   limit?: number;
 }
 
-export interface RoleResponse {
-  data: Role[];
-  meta: RoleMeta;
+export interface AbilityResponse {
+  data: Ability[];
+  meta: AbilityMeta;
 }
 
-class RoleService extends BaseService<Role, RoleQuery, RoleResponse> {
+class AbilityService extends BaseService<Ability, AbilityQuery, AbilityResponse> {
   constructor() {
-    super(http, 'role', {
+    super(http, 'ability', {
       field: 'searchBy',
       sortBy: 'orderBy',
       sortDir: 'orderDir',
@@ -34,8 +35,8 @@ class RoleService extends BaseService<Role, RoleQuery, RoleResponse> {
   }
 
   list(status?: 'available' | 'all') {
-    return http.get(`role/index/all?status=${status}`).json<Role[]>();
+    return http.get(`ability/index/all?status=${status}`).json<Ability[]>();
   }
 }
 
-export const roleService = new RoleService();
+export const abilityService = new AbilityService();

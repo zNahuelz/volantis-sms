@@ -1,3 +1,149 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import type { Role } from '~/types/role';
+import { roleService } from '../services/roleService';
+import { NavLink } from 'react-router';
+import {
+  CancelText,
+  ConfirmActionText,
+  DeleteText,
+  DetailsText,
+  EditText,
+  ErrorTagText,
+  LoadingRolesText,
+  NewText,
+  OkTagText,
+  ReloadText,
+  RestoreText,
+  RoleStatusChangeMessage,
+  RoleStatusUpdateFailedText,
+  RoleStatusUpdatedText,
+  TotalSystemRolesText,
+} from '~/constants/strings';
+import Loading from '~/components/Loading';
+import RoleTable from '../components/RoleTable';
+import Button from '~/components/Button';
+import { DeleteIcon, DetailsIcon, EditIcon, ReloadIcon, RestoreIcon } from '~/constants/iconNames';
+import clsx from 'clsx';
+import Swal from 'sweetalert2';
+import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+
 export default function RolesListView() {
-  return <div>Wip Role list!</div>;
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const loadRoles = async () => {
+    setLoading(true);
+    const response = await roleService.list('all');
+    setRoles(response);
+    setLoading(false);
+  };
+
+  const showStatusChangeModal = async (role: Role) => {
+    const result = await Swal.fire({
+      title: ConfirmActionText,
+      html: RoleStatusChangeMessage(role),
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: SuccessColor,
+      cancelButtonColor: ErrorColor,
+      confirmButtonText:
+        role.deletedAt != null ? RestoreText.toUpperCase() : DeleteText.toUpperCase(),
+      cancelButtonText: CancelText.toUpperCase(),
+    });
+
+    if (result.isConfirmed) {
+      await performStatusChange(role.id!);
+    }
+  };
+
+  const performStatusChange = async (id: number) => {
+    try {
+      const res = await roleService.destroy(id);
+      Swal.fire({
+        title: OkTagText,
+        html: !res.message ? RoleStatusUpdatedText : res.message,
+        icon: 'success',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) loadRoles();
+      });
+    } catch (error) {
+      Swal.fire({
+        title: ErrorTagText,
+        html: RoleStatusUpdateFailedText,
+        icon: 'error',
+        timer: swalDismissalTime,
+        showConfirmButton: false,
+      }).then((e) => {
+        if (e.dismiss) window.location.reload();
+      });
+    }
+  };
+
+  useEffect(() => {
+    loadRoles();
+  }, []);
+
+  return (
+    <div className='p-0 md:p-4'>
+      <div className='mb-4 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
+        <NavLink to='/dashboard/role/create' className='btn btn-success w-full md:w-auto'>
+          {NewText}
+        </NavLink>
+        <Button
+          icon={ReloadIcon}
+          color='btn-neutral'
+          title={ReloadText}
+          width='w-full md:w-auto'
+          onClick={() => loadRoles()}
+        ></Button>
+      </div>
+
+      {loading ? (
+        <Loading loadMessage={LoadingRolesText} />
+      ) : (
+        <RoleTable
+          data={roles}
+          actions={(row) => (
+            <div className='join-horizontal join'>
+              <Button
+                className='join-item btn-sm'
+                color='btn-primary'
+                icon={DetailsIcon}
+                title={DetailsText}
+                onClick={() => {
+                  navigate(`/dashboard/role/${row.id}`);
+                }}
+              />
+
+              <Button
+                className='join-item btn-sm'
+                color='btn-accent'
+                icon={EditIcon}
+                title={EditText}
+                onClick={() => {
+                  navigate(`/dashboard/role/${row.id}/edit`);
+                }}
+              />
+
+              <Button
+                className={clsx('join-item btn-sm')}
+                color={row.deletedAt ? 'btn-warning' : 'btn-error'}
+                icon={row.deletedAt ? RestoreIcon : DeleteIcon}
+                title={row.deletedAt ? RestoreText : DeleteText}
+                onClick={() => showStatusChangeModal(row)}
+              />
+            </div>
+          )}
+        />
+      )}
+
+      <h1 className={`mt-2 text-center font-medium ${loading ? 'hidden' : ''}`}>
+        {TotalSystemRolesText(roles.length)}
+      </h1>
+    </div>
+  );
 }

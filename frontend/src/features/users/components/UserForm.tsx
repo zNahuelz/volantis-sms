@@ -139,7 +139,7 @@ export default function UserForm({
     async function loadData() {
       const [storesResult, rolesResult] = await Promise.allSettled([
         storeService.list(),
-        roleService.list(),
+        roleService.list('available'),
       ]);
 
       if (!mounted) return;
