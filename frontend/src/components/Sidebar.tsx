@@ -6,6 +6,7 @@ import {
   CustomerIcon,
   HomeIcon,
   LogoutIcon,
+  ProductIcon,
   SaleIcon,
   SettingsIcon,
   SupplierIcon,
@@ -22,6 +23,8 @@ import {
   NewSaleText,
   NewText,
   PleaseWaitText,
+  PresentationManagementText,
+  ProductsText,
   SettingText,
   SuppliersText,
   SystemAbilitiesText,
@@ -99,6 +102,41 @@ export default function Sidebar() {
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {ListText}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={ProductIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{ProductsText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/product/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {NewText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/product'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ListText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/presentation'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {PresentationManagementText}
                   </NavLink>
                 </li>
               </ul>

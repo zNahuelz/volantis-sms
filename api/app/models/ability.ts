@@ -10,7 +10,7 @@ export default class Ability extends BaseModel {
   @column()
   declare name: string;
 
-  @column()
+  @column({ columnName: '_key' })
   declare key: string;
 
   @column()

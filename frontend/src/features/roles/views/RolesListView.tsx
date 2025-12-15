@@ -4,13 +4,16 @@ import type { Role } from '~/types/role';
 import { roleService } from '../services/roleService';
 import { NavLink } from 'react-router';
 import {
+  BackText,
   CancelText,
   ConfirmActionText,
+  ContinueText,
   DeleteText,
   DetailsText,
   EditText,
   ErrorTagText,
   LoadingRolesText,
+  ModifySettingsWarning,
   NewText,
   OkTagText,
   ReloadText,
@@ -19,6 +22,7 @@ import {
   RoleStatusUpdateFailedText,
   RoleStatusUpdatedText,
   TotalSystemRolesText,
+  WarningText,
 } from '~/constants/strings';
 import Loading from '~/components/Loading';
 import RoleTable from '../components/RoleTable';
@@ -31,6 +35,7 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 export default function RolesListView() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dismissedWarning, setDismissedWarning] = useState(false);
   const navigate = useNavigate();
 
   const loadRoles = async () => {
@@ -83,8 +88,31 @@ export default function RolesListView() {
     }
   };
 
+  const showWarning = () => {
+    if (!dismissedWarning) {
+      Swal.fire({
+        title: WarningText.toUpperCase(),
+        html: ModifySettingsWarning,
+        icon: 'warning',
+        showDenyButton: true,
+        denyButtonColor: ErrorColor,
+        confirmButtonColor: SuccessColor,
+        confirmButtonText: ContinueText.toUpperCase(),
+        denyButtonText: BackText.toUpperCase(),
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        reverseButtons: true,
+      }).then((r) => {
+        if (r.isConfirmed) setDismissedWarning(true);
+        if (r.isDenied) navigate('/dashboard');
+      });
+    }
+  };
+
   useEffect(() => {
     loadRoles();
+    showWarning();
   }, []);
 
   return (

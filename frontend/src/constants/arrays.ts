@@ -25,6 +25,13 @@ export const CUSTOMER_SEARCH_TYPES = [
   { label: 'POR NOMBRES', value: 'names' },
 ];
 
+export const ABILITY_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR NOMBRE', value: 'name' },
+  { label: 'POR CLAVE', value: 'key' },
+  { label: 'POR DESCRIPCIÓN', value: 'description' },
+];
+
 export const DEFAULT_STATUS_TYPES = [
   { label: 'TODOS', value: 'all' },
   { label: 'SOLO HABILITADOS', value: 'available' },

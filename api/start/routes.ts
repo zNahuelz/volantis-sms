@@ -25,6 +25,9 @@ router
     router
       .group(() => {
         router
+          .post('/', [AbilityController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'ability:store'])]);
+        router
           .get('/:id', [AbilityController, 'show'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'ability:show'])]);
         router
@@ -36,6 +39,9 @@ router
             middleware.auth(),
             middleware.ability(['sys:admin', 'ability:list', 'role:create']),
           ]);
+        router
+          .put('/:id', [AbilityController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'ability:update'])]);
       })
       .prefix('ability');
     router

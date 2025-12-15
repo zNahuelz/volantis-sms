@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router';
 import LoginView from './features/auth/views/LoginView';
 import GuestRoute from './features/auth/components/GuestRoute';
 import {
+  AbilitiesListAreaText,
   CreateCustomerAreaText,
   CreateRoleAreaText,
   CreateSupplierAreaText,
@@ -11,6 +12,7 @@ import {
   EditRoleAreaText,
   EditSupplierAreaText,
   LoginAreaText,
+  PresentationsListAreaText,
   ProfileAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
@@ -43,6 +45,7 @@ import { EditRoleIcon } from './constants/iconNames';
 import RoleEditView from './features/roles/views/RoleEditView';
 import RoleDetailView from './features/roles/views/RoleDetailView';
 import AbilitiesListView from './features/abilities/views/AbilitiesListView';
+import PresentationsListView from './features/presentations/views/PresentationsListView';
 
 export const router = createBrowserRouter([
   {
@@ -149,6 +152,20 @@ export const router = createBrowserRouter([
               },
             ],
           },
+          //Presentation routes...
+          {
+            path: 'presentation',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: PresentationsListAreaText,
+                  abilities: ['sys:admin', 'presentation:index'],
+                },
+                children: [{ index: true, Component: PresentationsListView }],
+              },
+            ],
+          },
           //Role routes...
           {
             path: 'role',
@@ -190,7 +207,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 element: <AbilityRoute />,
-                handle: { title: RolesListAreaText, abilities: ['sys:admin', 'ability:index'] },
+                handle: { title: AbilitiesListAreaText, abilities: ['sys:admin', 'ability:index'] },
                 children: [{ index: true, Component: AbilitiesListView }],
               },
             ],

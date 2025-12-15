@@ -43,3 +43,6 @@ export const UnknownRoleIcon = 'ic:sharp-nearby-error';
 export const UpdateIcon = 'ic:sharp-save-all';
 export const WarningIcon = 'ic:baseline-warning-amber';
 export const _404Icon = 'ic:sharp-developer-board-off';
+export const SysKeyIcon = 'ic:outline-code';
+export const DescriptionIcon = 'ic:sharp-description';
+export const ProductIcon = 'ic:sharp-all-inbox';
