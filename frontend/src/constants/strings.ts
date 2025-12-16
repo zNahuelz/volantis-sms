@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import type { Customer } from '~/types/customer';
+import type { Presentation } from '~/types/presentation';
 import type { Role } from '~/types/role';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
@@ -35,6 +36,8 @@ export const LoadingUsersText = 'Cargando usuarios...';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
 export const CustomersNotLoaded = 'No se encontraron clientes con el criterío ingresado.';
 export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingresado.';
+export const PresentationsNotLoadedText =
+  'No se encontraron presentaciones de productos con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
 export const CustomersListAreaText = `Listado de Clientes - ${AppName}`;
 export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
@@ -44,6 +47,7 @@ export const RoleDetailAreaText = `Detalle de Rol - ${AppName}`;
 export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const NameText = 'Nombre';
+export const NumericValueText = 'Valor Numérico';
 export const KeyText = 'Clave';
 export const RucText = 'Ruc';
 export const PhoneText = 'Teléfono';
@@ -111,7 +115,9 @@ export const RemoveProfilePictureMessage = (user: User) => {
 export const ResetPasswordRemotelyMessage = (user: User) => {
   return `¿Está seguro que desea <strong>restablecer</strong> la contraseña del siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> <strong>La nueva contraseña será el DNI del usuario (de estar disponible) o la fecha actual (DÍA-MES-AÑO): ${dayjs().format('DDMMYYYY')}</strong>`;
 };
-
+export const PresentationStatusChangeMessage = (presentation: Presentation) => {
+  return `¿Está seguro de <strong>${presentation.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente presentación de producto? <br> <strong>ID:</strong> ${presentation.id} <br> <strong>NOMBRE:</strong> ${presentation.name} <br> <strong>VAL. NUMÉRICO:</strong> ${presentation.numericValue} <br> <strong>DESCRIPCIÓN</strong> ${presentation.description}`;
+};
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
 export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
 export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
@@ -172,6 +178,9 @@ export const SystemRolesText = 'Gest. Roles';
 export const SystemAbilitiesText = 'Gest. Permisos';
 export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
 export const RolesListAreaText = `Listado de Roles - ${AppName}`;
+export const SettingsListAreaText = `Configuración del Sistema - ${AppName}`;
+export const ProductsListAreaText = `Listado de Productos - ${AppName}`;
+export const CreateProductAreaText = `Registro de Producto - ${AppName}`;
 export const PresentationsListAreaText = `Listado de Presentaciones de Productos - ${AppName}`;
 export const AbilitiesListAreaText = `Listado de Permisos - ${AppName}`;
 export const CreateCustomerAreaText = `Registro de Cliente - ${AppName}`;
@@ -257,3 +266,16 @@ export const WarningText = 'Advertencia';
 export const ModifySettingsWarning =
   'Estás accediendo a la configuración del sistema. Modificaciones incorrectas pueden afectar su funcionamiento. <br> <strong>Procede con precaución.</strong>';
 export const BackText = 'Volver';
+export const LoadingPresentationsText = 'Cargando presentaciones de productos...';
+export const PresentationText = 'Presentación';
+export const PresentationsText = 'Presentaciones';
+export const PresentationCreatedText = 'Presentación registrada correctamente.';
+export const PresentationUpdatedText = 'Presentación actualizada correctamente.';
+export const DuplicatedPresentationText =
+  'El nombre y valor numérico ingresados ya pertenecen a otra presentación de producto, puede variar el valor numérico para proceder con el registro.';
+export const NewPresentationText = 'Registro de Presentación de Producto';
+export const EditPresentationText = 'Modificar Presentación de Producto';
+export const NewPresentationAdviceText =
+  'El campo Valor numérico acepta únicamente números enteros expresados en la unidad base del sistema (gramos o mililitros). No se admiten valores decimales ni conversiones automáticas. Ejemplo: 500 (equivale a 500 g o ml)';
+export const PresentationStatusUpdatedText =
+  'Estado de presentación de producto actualizada correctamente.';

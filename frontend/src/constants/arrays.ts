@@ -32,6 +32,12 @@ export const ABILITY_SEARCH_TYPES = [
   { label: 'POR DESCRIPCIÓN', value: 'description' },
 ];
 
+export const PRESENTATION_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR NOMBRE', value: 'name' },
+  { label: 'POR DESCRIPCIÓN', value: 'description' },
+];
+
 export const DEFAULT_STATUS_TYPES = [
   { label: 'TODOS', value: 'all' },
   { label: 'SOLO HABILITADOS', value: 'available' },

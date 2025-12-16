@@ -348,6 +348,7 @@ export default function UsersListView() {
           closeParentModal={() => {
             reloadUsers();
             setEditUserModalVisible(false);
+            setSelectedUser(null);
           }}
         ></UserForm>
       </Modal>

@@ -46,3 +46,4 @@ export const _404Icon = 'ic:sharp-developer-board-off';
 export const SysKeyIcon = 'ic:outline-code';
 export const DescriptionIcon = 'ic:sharp-description';
 export const ProductIcon = 'ic:sharp-all-inbox';
+export const NumericValueIcon = 'ic:baseline-format-list-numbered';

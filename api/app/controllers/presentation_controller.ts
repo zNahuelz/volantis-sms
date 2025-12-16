@@ -64,10 +64,10 @@ export default class PresentationController {
               q.where('id', search);
               break;
             case 'name':
-              q.where('name', search);
+              q.whereILike('name', `%${search}%`);
               break;
             case 'description':
-              q.where('description', search);
+              q.whereILike('description', `%${search}%`);
               break;
             case 'all':
             default:

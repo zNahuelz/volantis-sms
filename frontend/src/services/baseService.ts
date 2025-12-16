@@ -1,4 +1,5 @@
 import type { http as _http } from '~/api/httpWrapper';
+import type { EntityResponse } from '~/types/entityResponse';
 
 type ParamMap = Record<string, string>;
 

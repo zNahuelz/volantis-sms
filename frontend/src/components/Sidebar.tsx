@@ -206,13 +206,13 @@ export default function Sidebar() {
           </li>
 
           <li>
-            <button
-              type='button'
+            <NavLink
+              to='/dashboard/settings'
               className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'
             >
               <Icon icon={SettingsIcon} className='text-lg leading-none'></Icon>
               <span className='font-medium'>{SettingText}</span>
-            </button>
+            </NavLink>
           </li>
 
           <li>

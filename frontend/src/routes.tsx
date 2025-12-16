@@ -4,6 +4,7 @@ import GuestRoute from './features/auth/components/GuestRoute';
 import {
   AbilitiesListAreaText,
   CreateCustomerAreaText,
+  CreateProductAreaText,
   CreateRoleAreaText,
   CreateSupplierAreaText,
   CustomerDetailAreaText,
@@ -13,9 +14,11 @@ import {
   EditSupplierAreaText,
   LoginAreaText,
   PresentationsListAreaText,
+  ProductsListAreaText,
   ProfileAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
+  SettingsListAreaText,
   SupplierDetailAreaText,
   SuppliersListAreaText,
   UserDetailAreaText,
@@ -46,6 +49,9 @@ import RoleEditView from './features/roles/views/RoleEditView';
 import RoleDetailView from './features/roles/views/RoleDetailView';
 import AbilitiesListView from './features/abilities/views/AbilitiesListView';
 import PresentationsListView from './features/presentations/views/PresentationsListView';
+import ProductsListView from './features/products/views/ProductsListView';
+import ProductCreateView from './features/products/views/ProductCreateView';
+import SettingsListView from './features/settings/views/SettingsListView';
 
 export const router = createBrowserRouter([
   {
@@ -166,6 +172,26 @@ export const router = createBrowserRouter([
               },
             ],
           },
+          //Product routes...
+          {
+            path: 'product',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: { title: ProductsListAreaText, abilities: ['sys:admin', 'product:index'] },
+                children: [{ index: true, Component: ProductsListView }],
+              },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreateProductAreaText,
+                  abilities: ['sys:admin', 'product:create'],
+                },
+                children: [{ index: true, Component: ProductCreateView }],
+              },
+            ],
+          },
           //Role routes...
           {
             path: 'role',
@@ -209,6 +235,17 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: { title: AbilitiesListAreaText, abilities: ['sys:admin', 'ability:index'] },
                 children: [{ index: true, Component: AbilitiesListView }],
+              },
+            ],
+          },
+          //Settings routes...
+          {
+            path: 'settings',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: { title: SettingsListAreaText, abilities: ['sys:admin', 'settings:index'] },
+                children: [{ index: true, Component: SettingsListView }],
               },
             ],
           },
