@@ -9,8 +9,8 @@ type PaginatorProps = {
   onPageChange: (page: number) => void;
   onLimitChange: (limit: number) => void;
   limits?: { label: string; value: number }[];
-  status: string;
-  onStatusChange: (status: string) => void;
+  status?: string;
+  onStatusChange?: (status: string) => void;
   statusTypes?: { label: string; value: string }[];
 };
 
@@ -81,6 +81,7 @@ export function Paginator({
         className='select md:w-50 w-full'
         value={status}
         onChange={(e) => onStatusChange(e.target.value)}
+        disabled={status === undefined}
       >
         {statusTypes.map((opt) => (
           <option key={opt.value} value={opt.value}>

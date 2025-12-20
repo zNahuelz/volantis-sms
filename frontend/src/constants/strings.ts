@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import type { Customer } from '~/types/customer';
 import type { Presentation } from '~/types/presentation';
 import type { Role } from '~/types/role';
+import type { Setting } from '~/types/setting';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 
@@ -36,6 +37,8 @@ export const LoadingUsersText = 'Cargando usuarios...';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
 export const CustomersNotLoaded = 'No se encontraron clientes con el criterío ingresado.';
 export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingresado.';
+export const SettingsNotLoaded =
+  'No se encontraron variables del sistema con el criterío ingresado.';
 export const PresentationsNotLoadedText =
   'No se encontraron presentaciones de productos con el criterío ingresado.';
 export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
@@ -49,6 +52,8 @@ export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const NameText = 'Nombre';
 export const NumericValueText = 'Valor Numérico';
 export const KeyText = 'Clave';
+export const ValueText = 'Valor';
+export const ValueType = 'Tipo de Var.';
 export const RucText = 'Ruc';
 export const PhoneText = 'Teléfono';
 export const CreatedAtText = 'Fecha de Creación';
@@ -94,6 +99,7 @@ export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a
 export const ErrorTagText = 'Ha ocurrido un error';
 export const OpRollbackText = 'Operación cancelada';
 export const LoadingSupplierText = 'Cargando información de proveedor...';
+export const LoadingSettingsText = 'Cargando configuración del sistema...';
 export const SupplierNotFound = 'Proveedor no encontrado.';
 export const IdText = '#';
 export const IdTextAlt = 'ID';
@@ -117,6 +123,10 @@ export const ResetPasswordRemotelyMessage = (user: User) => {
 };
 export const PresentationStatusChangeMessage = (presentation: Presentation) => {
   return `¿Está seguro de <strong>${presentation.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente presentación de producto? <br> <strong>ID:</strong> ${presentation.id} <br> <strong>NOMBRE:</strong> ${presentation.name} <br> <strong>VAL. NUMÉRICO:</strong> ${presentation.numericValue} <br> <strong>DESCRIPCIÓN</strong> ${presentation.description}`;
+};
+
+export const SettingDeletionMessage = (setting: Setting) => {
+  return `¿Está seguro de <strong>eliminar</strong> la siguiente variable del sistema? <br> <strong>ID:</strong> ${setting.id} <br> <strong>CLAVE:</strong> ${setting.key} <br> <strong>VALOR:</strong> ${setting.value} <br> <strong>DESCRIPCIÓN</strong> ${setting.description} <br> <strong class='text-error'>Esta operación NO es reversible, deberá volver a crear la variable de ser requerida posteriormente.</strong>`;
 };
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
 export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
@@ -260,7 +270,11 @@ export const AbilityEditText = 'Modificar Permiso';
 export const NewAbilityAdvice =
   'Recuerde que la creación de nuevos permisos debe estar acompañada de una actualización del sistema la cual incluya las acciones correspondientes al permiso.';
 export const EditAbilityAdvice =
-  'IMPORTANTE: Modificar la CLAVE de un permiso puede alterar el funcionamiento del sistema, solo realice esta acción bajo supervisión de la administración.';
+  'IMPORTANTE: Modificar la CLAVE de un permiso puede alterar el funcionamiento del sistema, solo realice esta acción bajo supervisión del área de TI.';
+export const NewSysVarAdvice =
+  'Recuerde que la creación de nuevas variables del sistema deben estar acompañadas de una actualización del sistema la cual incluya las características correspondientes a la variable.';
+export const EditSysVarAdvice =
+  'IMPORTANTE: Modificar el valor de una variable del sistema alterara el comportamiento del mismo, solo realice esta acción bajo supervisión del área de TI.';
 export const ContinueText = 'Continuar';
 export const WarningText = 'Advertencia';
 export const ModifySettingsWarning =
@@ -279,3 +293,20 @@ export const NewPresentationAdviceText =
   'El campo Valor numérico acepta únicamente números enteros expresados en la unidad base del sistema (gramos o mililitros). No se admiten valores decimales ni conversiones automáticas. Ejemplo: 500 (equivale a 500 g o ml)';
 export const PresentationStatusUpdatedText =
   'Estado de presentación de producto actualizada correctamente.';
+export const SysSettingText = 'Variable';
+export const SysSettingsText = 'Variables';
+export const SettingDeletedText = 'Variable del sistema eliminada correctamente.';
+export const SettingDeletionFailedText =
+  'Fallo la eliminación de la variable del sistema. Intente nuevamente o comuniquese con administración.';
+export const SettingUpdatedText = 'Variable del sistema actualizada correctamente.';
+export const SettingCreatedText = 'Variable del sistema registrada correctamente.';
+export const SysSettingKeyTakenText =
+  'La clave ingresada ya se encuentra asignado a otra variable del sistema.';
+export const InvalidSettingValueTypeText =
+  'El tipo de variable solo puede ser uno de los siguientes: ENTERO, ENTERO LARGO, DECIMAL, TEXTO, LISTA, BOOLEANO u OTRO.';
+export const NewSettingText = 'Registro de variable del sistema';
+export const EditSettingText = 'Modificar variable del sistema';
+export const SettingDetailText = 'Detalle de Variable del Sistema';
+export const ExpiredSessionText =
+  'Sesión expirada o finalizada remotamente por una cuenta de administrador. Inicie sesión nuevamente.';
+export const InfoTag = 'Información';

@@ -1,6 +1,7 @@
-import { LoginAreaText, LoginText } from '~/constants/strings';
+import { ExpiredSessionText, InfoTag, LoginAreaText, LoginText } from '~/constants/strings';
 import appIcon from '../../../assets/images/volantisIconTransparent.png';
 import LoginForm from '../components/LoginForm';
+import Swal from 'sweetalert2';
 
 export default function LoginView() {
   return (

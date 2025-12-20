@@ -155,7 +155,8 @@ export default function AbilitiesListView() {
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
         <Button
           label={NewText}
-          className='btn btn-success w-full md:w-auto'
+          color='btn-success'
+          width='w-full md:w-auto'
           onClick={() => setNewAbilityModalVisible(true)}
           disabled={newAbilityModalVisible}
         />

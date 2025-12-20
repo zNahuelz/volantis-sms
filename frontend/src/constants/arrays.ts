@@ -38,6 +38,24 @@ export const PRESENTATION_SEARCH_TYPES = [
   { label: 'POR DESCRIPCIÓN', value: 'description' },
 ];
 
+export const SETTING_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR CLAVE', value: 'key' },
+  { label: 'POR VALOR', value: 'value' },
+  { label: 'POR TIPO DE VARIABLE', value: 'valueType' },
+  { label: 'POR DESCRIPCIÓN', value: 'description' },
+];
+
+export const SYSTEM_VAR_TYPES = [
+  { label: 'ENTERO LARGO', value: 'double' },
+  { label: 'DECIMAL', value: 'decimal' },
+  { label: 'TEXTO', value: 'string' },
+  { label: 'LISTA', value: 'array' },
+  { label: 'ENTERO', value: 'integer' },
+  { label: 'BOOLEANO', value: 'boolean' },
+  { label: 'OTRO', value: 'other' },
+];
+
 export const DEFAULT_STATUS_TYPES = [
   { label: 'TODOS', value: 'all' },
   { label: 'SOLO HABILITADOS', value: 'available' },

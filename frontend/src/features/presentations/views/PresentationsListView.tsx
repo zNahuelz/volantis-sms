@@ -184,9 +184,10 @@ export default function PresentationsListView() {
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
         <Button
           label={NewText}
+          color='btn-success'
+          width='w-full md:w-auto'
           onClick={() => setNewPresentationModalVisible(true)}
           disabled={newPresentationModalVisible}
-          className='btn btn-success w-full md:w-auto'
         />
 
         <form

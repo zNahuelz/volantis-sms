@@ -75,16 +75,16 @@ export default class SettingController {
               q.where('id', search);
               break;
             case 'key':
-              q.where('key', search);
+              q.whereILike('key', `%${search}%`);
               break;
             case 'value':
-              q.where('value', search);
+              q.whereILike('value', `%${search}%`);
               break;
             case 'valueType':
-              q.where('valueType', search);
+              q.whereILike('valueType', `%${search}%`);
               break;
             case 'description':
-              q.where('description', search);
+              q.whereILike('description', `%${search}%`);
               break;
             case 'all':
             default:
