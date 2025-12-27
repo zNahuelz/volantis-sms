@@ -33,11 +33,7 @@ export default class AuthController {
         role: {
           id: user.role.id,
           name: user.role.name,
-          abilities: user.role.abilities.map((e) => ({
-            key: e.key,
-            name: e.name,
-            description: e.description,
-          })),
+          abilities: user.role.abilities,
         },
         store: user.store
           ? {

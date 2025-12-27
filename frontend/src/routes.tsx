@@ -3,17 +3,23 @@ import LoginView from './features/auth/views/LoginView';
 import GuestRoute from './features/auth/components/GuestRoute';
 import {
   AbilitiesListAreaText,
+  BuyOrderDetailAreaText,
+  BuyOrdersListAreaText,
+  CreateBuyOrderAreaText,
   CreateCustomerAreaText,
   CreateProductAreaText,
   CreateRoleAreaText,
   CreateSupplierAreaText,
   CustomerDetailAreaText,
   CustomersListAreaText,
+  EditBuyOrderAreaText,
   EditCustomerAreaText,
+  EditProductAreaText,
   EditRoleAreaText,
   EditSupplierAreaText,
   LoginAreaText,
   PresentationsListAreaText,
+  ProductDetailAreaText,
   ProductsListAreaText,
   ProfileAreaText,
   RoleDetailAreaText,
@@ -52,6 +58,12 @@ import PresentationsListView from './features/presentations/views/PresentationsL
 import ProductsListView from './features/products/views/ProductsListView';
 import ProductCreateView from './features/products/views/ProductCreateView';
 import SettingsListView from './features/settings/views/SettingsListView';
+import ProductEditView from './features/products/views/ProductEditView';
+import ProductDetailView from './features/products/views/ProductDetailView';
+import BuyOrderCreateView from './features/buyOrders/views/BuyOrderCreateView';
+import BuyOrderListView from './features/buyOrders/views/BuyOrderListView';
+import BuyOrderDetailView from './features/buyOrders/views/BuyOrderDetailView';
+import BuyOrderEditView from './features/buyOrders/views/BuyOrderEditView';
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +93,44 @@ export const router = createBrowserRouter([
             path: 'profile',
             handle: { title: ProfileAreaText },
             children: [{ index: true, Component: ProfileView }],
+          },
+          //Buy order routes...
+          {
+            path: 'buy-order',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: BuyOrdersListAreaText,
+                  abilities: ['sys:admin', 'buyOrder:index'],
+                },
+                children: [{ index: true, Component: BuyOrderListView }],
+              },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreateBuyOrderAreaText,
+                  abilities: ['sys:admin', 'buyOrder:create'],
+                },
+                children: [{ index: true, Component: BuyOrderCreateView }],
+              },
+              {
+                path: ':id',
+                element: <AbilityRoute />,
+                handle: {
+                  title: BuyOrderDetailAreaText,
+                  abilities: ['sys:admin', 'buyOrder:detail'],
+                },
+                children: [{ index: true, Component: BuyOrderDetailView }],
+              },
+              {
+                path: ':id/edit',
+                element: <AbilityRoute />,
+                handle: { title: EditBuyOrderAreaText, abilities: ['sys:admin', 'buyOrder:edit'] },
+                children: [{ index: true, Component: BuyOrderEditView }],
+              },
+            ],
           },
           //Customer routes...
           {
@@ -189,6 +239,21 @@ export const router = createBrowserRouter([
                   abilities: ['sys:admin', 'product:create'],
                 },
                 children: [{ index: true, Component: ProductCreateView }],
+              },
+              {
+                path: ':id',
+                element: <AbilityRoute />,
+                handle: {
+                  title: ProductDetailAreaText,
+                  abilities: ['sys:admin', 'product:detail'],
+                },
+                children: [{ index: true, Component: ProductDetailView }],
+              },
+              {
+                path: ':id/edit',
+                element: <AbilityRoute />,
+                handle: { title: EditProductAreaText, abilities: ['sys:admin', 'product:edit'] },
+                children: [{ index: true, Component: ProductEditView }],
               },
             ],
           },

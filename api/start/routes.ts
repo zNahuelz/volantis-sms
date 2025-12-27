@@ -19,6 +19,8 @@ import PresentationController from '../app/controllers/presentation_controller.j
 import StoreController from '../app/controllers/store_controller.js';
 import SettingController from '../app/controllers/setting_controller.js';
 import AbilityController from '../app/controllers/ability_controller.js';
+import ProductController from '../app/controllers/product_controller.js';
+import BuyOrderController from '../app/controllers/buy_order_controller.js';
 
 router
   .group(() => {
@@ -56,7 +58,22 @@ router
         router.get('profile', [AuthController, 'profile']).use(middleware.auth());
       })
       .prefix('auth');
-
+    router
+      .group(() => {
+        router
+          .post('/', [BuyOrderController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:store'])]);
+        router
+          .get('/:id', [BuyOrderController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:show'])]);
+        router
+          .get('/', [BuyOrderController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:index'])]);
+        router
+          .put('/:id', [BuyOrderController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:update'])]);
+      })
+      .prefix('buy-order');
     router
       .group(() => {
         router
@@ -86,6 +103,12 @@ router
           .get('/', [PresentationController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:index'])]);
         router
+          .get('/index/all', [PresentationController, 'list'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'presentation:list', 'product:create']),
+          ]);
+        router
           .put('/:id', [PresentationController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:update'])]);
         router
@@ -96,6 +119,38 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'presentation:destroy'])]);
       })
       .prefix('presentation');
+
+    router
+      .group(() => {
+        router
+          .post('/', [ProductController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:store'])]);
+        router
+          .get('/random-barcode', [ProductController, 'generateRandomBarcode'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'product:store', 'utils:generateRandomBarcode']),
+          ]);
+        router
+          .get('/', [ProductController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:index'])]);
+        router
+          .put('/:id', [ProductController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:update'])]);
+        router
+          .get('/:id', [ProductController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:show'])]);
+        router
+          .get('/show/:barcode', [ProductController, 'showByBarcode'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'product:showByBarcode', 'product:store']),
+          ]);
+        router
+          .delete('/:id', [ProductController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:destroy'])]);
+      })
+      .prefix('product');
 
     router
       .group(() => {

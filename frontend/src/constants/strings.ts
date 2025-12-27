@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import type { Customer } from '~/types/customer';
 import type { Presentation } from '~/types/presentation';
+import type { Product } from '~/types/product';
 import type { Role } from '~/types/role';
 import type { Setting } from '~/types/setting';
 import type { Supplier } from '~/types/supplier';
@@ -21,6 +22,7 @@ export const HomeText = 'Inicio';
 export const NewSaleText = 'Nueva venta';
 export const SuppliersText = 'Proveedores';
 export const ProductsText = 'Productos';
+export const BuyOrdersText = 'Ordenes de Compra';
 export const SettingText = 'Configuración';
 export const LogoutText = 'Cerrar Sesión';
 export const ProfileText = 'Perfil';
@@ -168,6 +170,8 @@ export const NewEmailText = 'Nuevo correo electrónico';
 export const ConfirmEmailText = 'Repetir correo electrónico';
 export const ServerErrorText =
   'Error interno del servidor, operación cancelada. Vuelva a intentarlo o comuniquese con administración';
+export const BarcodeGenerationFailed =
+  'Error interno del servidor, generación de código de barras aleatorio fallida. Vuelva a intentarlo o comuniquese con administración';
 export const UserEmailUpdatedText = (email: string) => {
   return `Correo electrónico actualizado correctamente. <br> <strong>NUEVO CORREO ELECTRÓNICO: </strong>${email}`;
 };
@@ -236,6 +240,8 @@ export const EditCustomerText = 'Modificando Cliente';
 export const CustomerNotFoundText = 'Cliente no encontrado';
 export const LoadingCustomerText = 'Cargando información de cliente...';
 export const CustomerDetailAreaText = `Detalle de Cliente - ${AppName}`;
+export const ProductDetailAreaText = `Detalle de Producto - ${AppName}`;
+export const ProductDetailText = `Detalle de Producto`;
 export const CustomerDetailText = 'Detalle de Cliente';
 export const _404Text =
   'Oops! El módulo no existe o no está disponible. Comuniquese con administración o verifique la URL.';
@@ -253,6 +259,7 @@ export const CreateRoleText = 'Registro de Rol';
 export const LoadingRoleText = 'Cargando información de rol';
 export const RoleNotFound = 'Rol no encontrado.';
 export const EditRoleAreaText = `Editar Rol - ${AppName}`;
+export const EditProductAreaText = `Editar Producto - ${AppName}`;
 export const RoleCreatedText = 'Rol registrado correctamente.';
 export const RoleUpdatedText = 'Rol actualizado correctamente.';
 export const RoleNameTaken = 'El nombre ingresado ya pertenece a un rol registrado.';
@@ -310,3 +317,33 @@ export const SettingDetailText = 'Detalle de Variable del Sistema';
 export const ExpiredSessionText =
   'Sesión expirada o finalizada remotamente por una cuenta de administrador. Inicie sesión nuevamente.';
 export const InfoTag = 'Información';
+export const CreateProductText = 'Registro de Producto';
+export const ProductCreatedText = 'Producto registrado correctamente.';
+export const ProductUpdatedText = 'Producto actualizado correctamente.';
+export const ProductBarcodeTaken =
+  'El código de barras ingresado ya se encuentra asignado a otro producto.';
+export const BarcodeText = 'Código de Barras';
+export const AssignText = 'Asignar';
+export const RandomizeBarcodeText = 'Aleatorizar código de barras';
+export const EditProductText = 'Modificar Producto';
+export const LoadingProductText = 'Cargando información de producto...';
+export const ProductNotFound = 'Producto no encontrado.';
+export const ProductFoundByBarcodeMessage = (product: Product) => {
+  return `El código de barras ingresado se encuentra asignado al siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> ¿Desea <strong>modificar</strong> el producto?`;
+};
+export const QuestionText = 'Consulta';
+export const CreateProductWarning =
+  'INFORMACIÓN: Al registrar un producto, este pasará a estar disponible en todas las tiendas existentes, las cuales podrán crear órdenes de compra con los productos registrados, para posteriormente modificar sus propiedades individuales (precio, stock, realizar ventas) por cada tienda.';
+export const UpdateProductWarning =
+  'INFORMACIÓN: Modificar el producto actualizará sus propiedades básicas (nombre, descripción, presentación) en todas las tiendas. Para crear y modificar propiedades avanzadas/órdenes de compra, debe realizar la operación en una tienda específica.';
+export const ProductsNotLoaded = 'No se encontraron productos con el criterío ingresado.';
+export const LoadingProductsText = 'Cargando productos...';
+export const ProductText = 'Producto';
+export const ProductStatusChangeMessage = (product: Product) => {
+  return `¿Está seguro de <strong>${product.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> el siguiente producto? <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>DESCRIPCIÓN</strong> ${product.description}`;
+};
+export const ProductStatusUpdatedText = 'Visibilidad de producto actualizada correctamente.';
+export const BuyOrdersListAreaText = `Listado de Ordenes de Compra - ${AppName}`;
+export const CreateBuyOrderAreaText = `Registro de Orden de Compra - ${AppName}`;
+export const BuyOrderDetailAreaText = `Detalle de Orden de Compra - ${AppName}`;
+export const EditBuyOrderAreaText = `Editar Orden de Compra - ${AppName}`;

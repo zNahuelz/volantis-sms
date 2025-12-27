@@ -48,3 +48,6 @@ export const DescriptionIcon = 'ic:sharp-description';
 export const ProductIcon = 'ic:sharp-all-inbox';
 export const NumericValueIcon = 'ic:baseline-format-list-numbered';
 export const ValueIcon = 'ic:sharp-sync-alt';
+export const BarcodeIcon = 'ic:baseline-barcode';
+export const RandomizeIcon = 'ic:baseline-autorenew';
+export const BuyOrderIcon = 'ic:baseline-library-books';

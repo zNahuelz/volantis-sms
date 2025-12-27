@@ -38,6 +38,13 @@ export const PRESENTATION_SEARCH_TYPES = [
   { label: 'POR DESCRIPCIÓN', value: 'description' },
 ];
 
+export const PRODUCT_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR COD. BARRAS', value: 'barcode' },
+  { label: 'POR NOMBRE', value: 'name' },
+  { label: 'POR DESCRIPCIÓN', value: 'description' },
+];
+
 export const SETTING_SEARCH_TYPES = [
   { label: 'POR ID', value: 'id' },
   { label: 'POR CLAVE', value: 'key' },

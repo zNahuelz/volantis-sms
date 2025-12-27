@@ -32,6 +32,14 @@ class ProductService extends BaseService<Product, ProductQuery, ProductResponse>
       sortDir: 'orderDir',
     });
   }
+
+  generateRandomBarcode() {
+    return http.get(`product/random-barcode`).json<{ message: string; barcode: string }>();
+  }
+
+  showByBarcode(barcode: string) {
+    return http.get(`product/show/${barcode}`).json<Product>();
+  }
 }
 
 export const productService = new ProductService();

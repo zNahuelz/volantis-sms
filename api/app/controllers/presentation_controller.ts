@@ -98,6 +98,24 @@ export default class PresentationController {
     }
   }
 
+  public async list({ request, response }: HttpContext) {
+    const status = request.input('status', 'available'); //available | all
+    const presentationsQuery = Presentation.query().orderBy('name', 'asc');
+
+    switch (status) {
+      case 'available':
+        presentationsQuery.whereNull('deleted_at');
+        break;
+      case 'all':
+        break;
+      default:
+        break;
+    }
+
+    const presentations = await presentationsQuery;
+    return response.ok(presentations);
+  }
+
   public async update({ request, response }: HttpContext) {
     const id = request.param('id');
 

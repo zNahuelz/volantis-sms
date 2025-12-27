@@ -1,5 +1,5 @@
 import { ExpiredSessionText, InfoTag, LoginAreaText, LoginText } from '~/constants/strings';
-import appIcon from '../../../assets/images/volantisIconTransparent.png';
+import appIcon from '../../../assets/images/volLogoTransparent.png';
 import LoginForm from '../components/LoginForm';
 import Swal from 'sweetalert2';
 

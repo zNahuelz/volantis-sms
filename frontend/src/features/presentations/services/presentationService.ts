@@ -36,6 +36,9 @@ class PresentationService extends BaseService<
       sortDir: 'orderDir',
     });
   }
+  list(status?: 'available' | 'all') {
+    return http.get(`presentation/index/all?status=${status}`).json<Presentation[]>();
+  }
 }
 
 export const presentationService = new PresentationService();

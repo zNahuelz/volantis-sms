@@ -3,6 +3,7 @@ import { NavLink } from 'react-router';
 import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import {
+  BuyOrderIcon,
   CustomerIcon,
   HomeIcon,
   LogoutIcon,
@@ -15,6 +16,7 @@ import {
 import {
   AppDescription,
   AppName,
+  BuyOrdersText,
   ClosingSessionText,
   CustomersText,
   HomeText,
@@ -33,6 +35,7 @@ import {
   SystemUsersText,
 } from '~/constants/strings';
 import { useAuth } from '~/context/authContext';
+import appIcon from '../assets/images/volLogoTransparent.png';
 
 export default function Sidebar() {
   const { logout } = useAuth();
@@ -55,8 +58,8 @@ export default function Sidebar() {
     <aside className='border-base-300 bg-base-200 min-h-full w-64 border-r'>
       <div className='border-base-300 border-b p-2'>
         <div className='flex flex-col items-center gap-3'>
-          <div>
-            <h2 className='text-primary text-center text-lg font-bold'>{AppName}</h2>
+          <div className='flex flex-col items-center'>
+            <img alt={AppName} src={appIcon} className='w-10 my-1 text-center' />
             <p className='text-base-content/70 text-sm'>{AppDescription}</p>
           </div>
         </div>
@@ -161,6 +164,33 @@ export default function Sidebar() {
                 <li>
                   <NavLink
                     to='/dashboard/supplier'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ListText}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={BuyOrderIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{BuyOrdersText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/buy-order/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {NewText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/buy-order'
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {ListText}
