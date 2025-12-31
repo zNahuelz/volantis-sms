@@ -13,6 +13,9 @@ export default class BuyOrderController {
         const newBuyOrder = await BuyOrder.create(
           {
             status: data.status.trim().toUpperCase(),
+            subtotal: data.subtotal,
+            igv: data.igv,
+            total: data.total,
             supplierId: data.supplierId,
             storeId: data.storeId,
           },
@@ -57,7 +60,9 @@ export default class BuyOrderController {
     await buyOrder.load('store');
     await buyOrder.load('supplier');
     await buyOrder.load('buyOrderDetails', (buyOrderQuery) => {
-      buyOrderQuery.preload('product');
+      buyOrderQuery.preload('product', (productQuery) => {
+        productQuery.preload('presentation');
+      });
     });
     return response.ok(buyOrder);
   }
@@ -107,7 +112,11 @@ export default class BuyOrderController {
           break;
       }
 
-      const buyOrders = await query.orderBy(orderBy, orderDir).paginate(page, limit);
+      const buyOrders = await query
+        .preload('store')
+        .preload('supplier')
+        .orderBy(orderBy, orderDir)
+        .paginate(page, limit);
 
       buyOrders.baseUrl(request.url());
       return response.ok(buyOrders);
@@ -136,12 +145,17 @@ export default class BuyOrderController {
         await model
           .merge({
             status: data.status.trim().toUpperCase(),
+            subtotal: data.subtotal,
+            igv: data.igv,
+            total: data.total,
             supplierId: data.supplierId,
             storeId: data.storeId,
           })
           .save();
 
-        await model.related('buyOrderDetails').updateOrCreateMany(
+        await model.related('buyOrderDetails').query().delete();
+
+        await model.related('buyOrderDetails').createMany(
           data.buyOrderDetails.map((detail) => ({
             productId: detail.productId,
             quantity: detail.quantity,

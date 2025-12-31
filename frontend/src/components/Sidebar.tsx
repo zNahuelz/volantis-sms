@@ -59,7 +59,13 @@ export default function Sidebar() {
       <div className='border-base-300 border-b p-2'>
         <div className='flex flex-col items-center gap-3'>
           <div className='flex flex-col items-center'>
-            <img alt={AppName} src={appIcon} className='w-10 my-1 text-center' />
+            <img
+              alt={AppName}
+              src={appIcon}
+              className='w-10 my-1 text-center'
+              draggable={false}
+              onContextMenu={(e) => e.preventDefault()}
+            />
             <p className='text-base-content/70 text-sm'>{AppDescription}</p>
           </div>
         </div>

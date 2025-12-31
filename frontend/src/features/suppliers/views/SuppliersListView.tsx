@@ -56,6 +56,7 @@ export default function SuppliersListView() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('available');
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -88,13 +89,15 @@ export default function SuppliersListView() {
       sortDir: undefined,
     };
 
-    const response = await supplierService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
+    try {
+      const response = await supplierService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadSuppliers = async () => {
@@ -114,11 +117,23 @@ export default function SuppliersListView() {
       search: values.search,
       status: status,
     };
-    const response = await supplierService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await supplierService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (supplier: Supplier) => {
@@ -237,6 +252,7 @@ export default function SuppliersListView() {
       ) : (
         <SupplierTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -289,7 +305,7 @@ export default function SuppliersListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               SupplierText.toLowerCase(),
               SuppliersText.toLowerCase(),

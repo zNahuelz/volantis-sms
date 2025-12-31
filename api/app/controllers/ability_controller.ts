@@ -13,7 +13,7 @@ export default class AbilityController {
         const newAbility = await Ability.create(
           {
             name: data.name.trim().toUpperCase(),
-            key: data.key.trim().toLowerCase(),
+            key: data.key.trim(),
             description: data.description.trim().toUpperCase(),
           },
           { client: trx }
@@ -142,7 +142,7 @@ export default class AbilityController {
 
         model.merge({
           name: data.name.trim().toUpperCase(),
-          key: data.key.trim().toLowerCase(),
+          key: data.key.trim(),
           description: data.description.trim().toUpperCase(),
         });
 

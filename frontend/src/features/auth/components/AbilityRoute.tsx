@@ -3,7 +3,7 @@ import { TitleSync } from '~/components/TitleSync';
 import { useAuth } from '~/context/authContext';
 
 export function AbilityRoute() {
-  const { token, abilities: userAbilities } = useAuth();
+  const { token, abilityKeys } = useAuth();
   const matches = useMatches();
 
   if (!token) {
@@ -14,7 +14,7 @@ export function AbilityRoute() {
 
   const required = current?.handle?.abilities || [];
 
-  const userKeys = (userAbilities || []).map((a) => a.key);
+  const userKeys = abilityKeys ?? [];
 
   const allowed = userKeys.includes('sys:admin') || required.some((req) => userKeys.includes(req));
 

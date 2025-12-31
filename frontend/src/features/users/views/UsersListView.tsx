@@ -61,6 +61,7 @@ export default function UsersListView() {
   const [editUserModalVisible, setEditUserModalVisible] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User>();
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const { user } = useAuth();
@@ -95,13 +96,15 @@ export default function UsersListView() {
       sortDir: undefined,
     };
 
-    const response = await userService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
+    try {
+      const response = await userService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadUsers = async () => {
@@ -121,11 +124,23 @@ export default function UsersListView() {
       search: values.search,
       status: status,
     };
-    const response = await userService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await userService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (user: User) => {
@@ -250,6 +265,7 @@ export default function UsersListView() {
       ) : (
         <UserTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -306,7 +322,7 @@ export default function UsersListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               UserText.toLowerCase(),
               UsersText.toLowerCase(),

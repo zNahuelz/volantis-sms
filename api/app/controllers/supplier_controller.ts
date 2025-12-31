@@ -111,6 +111,24 @@ export default class SupplierController {
     }
   }
 
+  public async list({ request, response }: HttpContext) {
+    const status = request.input('status', 'available'); //available | all
+    const suppliersQuery = Supplier.query().orderBy('name', 'asc');
+
+    switch (status) {
+      case 'available':
+        suppliersQuery.whereNull('deleted_at');
+        break;
+      case 'all':
+        break;
+      default:
+        break;
+    }
+
+    const suppliers = await suppliersQuery;
+    return response.ok(suppliers);
+  }
+
   public async update({ request, response }: HttpContext) {
     const id = request.param('id');
 

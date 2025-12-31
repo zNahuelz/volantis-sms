@@ -23,7 +23,13 @@ export default function WelcomeView() {
 
   return (
     <div className='flex flex-col items-center'>
-      <img alt='Volantis Logo' src={appIcon} className='w-60 m-3' />
+      <img
+        alt='Volantis Logo'
+        src={appIcon}
+        className='w-60 m-3'
+        draggable={false}
+        onContextMenu={(e) => e.preventDefault()}
+      />
       <h1 className='text-2xl font-light p-1'>{AppDescription}</h1>
       <h1 className='text-lg font-semibold'>{clockString}</h1>
       <h1 className='text-md font-extralight p-1 text-error'>{AppVersion}</h1>
@@ -32,7 +38,7 @@ export default function WelcomeView() {
       </h1>
       <h1 className='text-lg font-semibold p-1 break-all'>TOKEN: {auth.token}</h1>
       <h1 className='text-lg font-semibold p-1'>PERMISOS:</h1>
-      {JSON.stringify(auth.abilities)}
+      {JSON.stringify(auth.abilityKeys)}
     </div>
   );
 }

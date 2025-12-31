@@ -33,8 +33,8 @@ class StoreService extends BaseService<Store, StoreQuery, StoreResponse> {
     });
   }
 
-  list() {
-    return http.get(`store/index/all`).json<Store[]>();
+  list(status?: 'available' | 'all') {
+    return http.get(`store/index/all?status=${status}`).json<Store[]>();
   }
 }
 

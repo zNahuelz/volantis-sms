@@ -39,7 +39,7 @@ router
           .get('/index/all', [AbilityController, 'list'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'ability:list', 'role:create']),
+            middleware.ability(['sys:admin', 'ability:list', 'role:store']),
           ]);
         router
           .put('/:id', [AbilityController, 'update'])
@@ -72,6 +72,9 @@ router
         router
           .put('/:id', [BuyOrderController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:update'])]);
+        router
+          .delete('/:id', [BuyOrderController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'buyOrder:destroy'])]);
       })
       .prefix('buy-order');
     router
@@ -106,7 +109,7 @@ router
           .get('/index/all', [PresentationController, 'list'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'presentation:list', 'product:create']),
+            middleware.ability(['sys:admin', 'presentation:list', 'product:store']),
           ]);
         router
           .put('/:id', [PresentationController, 'update'])
@@ -187,6 +190,12 @@ router
           .get('/', [SupplierController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:index'])]);
         router
+          .get('/index/all', [SupplierController, 'list'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'supplier:list', 'buyOrder:store']),
+          ]);
+        router
           .put('/:id', [SupplierController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:update'])]);
         router
@@ -220,7 +229,10 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'store:index'])]);
         router
           .get('/index/all', [StoreController, 'list'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'store:list', 'user:create'])]);
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'store:list', 'user:store', 'buyOrder:store']),
+          ]);
         router
           .put('/:id', [StoreController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'store:update'])]);
@@ -263,7 +275,7 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:index'])]);
         router
           .get('/index/all', [RoleController, 'list'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:list', 'user:create'])]);
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'role:list', 'user:store'])]);
         router
           .put('/:id', [RoleController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'role:update'])]);

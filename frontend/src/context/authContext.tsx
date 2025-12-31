@@ -8,7 +8,7 @@ import type { User } from '~/types/user';
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  abilities: Ability[] | null;
+  abilityKeys: string[] | null;
   login: (token: string, user: User, rememberMe: boolean, abilities: Ability[]) => void;
   logout: (expiredToken?: boolean) => void;
   refreshUser: (newUser: User, abilities: Ability[]) => void;
@@ -18,17 +18,24 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const authStore = {
   token: null as string | null,
-  abilities: null as Ability[] | null,
+  abilityKeys: null as string[] | null,
   logout: (expiredToken?: boolean) => {},
+};
+
+const sanitizeUserForCookie = (user: User) => {
+  return {
+    ...user,
+    role: user.role ? { ...user.role, abilities: [] } : null,
+  };
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(() => Cookies.get('AUTH_TOKEN') || null);
-  const [abilities, setAbilities] = useState<Ability[] | null>(() => {
+  const [abilityKeys, setAbilityKeys] = useState<string[] | null>(() => {
     const raw = Cookies.get('USER_ABILITIES');
     if (!raw) return null;
     try {
-      return JSON.parse(raw) as Ability[];
+      return JSON.parse(raw) as string[];
     } catch {
       return null;
     }
@@ -45,27 +52,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [token]);
 
   const login = (opaqueToken: string, newUser: User, remember: boolean, abilities: Ability[]) => {
+    const keys = abilities.map((a) => a.key);
+    const smallUser = sanitizeUserForCookie(newUser);
     setToken(opaqueToken);
     setUser(newUser);
     setAuthToken(opaqueToken);
-    setAbilities(abilities);
+    setAbilityKeys(keys);
 
     if (remember) {
       Cookies.set('AUTH_TOKEN', opaqueToken, { expires: 7 });
-      Cookies.set('USER_INFO', JSON.stringify(newUser), { expires: 7 });
-      Cookies.set('USER_ABILITIES', JSON.stringify(abilities), { expires: 7 });
+      Cookies.set('USER_INFO', JSON.stringify(smallUser), { expires: 7 });
+      Cookies.set('USER_ABILITIES', JSON.stringify(keys), { expires: 7 });
     } else {
       Cookies.set('AUTH_TOKEN', opaqueToken);
-      Cookies.set('USER_INFO', JSON.stringify(newUser));
-      Cookies.set('USER_ABILITIES', JSON.stringify(abilities));
+      Cookies.set('USER_INFO', JSON.stringify(smallUser));
+      Cookies.set('USER_ABILITIES', JSON.stringify(keys));
     }
   };
 
   const refreshUser = (newUser: User, abilities: Ability[]) => {
+    const keys = abilities.map((a) => a.key);
+    const smallUser = sanitizeUserForCookie(newUser);
     setUser(newUser);
-    setAbilities(abilities);
-    Cookies.set('USER_INFO', JSON.stringify(newUser), { expires: 7 });
-    Cookies.set('USER_ABILITIES', JSON.stringify(abilities), { expires: 7 });
+    setAbilityKeys(keys);
+    Cookies.set('USER_INFO', JSON.stringify(smallUser), { expires: 7 });
+    Cookies.set('USER_ABILITIES', JSON.stringify(keys), { expires: 7 });
   };
 
   const logout = async (expiredToken?: boolean) => {
@@ -77,7 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null);
     setUser(null);
     setAuthToken(null);
-    setAbilities([]);
+    setAbilityKeys([]);
     Cookies.remove('AUTH_TOKEN');
     Cookies.remove('USER_INFO');
     Cookies.remove('USER_ABILITIES');
@@ -86,7 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   authStore.logout = logout;
 
   return (
-    <AuthContext.Provider value={{ user, token, abilities, login, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, token, abilityKeys, login, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

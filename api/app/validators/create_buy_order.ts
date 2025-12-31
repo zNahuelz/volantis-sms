@@ -7,6 +7,9 @@ export const CreateBuyOrderValidator = vine.compile(
       .trim()
       .toUpperCase()
       .in(['PENDIENTE', 'ENVIADO', 'CANCELADA', 'FINALIZADA']),
+    subtotal: vine.number().positive(),
+    igv: vine.number().positive(),
+    total: vine.number().positive(),
     supplierId: vine.number().exists({ table: 'suppliers', column: 'id' }),
     storeId: vine.number().exists({ table: 'stores', column: 'id' }),
     buyOrderDetails: vine

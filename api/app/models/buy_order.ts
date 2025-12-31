@@ -13,6 +13,15 @@ export default class BuyOrder extends BaseModel {
   declare status: string;
 
   @column()
+  declare igv: number;
+
+  @column()
+  declare subtotal: number;
+
+  @column()
+  declare total: number;
+
+  @column()
   declare storeId: number;
 
   @column()

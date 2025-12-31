@@ -7,6 +7,9 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id');
       table.string('status', 20).notNullable();
+      table.decimal('igv', 18, 2).notNullable();
+      table.decimal('subtotal', 18, 2).notNullable();
+      table.decimal('total', 18, 2).notNullable();
       table.integer('store_id').unsigned().references('id').inTable('stores').notNullable();
       table.integer('supplier_id').unsigned().references('id').inTable('suppliers').notNullable();
       table.timestamp('created_at', { useTz: true }).notNullable();

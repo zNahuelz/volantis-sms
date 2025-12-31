@@ -1,6 +1,7 @@
 import { Table, type Column } from '~/components/Table';
 import {
   DniText,
+  FetchFailedText,
   IdText,
   NamesText,
   StateText,
@@ -14,9 +15,10 @@ import type { User } from '~/types/user';
 type Props = {
   data: User[];
   actions: (row: User) => React.ReactNode;
+  fetchFailed?: boolean;
 };
 
-export default function UserTable({ data, actions }: Props) {
+export default function UserTable({ data, actions, fetchFailed = false }: Props) {
   const columns = [
     { key: 'id', label: IdText },
     { key: 'names', label: NamesText },
@@ -27,5 +29,12 @@ export default function UserTable({ data, actions }: Props) {
     { key: 'deletedAt', label: StateText },
   ] satisfies Column<User>[];
 
-  return <Table columns={columns} data={data} actions={actions} errorMessage={UsersNotLoaded} />;
+  return (
+    <Table
+      columns={columns}
+      data={data}
+      actions={actions}
+      errorMessage={fetchFailed ? FetchFailedText : UsersNotLoaded}
+    />
+  );
 }

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import type { BuyOrder } from '~/types/buyOrder';
 import type { Customer } from '~/types/customer';
 import type { Presentation } from '~/types/presentation';
 import type { Product } from '~/types/product';
@@ -22,6 +23,7 @@ export const HomeText = 'Inicio';
 export const NewSaleText = 'Nueva venta';
 export const SuppliersText = 'Proveedores';
 export const ProductsText = 'Productos';
+export const BuyOrderText = 'Ordene de Compra';
 export const BuyOrdersText = 'Ordenes de Compra';
 export const SettingText = 'Configuración';
 export const LogoutText = 'Cerrar Sesión';
@@ -62,6 +64,7 @@ export const CreatedAtText = 'Fecha de Creación';
 export const UpdatedAtText = 'Ult. Mod.';
 export const DeletedAtText = 'Fecha de Eliminación';
 export const StateText = 'Estado';
+export const OrderStatusText = 'Estado de Orden';
 export const EditText = 'Modificar';
 export const DeleteText = 'Eliminar';
 export const DisableText = 'Deshabilitar';
@@ -126,9 +129,11 @@ export const ResetPasswordRemotelyMessage = (user: User) => {
 export const PresentationStatusChangeMessage = (presentation: Presentation) => {
   return `¿Está seguro de <strong>${presentation.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente presentación de producto? <br> <strong>ID:</strong> ${presentation.id} <br> <strong>NOMBRE:</strong> ${presentation.name} <br> <strong>VAL. NUMÉRICO:</strong> ${presentation.numericValue} <br> <strong>DESCRIPCIÓN</strong> ${presentation.description}`;
 };
-
 export const SettingDeletionMessage = (setting: Setting) => {
   return `¿Está seguro de <strong>eliminar</strong> la siguiente variable del sistema? <br> <strong>ID:</strong> ${setting.id} <br> <strong>CLAVE:</strong> ${setting.key} <br> <strong>VALOR:</strong> ${setting.value} <br> <strong>DESCRIPCIÓN</strong> ${setting.description} <br> <strong class='text-error'>Esta operación NO es reversible, deberá volver a crear la variable de ser requerida posteriormente.</strong>`;
+};
+export const BuyOrderStatusChangeMessage = (buyOrder: BuyOrder) => {
+  return `¿Está seguro de <strong>${buyOrder.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> la siguiente orden de compra? <br> <strong>ID:</strong> ${buyOrder.id} <br> <strong>PROVEEDOR:</strong> ${buyOrder.supplier?.name ?? ''} <br> <strong>TIENDA:</strong> ${buyOrder.store?.name ?? ''} <br> <strong>SUBTOTAL:</strong> ${buyOrder.subtotal} <br> <strong>TOTAL:</strong> ${buyOrder.total}`;
 };
 export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
 export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
@@ -211,6 +216,10 @@ export const UserRegisterText = 'Registro de Usuario';
 export const UserEditText = 'Modificar Usuario';
 export const InvalidStoreIdText =
   'La tienda seleccionada no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
+export const InvalidSupplierIdText =
+  'El proveedor seleccionado no se encuentra disponible o es inválido, intente nuevamente o comuniquese con administración';
+export const InvalidBuyOrderDetailsPayload =
+  'Los productos seleccionados no se encuentran disponibles, intente nuevamente o comuniquese con administración.';
 export const InvalidRoleIdText =
   'El rol seleccionado no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
 export const UserDniTakenText =
@@ -219,6 +228,8 @@ export const UserEmailTaken =
   'El correo electrónico ingresado ya se encuentra asignado a otro usuario, comuniquese con administración';
 export const UsernameChangeDisabledOnEditText =
   'Modificar el DNI del empleado no actualizará su nombre de usuario, tal cambio puede realizarse de forma personal desde el apartado "Mi Perfil".';
+export const LockStoreOnBuyOrderMgmtText =
+  'INFORMACIÓN: Los usuarios sin permisos administrativos solo pueden registrar o modificar ordenes de compra de su tienda asignada.';
 export const LoadingUserText = 'Cargando usuario...';
 export const UserNotFoundText = 'Usuario no encontrado.';
 export const UserDetailText = 'Detalle de Usuario';
@@ -312,6 +323,7 @@ export const SysSettingKeyTakenText =
 export const InvalidSettingValueTypeText =
   'El tipo de variable solo puede ser uno de los siguientes: ENTERO, ENTERO LARGO, DECIMAL, TEXTO, LISTA, BOOLEANO u OTRO.';
 export const NewSettingText = 'Registro de variable del sistema';
+TableElementsMessage;
 export const EditSettingText = 'Modificar variable del sistema';
 export const SettingDetailText = 'Detalle de Variable del Sistema';
 export const ExpiredSessionText =
@@ -323,6 +335,7 @@ export const ProductUpdatedText = 'Producto actualizado correctamente.';
 export const ProductBarcodeTaken =
   'El código de barras ingresado ya se encuentra asignado a otro producto.';
 export const BarcodeText = 'Código de Barras';
+export const ShortBarcodeText = 'Cód. Barras';
 export const AssignText = 'Asignar';
 export const RandomizeBarcodeText = 'Aleatorizar código de barras';
 export const EditProductText = 'Modificar Producto';
@@ -347,3 +360,27 @@ export const BuyOrdersListAreaText = `Listado de Ordenes de Compra - ${AppName}`
 export const CreateBuyOrderAreaText = `Registro de Orden de Compra - ${AppName}`;
 export const BuyOrderDetailAreaText = `Detalle de Orden de Compra - ${AppName}`;
 export const EditBuyOrderAreaText = `Editar Orden de Compra - ${AppName}`;
+export const CreateBuyOrderText = 'Registro de Orden de Compra';
+export const StatusText = 'Estado';
+export const QuantityText = 'Cantidad';
+export const UnitPriceText = 'Precio Unitario';
+export const TotalText = 'Total';
+export const SubtotalText = 'Subtotal';
+export const TaxNameText = 'Igv';
+export const RemoveText = 'Quitar';
+export const AddProductText = 'Añadir producto';
+export const ProductSearchText = 'Búsqueda de Producto';
+export const BuyOrderCreatedText = 'Orden de compra registrada correctamente.';
+export const BuyOrderUpdatedText = 'Orden de compra actualizada correctamente.';
+export const EditBuyOrderText = 'Modificar Orden de Compra';
+export const LoadingBuyOrderText = 'Cargando orden de compra...';
+export const LoadingBuyOrdersText = 'Cargando ordenes de compra...';
+export const BuyOrderNotFound = 'Orden de compra no encontrada.';
+export const BuyOrdersNotLoaded = 'No se encontraron ordenes de compra con el criterío ingresado.';
+export const FetchFailedText =
+  'Conexión con el servidor fallida; intente nuevamente o comuníquese con administración.';
+export const BuyOrderStatusUpdatedText =
+  'Visibilidad de orden de compra actualizada correctamente.';
+export const BuyOrderStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad de la orden de compra. Intente nuevamente o comuniquese con administración.';
+export const BuyOrderDetailText = 'Detalle de Orden de Compra';

@@ -50,6 +50,7 @@ export default function AbilitiesListView() {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [selectedAbility, setSelectedAbility] = useState<Ability>();
   const [dismissedWarning, setDismissedWarning] = useState(false);
+  const [fetchFailed, setFetchFailed] = useState(false);
 
   const {
     register,
@@ -81,13 +82,15 @@ export default function AbilitiesListView() {
       sortDir: undefined,
     };
 
-    const response = await abilityService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
+    try {
+      const response = await abilityService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadAbilities = async () => {
@@ -107,11 +110,23 @@ export default function AbilitiesListView() {
       search: values.search,
       status: status,
     };
-    const response = await abilityService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await abilityService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showWarning = () => {
@@ -214,6 +229,7 @@ export default function AbilitiesListView() {
       ) : (
         <AbilityTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -249,7 +265,7 @@ export default function AbilitiesListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               AbilityText.toLowerCase(),
               AbilitiesText.toLowerCase(),

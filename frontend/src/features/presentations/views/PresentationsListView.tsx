@@ -59,6 +59,7 @@ export default function PresentationsListView() {
   const [editPresentationModalVisible, setEditPresentationModalVisible] = useState(false);
   const [selectedPresentation, setSelectedPresentation] = useState<Presentation>();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -91,13 +92,15 @@ export default function PresentationsListView() {
       sortDir: undefined,
     };
 
-    const response = await presentationService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
+    try {
+      const response = await presentationService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadPresentations = async () => {
@@ -117,11 +120,23 @@ export default function PresentationsListView() {
       search: values.search,
       status: status,
     };
-    const response = await presentationService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await presentationService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (presentation: Presentation) => {
@@ -239,6 +254,7 @@ export default function PresentationsListView() {
       ) : (
         <PresentationTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -282,7 +298,7 @@ export default function PresentationsListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               PresentationText.toLowerCase(),
               PresentationsText.toLowerCase(),

@@ -106,8 +106,21 @@ export default class StoreController {
     }
   }
 
-  public async list({ response }: HttpContext) {
-    const stores = await Store.query().whereNull('deleted_at').orderBy('updated_at');
+  public async list({ request, response }: HttpContext) {
+    const status = request.input('status', 'available'); //available | all
+    const storesQuery = Store.query().orderBy('name', 'asc');
+
+    switch (status) {
+      case 'available':
+        storesQuery.whereNull('deleted_at');
+        break;
+      case 'all':
+        break;
+      default:
+        break;
+    }
+
+    const stores = await storesQuery;
     return response.ok(stores);
   }
 

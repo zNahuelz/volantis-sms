@@ -68,3 +68,17 @@ export const DEFAULT_STATUS_TYPES = [
   { label: 'SOLO HABILITADOS', value: 'available' },
   { label: 'SOLO DESHABILITADOS', value: 'deleted' },
 ];
+
+export const DEFAULT_BUY_ORDER_STATUS = [
+  { label: 'SOLICITUD PENDIENTE', value: 'PENDIENTE' },
+  { label: 'ENTREGA PENDIENTE', value: 'ENVIADO' },
+  { label: 'ORDEN COMPLETADA', value: 'FINALIZADA' },
+  { label: 'CANCELADA', value: 'CANCELADA' },
+];
+
+export const DEFAULT_BUY_ORDER_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR ESTADO', value: 'status' },
+  { label: 'POR PROVEEDOR', value: 'supplierId' },
+  { label: 'POR POR TIENDA', value: 'storeId' },
+];

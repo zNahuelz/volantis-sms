@@ -53,6 +53,7 @@ export default function CustomerListView() {
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('available');
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -85,13 +86,15 @@ export default function CustomerListView() {
       sortDir: undefined,
     };
 
-    const response = await customerService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
+    try {
+      const response = await customerService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadCustomers = async () => {
@@ -111,11 +114,23 @@ export default function CustomerListView() {
       search: values.search,
       status: status,
     };
-    const response = await customerService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await customerService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (customer: Customer) => {
@@ -234,6 +249,7 @@ export default function CustomerListView() {
       ) : (
         <CustomerTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -288,7 +304,7 @@ export default function CustomerListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               CustomerText.toLowerCase(),
               CustomersText.toLowerCase(),

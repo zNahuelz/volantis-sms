@@ -24,11 +24,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 type Props = {
   onBusyStart?: () => void;
   onBusyEnd?: () => void;
+  abilities?: Ability[];
 };
 
-export default function ProfileDetail({ onBusyStart, onBusyEnd }: Props) {
+export default function ProfileDetail({ onBusyStart, onBusyEnd, abilities }: Props) {
   const { user } = useAuth();
-  const { abilities } = useAuth();
 
   const columns: Column<Ability>[] = [
     { key: 'name', label: NameText },

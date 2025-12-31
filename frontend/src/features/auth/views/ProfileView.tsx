@@ -15,6 +15,7 @@ import { authStore, useAuth } from '~/context/authContext';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import Alert from '~/components/Alert';
+import type { Ability } from '~/types/ability';
 
 export default function ProfileView() {
   const [selected, setSelected] = useState<'profile' | 'email' | 'password' | 'avatar' | 'loading'>(
@@ -24,6 +25,7 @@ export default function ProfileView() {
   const { refreshUser } = useAuth();
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [abilities, setAbilities] = useState<Ability[]>();
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -33,6 +35,7 @@ export default function ProfileView() {
 
         const freshUser = await profileService();
         refreshUser(freshUser, freshUser.role?.abilities ?? []);
+        setAbilities(freshUser.role?.abilities ?? []);
 
         setSelected('profile');
       } catch (err) {
@@ -91,6 +94,7 @@ export default function ProfileView() {
               <ProfileDetail
                 onBusyStart={() => setIsLocked(true)}
                 onBusyEnd={() => setIsLocked(false)}
+                abilities={abilities}
               />
             )}
 

@@ -3,6 +3,7 @@ import {
   CreatedAtText,
   CustomersNotLoaded,
   DniText,
+  FetchFailedText,
   IdText,
   NameText,
   NamesText,
@@ -17,9 +18,10 @@ import type { Customer } from '~/types/customer';
 type Props = {
   data: Customer[];
   actions: (row: Customer) => React.ReactNode;
+  fetchFailed?: boolean;
 };
 
-export default function CustomerTable({ data, actions }: Props) {
+export default function CustomerTable({ data, actions, fetchFailed = false }: Props) {
   const columns = [
     { key: 'id', label: IdText },
     { key: 'names', label: NamesText },
@@ -32,6 +34,11 @@ export default function CustomerTable({ data, actions }: Props) {
   ] satisfies Column<Customer>[];
 
   return (
-    <Table columns={columns} data={data} actions={actions} errorMessage={CustomersNotLoaded} />
+    <Table
+      columns={columns}
+      data={data}
+      actions={actions}
+      errorMessage={fetchFailed ? FetchFailedText : CustomersNotLoaded}
+    />
   );
 }

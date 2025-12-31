@@ -56,6 +56,7 @@ export default function SettingsListView() {
   const [selectedSetting, setSelectedSetting] = useState<Setting>();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [dismissedWarning, setDismissedWarning] = useState(false);
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -88,14 +89,15 @@ export default function SettingsListView() {
       sortDir: undefined,
     };
 
-    const response = await settingService.index(query);
-
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
-
-    setLoading(false);
-    console.table(data);
+    try {
+      const response = await settingService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
   };
 
   const reloadSettings = async () => {
@@ -114,11 +116,23 @@ export default function SettingsListView() {
       field: values.field,
       search: values.field === 'valueType' ? values.valueTypeField : values.search,
     };
-    const response = await settingService.index(query);
-    setData(response.data);
-    setTotalPages(response.meta.lastPage);
-    setTotalItems(response.meta.total);
+    try {
+      const response = await settingService.index(query);
+      setData(response.data);
+      setTotalPages(response.meta.lastPage);
+      setTotalItems(response.meta.total);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setData([]);
+    setTotalPages(1);
+    setTotalItems(0);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (setting: Setting) => {
@@ -265,6 +279,7 @@ export default function SettingsListView() {
       ) : (
         <SettingTable
           data={data}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -313,7 +328,7 @@ export default function SettingsListView() {
       />
 
       <h1 className='mt-1 text-center font-medium'>
-        {data.length >= 1
+        {data.length >= 1 && !loading && !fetchFailed
           ? TableElementsMessage(
               SysSettingText.toLowerCase(),
               SysSettingsText.toLowerCase(),

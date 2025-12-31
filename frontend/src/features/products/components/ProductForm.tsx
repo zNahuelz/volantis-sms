@@ -155,7 +155,10 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
       </div>
     );
 
-  if (loading) return <Loading loadMessage={LoadingForm} />;
+  if (loading)
+    return (
+      <Loading loadMessage={LoadingForm} color={`${isEdit ? 'text-accent' : 'text-success'}`} />
+    );
 
   if (isLocked)
     return <div className='p-4 text-center text-error font-semibold'>{FormLoadFailed}</div>;

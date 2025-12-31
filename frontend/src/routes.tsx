@@ -111,7 +111,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CreateBuyOrderAreaText,
-                  abilities: ['sys:admin', 'buyOrder:create'],
+                  abilities: ['sys:admin', 'buyOrder:store'],
                 },
                 children: [{ index: true, Component: BuyOrderCreateView }],
               },
@@ -149,7 +149,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CreateCustomerAreaText,
-                  abilities: ['sys:admin', 'customer:create'],
+                  abilities: ['sys:admin', 'customer:store'],
                 },
                 children: [{ index: true, Component: CustomerCreateView }],
               },
@@ -187,7 +187,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CreateSupplierAreaText,
-                  abilities: ['sys:admin', 'supplier:create'],
+                  abilities: ['sys:admin', 'supplier:store'],
                 },
                 children: [{ index: true, Component: SupplierCreateView }],
               },
@@ -236,7 +236,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CreateProductAreaText,
-                  abilities: ['sys:admin', 'product:create'],
+                  abilities: ['sys:admin', 'product:store'],
                 },
                 children: [{ index: true, Component: ProductCreateView }],
               },
@@ -271,7 +271,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CreateRoleAreaText,
-                  abilities: ['sys:admin', 'role:create'],
+                  abilities: ['sys:admin', 'role:store'],
                 },
                 children: [{ index: true, Component: RoleCreateView }],
               },

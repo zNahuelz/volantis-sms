@@ -138,7 +138,7 @@ export default function UserForm({
 
     async function loadData() {
       const [storesResult, rolesResult] = await Promise.allSettled([
-        storeService.list(),
+        storeService.list('available'),
         roleService.list('available'),
       ]);
 
@@ -191,7 +191,10 @@ export default function UserForm({
           .join(', ')}`
       : EmptyAbilityListText;
 
-  if (loading) return <Loading loadMessage={LoadingForm} />;
+  if (loading)
+    return (
+      <Loading loadMessage={LoadingForm} color={`${isEdit ? 'text-accent' : 'text-success'}`} />
+    );
 
   if (isLocked)
     return <div className='p-4 text-center text-error font-semibold'>{FormLoadFailed}</div>;

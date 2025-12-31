@@ -2,6 +2,7 @@ import { Table, type Column } from '~/components/Table';
 import {
   CreatedAtText,
   DescriptionText,
+  FetchFailedText,
   IdText,
   NameText,
   NumericValueText,
@@ -14,9 +15,10 @@ import type { Presentation } from '~/types/presentation';
 type Props = {
   data: Presentation[];
   actions: (row: Presentation) => React.ReactNode;
+  fetchFailed?: boolean;
 };
 
-export default function PresentationTable({ data, actions }: Props) {
+export default function PresentationTable({ data, actions, fetchFailed = false }: Props) {
   const columns = [
     { key: 'id', label: IdText },
     { key: 'name', label: NameText },
@@ -32,7 +34,7 @@ export default function PresentationTable({ data, actions }: Props) {
       columns={columns}
       data={data}
       actions={actions}
-      errorMessage={PresentationsNotLoadedText}
+      errorMessage={fetchFailed ? FetchFailedText : PresentationsNotLoadedText}
     />
   );
 }

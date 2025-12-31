@@ -26,7 +26,7 @@ export interface BuyOrderResponse {
 
 class BuyOrderService extends BaseService<BuyOrder, BuyOrderQuery, BuyOrderResponse> {
   constructor() {
-    super(http, 'buy_order', {
+    super(http, 'buy-order', {
       field: 'searchBy',
       sortBy: 'orderBy',
       sortDir: 'orderDir',

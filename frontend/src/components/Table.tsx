@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { ActionsText, EmptyListText, IsActiveText, IsDeletedText } from '~/constants/strings';
 import { formatAsDatetime } from '~/utils/helpers';
+const RIGHT_ALIGNED_COLUMNS = ['total', 'igv', 'subtotal', 'amount', 'quantity'] as const;
 
 export type Column<T> = {
   key: string;
@@ -39,7 +40,12 @@ export function Table<T>({
         <thead>
           <tr className='font-bold text-black'>
             {columns.map((col) => (
-              <th key={String(col.key)}>{col.label}</th>
+              <th
+                key={String(col.key)}
+                className={clsx(RIGHT_ALIGNED_COLUMNS.includes(col.key as any) && 'text-end')}
+              >
+                {col.label}
+              </th>
             ))}
 
             {showActions && <th className='text-center'>{ActionsText}</th>}
@@ -79,6 +85,35 @@ export function Table<T>({
                       className={disabled ? 'text-error font-bold' : 'text-success font-bold'}
                     >
                       {disabled ? IsDeletedText.toUpperCase() : IsActiveText.toUpperCase()}
+                    </td>
+                  );
+                }
+
+                if (col.key === 'status') {
+                  return (
+                    <td
+                      key={String(col.key)}
+                      className={`${
+                        value === 'PENDIENTE'
+                          ? 'text-neutral'
+                          : value === 'ENVIADO'
+                            ? 'text-info'
+                            : value === 'CANCELADA'
+                              ? 'text-error'
+                              : value === 'FINALIZADA'
+                                ? 'text-success'
+                                : 'text-black'
+                      } font-bold`}
+                    >
+                      {value}
+                    </td>
+                  );
+                }
+
+                if (['total', 'igv', 'subtotal', 'amount', 'quantity'].includes(col.key)) {
+                  return (
+                    <td key={String(col.key)} className='text-end'>
+                      {value}
                     </td>
                   );
                 }

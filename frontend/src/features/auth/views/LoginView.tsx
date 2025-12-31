@@ -9,7 +9,13 @@ export default function LoginView() {
       <div className='card bg-base-100 flex w-100 flex-col p-6 shadow-xl'>
         <h1 className='text-center text-xl font-bold'>{LoginText}</h1>
         <div className='mt-2 flex flex-col items-center'>
-          <img alt='Volantis Logo' src={appIcon} className='h-25 w-20' />
+          <img
+            alt='Volantis Logo'
+            src={appIcon}
+            className='h-25 w-20'
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
+          />
         </div>
         <LoginForm></LoginForm>
       </div>

@@ -51,3 +51,4 @@ export const ValueIcon = 'ic:sharp-sync-alt';
 export const BarcodeIcon = 'ic:baseline-barcode';
 export const RandomizeIcon = 'ic:baseline-autorenew';
 export const BuyOrderIcon = 'ic:baseline-library-books';
+export const AddIcon = 'ic:baseline-plus';

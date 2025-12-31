@@ -32,6 +32,9 @@ class SupplierService extends BaseService<Supplier, SupplierQuery, SupplierRespo
       sortDir: 'orderDir',
     });
   }
+  list(status?: 'available' | 'all') {
+    return http.get(`supplier/index/all?status=${status}`).json<Supplier[]>();
+  }
 }
 
 export const supplierService = new SupplierService();

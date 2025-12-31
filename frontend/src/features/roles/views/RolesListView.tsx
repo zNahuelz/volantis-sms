@@ -36,13 +36,24 @@ export default function RolesListView() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
   const [dismissedWarning, setDismissedWarning] = useState(false);
+  const [fetchFailed, setFetchFailed] = useState(false);
   const navigate = useNavigate();
 
   const loadRoles = async () => {
     setLoading(true);
-    const response = await roleService.list('all');
-    setRoles(response);
+    try {
+      const response = await roleService.list('all');
+      setRoles(response);
+      setLoading(false);
+    } catch {
+      handleFailedFetch();
+    }
+  };
+
+  const handleFailedFetch = () => {
+    setRoles([]);
     setLoading(false);
+    setFetchFailed(true);
   };
 
   const showStatusChangeModal = async (role: Role) => {
@@ -135,6 +146,7 @@ export default function RolesListView() {
       ) : (
         <RoleTable
           data={roles}
+          fetchFailed={fetchFailed}
           actions={(row) => (
             <div className='join-horizontal join'>
               <Button
@@ -169,7 +181,7 @@ export default function RolesListView() {
         />
       )}
 
-      <h1 className={`mt-2 text-center font-medium ${loading ? 'hidden' : ''}`}>
+      <h1 className={`mt-2 text-center font-medium ${loading || fetchFailed ? 'hidden' : ''}`}>
         {TotalSystemRolesText(roles.length)}
       </h1>
     </div>

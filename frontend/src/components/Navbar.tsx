@@ -103,6 +103,7 @@ export default function Navbar() {
                     ? `${API_URL}/storage/profile-picture/${user?.profilePicture}`
                     : defaultPfp
                 }
+                draggable={false}
                 onContextMenu={(e) => e.preventDefault()}
                 onError={(e) => {
                   if (e.currentTarget.src !== defaultPfp) {
