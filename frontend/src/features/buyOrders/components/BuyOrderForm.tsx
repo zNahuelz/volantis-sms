@@ -55,9 +55,7 @@ import type { Supplier } from '~/types/supplier';
 import ProductSearchComponent from './ProductSearchComponent';
 import type { Product } from '~/types/product';
 import Swal from 'sweetalert2';
-import { swalDismissalTime } from '~/constants/values';
-
-const ADMIN_ABILITY_KEY = 'sys:admin';
+import { ADMIN_ABILITY_KEY, swalDismissalTime } from '~/constants/values';
 
 interface BuyOrderFormProps {
   buyOrder?: BuyOrder;

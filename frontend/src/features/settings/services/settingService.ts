@@ -32,6 +32,9 @@ class SettingService extends BaseService<Setting, SettingQuery, SettingResponse>
       sortDir: 'orderDir',
     });
   }
+  showByKey(key: string) {
+    return http.get(`setting/key/${key}`).json<Setting>();
+  }
 }
 
 export const settingService = new SettingService();

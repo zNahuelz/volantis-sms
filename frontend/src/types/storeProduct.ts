@@ -12,7 +12,7 @@ export interface StoreProduct {
   salable: boolean;
   store?: Store;
   product?: Product;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
 }

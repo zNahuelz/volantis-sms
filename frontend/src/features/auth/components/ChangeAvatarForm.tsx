@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Button from '~/components/Button';
 import {
   CancelText,
-  CurrenAvatarText,
+  CurrentAvatarText,
   ErrorTagText,
   NoFileSelected,
   OkTagText,
@@ -115,7 +115,7 @@ export default function ChangeAvatarForm({ onBusyStart, onBusyEnd }: Props) {
               }
             }}
           />
-          <h1 className='text-md font-semibold'>{CurrenAvatarText}</h1>
+          <h1 className='text-md font-semibold'>{CurrentAvatarText}</h1>
         </div>
 
         <div className='flex flex-col items-center'>

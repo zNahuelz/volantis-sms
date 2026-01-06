@@ -25,6 +25,10 @@ import {
   RoleDetailAreaText,
   RolesListAreaText,
   SettingsListAreaText,
+  StoreProductCreateAreaText,
+  StoreProductDetailAreaText,
+  StoreProductEditAreaText,
+  StoreProductsListAreaText,
   SupplierDetailAreaText,
   SuppliersListAreaText,
   UserDetailAreaText,
@@ -64,6 +68,10 @@ import BuyOrderCreateView from './features/buyOrders/views/BuyOrderCreateView';
 import BuyOrderListView from './features/buyOrders/views/BuyOrderListView';
 import BuyOrderDetailView from './features/buyOrders/views/BuyOrderDetailView';
 import BuyOrderEditView from './features/buyOrders/views/BuyOrderEditView';
+import StoreProductListView from './features/storeProduct/views/StoreProductListView';
+import StoreProductCreateView from './features/storeProduct/views/StoreProductCreateView';
+import StoreProductDetailView from './features/storeProduct/views/StoreProductDetailView';
+import StoreProductEditView from './features/storeProduct/views/StoreProductEditView';
 
 export const router = createBrowserRouter([
   {
@@ -205,6 +213,47 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: { title: EditSupplierAreaText, abilities: ['sys:admin', 'supplier:edit'] },
                 children: [{ index: true, Component: SupplierEditView }],
+              },
+            ],
+          },
+          //StoreProduct routes...
+          {
+            path: 'store-product',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoreProductsListAreaText,
+                  abilities: ['sys:admin', 'storeProduct:index'],
+                },
+                children: [{ index: true, Component: StoreProductListView }],
+              },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoreProductCreateAreaText,
+                  abilities: ['sys:admin', 'storeProduct:store'],
+                },
+                children: [{ index: true, Component: StoreProductCreateView }],
+              },
+              {
+                path: ':storeId/:productId',
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoreProductDetailAreaText,
+                  abilities: ['sys:admin', 'storeProduct:detail'],
+                },
+                children: [{ index: true, Component: StoreProductDetailView }],
+              },
+              {
+                path: ':storeId/:productId/edit',
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoreProductEditAreaText,
+                  abilities: ['sys:admin', 'storeProduct:edit'],
+                },
+                children: [{ index: true, Component: StoreProductEditView }],
               },
             ],
           },

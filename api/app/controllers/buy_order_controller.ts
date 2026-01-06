@@ -96,6 +96,7 @@ export default class BuyOrderController {
               break;
             case 'all':
             default:
+              q.where('status', search).orWhere('supplier_id', search).orWhere('store_id', search);
               break;
           }
         });

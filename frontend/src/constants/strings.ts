@@ -5,6 +5,7 @@ import type { Presentation } from '~/types/presentation';
 import type { Product } from '~/types/product';
 import type { Role } from '~/types/role';
 import type { Setting } from '~/types/setting';
+import type { Store } from '~/types/store';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 
@@ -53,6 +54,10 @@ export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
 export const RoleDetailAreaText = `Detalle de Rol - ${AppName}`;
 export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
+export const StoreProductsListAreaText = `Listado de Productos Asignados - ${AppName}`;
+export const StoreProductCreateAreaText = `Asignación de Productos - ${AppName}`;
+export const StoreProductEditAreaText = `Gestionar Asignación de Productos - ${AppName}`;
+export const StoreProductDetailAreaText = `Detalle de Asignación de Producto - ${AppName}`;
 export const NameText = 'Nombre';
 export const NumericValueText = 'Valor Numérico';
 export const KeyText = 'Clave';
@@ -186,9 +191,11 @@ export const UserPasswordUpdatedText =
   'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
 export const RegisterDateText = 'Fecha de Registro';
 export const UserUpdatedAtText = 'Ult. Mod. al Usuario';
-export const CurrenAvatarText = 'Foto de perfil actual';
+export const CurrentAvatarText = 'Foto de perfil actual';
 export const PreviewText = 'Vista previa';
 export const NoFileSelected = 'Sin archivo seleccionado';
+export const SelectProductText = 'Seleccione un producto';
+export const SelectText = 'Seleccionar';
 export const UserAvatarUpdatedText =
   'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
 export const SystemText = 'Sistema';
@@ -337,6 +344,8 @@ export const ProductBarcodeTaken =
 export const BarcodeText = 'Código de Barras';
 export const ShortBarcodeText = 'Cód. Barras';
 export const AssignText = 'Asignar';
+export const AssignmentsText = 'Asignaciones';
+export const CreateStoreProductText = 'Asignación de Producto';
 export const RandomizeBarcodeText = 'Aleatorizar código de barras';
 export const EditProductText = 'Modificar Producto';
 export const LoadingProductText = 'Cargando información de producto...';
@@ -352,6 +361,11 @@ export const UpdateProductWarning =
 export const ProductsNotLoaded = 'No se encontraron productos con el criterío ingresado.';
 export const LoadingProductsText = 'Cargando productos...';
 export const ProductText = 'Producto';
+export const BuyPriceText = 'Precio de Compra';
+export const SellPriceText = 'Precio de Venta';
+export const ProfitText = 'Ganancia';
+export const StockText = 'Stock';
+export const SalableText = 'Vendible';
 export const ProductStatusChangeMessage = (product: Product) => {
   return `¿Está seguro de <strong>${product.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> el siguiente producto? <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>DESCRIPCIÓN</strong> ${product.description}`;
 };
@@ -384,3 +398,18 @@ export const BuyOrderStatusUpdatedText =
 export const BuyOrderStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la orden de compra. Intente nuevamente o comuniquese con administración.';
 export const BuyOrderDetailText = 'Detalle de Orden de Compra';
+export const CurrentTaxValueText = (tax: number, isDefault: boolean) => {
+  return `Valor actual del IGV: ${tax * 100}%. ${isDefault ? 'Usando el valor por defecto del sistema, vuelva a abrir el formulario o comuniquese con administración' : ''}`;
+};
+export const LoadingStoreProductText = 'Cargando detalle de asignación de producto...';
+export const StoreProductNotFoundText = 'Asignación de producto no encontrada';
+export const EditStoreProductText = 'Modificar asignación de producto';
+export const DuplicatedStoreProductMessage = (product: Product, store: Store) => {
+  return `El siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>DESCRIPCIÓN:</strong> ${product.description} <br> <strong>PRESENTACIÓN:</strong> ${product.presentation?.name ?? 'N/A'} <br>ya se encuentra asignado a la siguiente tienda: <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name}  <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ¿Desea modificar la asignación? También puede asignar el producto a otra tienda.`;
+};
+export const StoreProductCreatedText = 'Asignación de producto a tienda completada correctamente.';
+export const StoreProductUpdatedText =
+  'Actualización de asignación de producto a tienda completada correctamente.';
+export const AffectedByIGVText = 'Afecto al IGV';
+export const UsingDefaultTaxMessage =
+  'No se pudo recuperar el valor del IGV desde la configuración. Se utilizará el valor predeterminado de 18%. Intente nuevamente, si el problema persiste comuniquese con administración.';

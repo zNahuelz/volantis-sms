@@ -1,6 +1,5 @@
 import { http } from '~/api/httpWrapper';
 import { BaseService } from '~/services/baseService';
-import type { Product } from '~/types/product';
 import type { StoreProduct } from '~/types/storeProduct';
 
 export interface StoreProductMeta {
@@ -21,7 +20,7 @@ export interface StoreProductQuery {
 }
 
 export interface StoreProductResponse {
-  data: Product[];
+  data: StoreProduct[];
   meta: StoreProductMeta;
 }
 
@@ -36,6 +35,14 @@ class StoreProductService extends BaseService<
       sortBy: 'orderBy',
       sortDir: 'orderDir',
     });
+  }
+  Show(storeId: number | string, productId: number | string) {
+    return http.get(`store-product/${storeId}/${productId}`).json<StoreProduct>();
+  }
+  Update(storeId: number, productId: number, payload: Partial<StoreProduct>) {
+    return http
+      .put(`store-product/${storeId}/${productId}`, { json: payload })
+      .json<StoreProduct>();
   }
 }
 

@@ -8,3 +8,6 @@ export const InfoColor = '#17a2b8';
 export const SuccessColor = '#28a745';
 export const WarningColor = '#ffc107';
 export const ErrorColor = '#dc3545';
+export const DEFAULT_TAX_VALUE = 0.18;
+export const ADMIN_ABILITY_KEY = 'sys:admin';
+export const DEFAULT_TAX_SETTING_KEY = 'VALOR_IGV';

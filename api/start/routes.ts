@@ -21,6 +21,7 @@ import SettingController from '../app/controllers/setting_controller.js';
 import AbilityController from '../app/controllers/ability_controller.js';
 import ProductController from '../app/controllers/product_controller.js';
 import BuyOrderController from '../app/controllers/buy_order_controller.js';
+import StoreProductController from '../app/controllers/store_product_controller.js';
 
 router
   .group(() => {
@@ -203,6 +204,26 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:destroy'])]);
       })
       .prefix('supplier');
+
+    router
+      .group(() => {
+        router
+          .post('/', [StoreProductController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:store'])]);
+        router
+          .get('/:storeId/:productId', [StoreProductController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:show'])]);
+        router
+          .get('/', [StoreProductController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:index'])]);
+        router
+          .put('/:storeId/:productId', [StoreProductController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:update'])]);
+        router
+          .delete('/:storeId/:productId', [StoreProductController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:destroy'])]);
+      })
+      .prefix('store-product');
 
     router
       .group(() => {

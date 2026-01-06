@@ -16,6 +16,8 @@ import {
 import {
   AppDescription,
   AppName,
+  AssignText,
+  AssignmentsText,
   BuyOrdersText,
   ClosingSessionText,
   CustomersText,
@@ -134,10 +136,26 @@ export default function Sidebar() {
                 </li>
                 <li>
                   <NavLink
+                    to='/dashboard/store-product/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {AssignText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to='/dashboard/product'
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {ListText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/store-product'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ListText} - {AssignmentsText}
                   </NavLink>
                 </li>
                 <li>
