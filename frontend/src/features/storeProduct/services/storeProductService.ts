@@ -39,10 +39,16 @@ class StoreProductService extends BaseService<
   Show(storeId: number | string, productId: number | string) {
     return http.get(`store-product/${storeId}/${productId}`).json<StoreProduct>();
   }
-  Update(storeId: number, productId: number, payload: Partial<StoreProduct>) {
+  showByProductId(productId: number | string) {
+    return http.get(`store-product/product-id/${productId}`).json<StoreProduct[]>();
+  }
+  Update(storeId: number | string, productId: number | string, payload: Partial<StoreProduct>) {
     return http
       .put(`store-product/${storeId}/${productId}`, { json: payload })
       .json<StoreProduct>();
+  }
+  Destroy(storeId: number | string, productId: number | string) {
+    return http.delete(`store-product/${storeId}/${productId}`).json<any>();
   }
 }
 

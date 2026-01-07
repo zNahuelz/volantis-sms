@@ -2,7 +2,17 @@ import clsx from 'clsx';
 import React from 'react';
 import { ActionsText, EmptyListText, IsActiveText, IsDeletedText } from '~/constants/strings';
 import { formatAsDatetime } from '~/utils/helpers';
-const RIGHT_ALIGNED_COLUMNS = ['total', 'igv', 'subtotal', 'amount', 'quantity'] as const;
+const RIGHT_ALIGNED_COLUMNS = [
+  'total',
+  'igv',
+  'subtotal',
+  'amount',
+  'quantity',
+  'buyPrice',
+  'sellPrice',
+  'stock',
+  'profit',
+] as const;
 
 export type Column<T> = {
   key: string;
@@ -110,7 +120,19 @@ export function Table<T>({
                   );
                 }
 
-                if (['total', 'igv', 'subtotal', 'amount', 'quantity'].includes(col.key)) {
+                if (
+                  [
+                    'total',
+                    'igv',
+                    'subtotal',
+                    'amount',
+                    'quantity',
+                    'buyPrice',
+                    'sellPrice',
+                    'stock',
+                    'profit',
+                  ].includes(col.key)
+                ) {
                   return (
                     <td key={String(col.key)} className='text-end'>
                       {value}

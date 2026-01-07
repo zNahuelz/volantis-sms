@@ -137,7 +137,10 @@ router
           ]);
         router
           .get('/', [ProductController, 'index'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'product:index'])]);
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'product:index', 'storeProduct:store']),
+          ]);
         router
           .put('/:id', [ProductController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'product:update'])]);
@@ -148,7 +151,12 @@ router
           .get('/show/:barcode', [ProductController, 'showByBarcode'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'product:showByBarcode', 'product:store']),
+            middleware.ability([
+              'sys:admin',
+              'product:showByBarcode',
+              'product:store',
+              'storeProduct:store',
+            ]),
           ]);
         router
           .delete('/:id', [ProductController, 'destroy'])
@@ -211,8 +219,15 @@ router
           .post('/', [StoreProductController, 'store'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:store'])]);
         router
+          .get('/product-id/:productId', [StoreProductController, 'showByProductId'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'storeProduct:showByProductId']),
+          ]);
+        router
           .get('/:storeId/:productId', [StoreProductController, 'show'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:show'])]);
+
         router
           .get('/', [StoreProductController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'storeProduct:index'])]);

@@ -6,39 +6,254 @@ import type { Product } from '~/types/product';
 import type { Role } from '~/types/role';
 import type { Setting } from '~/types/setting';
 import type { Store } from '~/types/store';
+import type { StoreProduct } from '~/types/storeProduct';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 
+// --- 1. APP IDENTITY & AREA TEXTS ---
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
 export const AppVersion = 'Dev. Env.';
 
+export const WelcomeAreaText = `Dashboard - ${AppName}`;
+export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
+export const ProfileAreaText = `Mi Perfil - ${AppName}`;
+export const _404AreaText = `Módulo no encontrado - ${AppName}`;
+
+// --- 2. UI LABELS & NAVIGATION ---
+export const HomeText = 'Inicio';
+export const NewText = 'Nuevo';
+export const ListText = 'Listado';
+export const ActionsText = 'Acciones';
+export const SearchText = 'Buscar';
+export const ReloadText = 'Recargar';
+export const ClearText = 'Limpiar';
+export const CancelText = 'Cancelar';
+export const SaveText = 'Guardar';
+export const UpdateText = 'Actualizar';
+export const DeleteText = 'Eliminar';
+export const DisableText = 'Deshabilitar';
+export const RestoreText = 'Restaurar';
+export const EditText = 'Modificar';
+export const DetailsText = 'Detalles';
+export const ConfirmText = 'Confirmar';
+export const ContinueText = 'Continuar';
+export const BackText = 'Volver';
+export const GoBackText = 'Átras';
+export const SelectText = 'Seleccionar';
+export const AssignText = 'Asignar';
+export const RemoveText = 'Quitar';
+export const HereText = 'aquí';
+export const ClickHereText = 'Click aquí';
+export const PreviewText = 'Vista previa';
+
+// --- 3. COMMON TABLE/FORM FIELDS ---
+export const IdText = '#';
+export const IdTextAlt = 'ID';
+export const NameText = 'Nombre';
+export const NamesText = 'Nombres';
+export const SurnameText = 'Apellido';
+export const SurnamesText = 'Apellidos';
+export const DescriptionText = 'Descripción';
+export const CreatedAtText = 'Fecha de Creación';
+export const UpdatedAtText = 'Ult. Mod.';
+export const DeletedAtText = 'Fecha de Eliminación';
+export const RegisterDateText = 'Fecha de Registro';
+export const StateText = 'Estado';
+export const IsActiveText = 'Habilitado';
+export const IsDeletedText = 'Deshabilitado';
+export const KeyText = 'Clave';
+export const ValueText = 'Valor';
+export const PhoneText = 'Teléfono';
+export const AddressText = 'Dirección';
+export const RucText = 'Ruc';
+export const DniText = 'Dni';
+
+// --- 4. AUTH & LOGIN ---
 export const LoginText = 'Inicio de Sesión';
 export const LoginButtonText = 'Iniciar Sesión';
 export const EmailText = 'Correo Electrónico';
+export const UsernameText = 'Nombre de Usuario';
 export const PasswordText = 'Contraseña';
 export const CurrentPasswordText = 'Contraseña actual';
 export const NewPasswordText = 'Nueva contraseña';
 export const RepeatPasswordText = 'Repetir contraseña';
-export const HomeText = 'Inicio';
-export const NewSaleText = 'Nueva venta';
+export const ForgotPasswordText = '¿Olvidaste tu contraseña? ';
+export const RememberMeText = 'Recuérdame';
+export const CurrentEmailText = 'Correo electrónico actual';
+export const NewEmailText = 'Nuevo correo electrónico';
+export const ConfirmEmailText = 'Repetir correo electrónico';
+export const LoggingInText = 'Ingresando...';
+export const ClosingSessionText = 'Cerrando sesión...';
+
+// --- 5. USER & PROFILE ---
+export const ProfileText = 'Perfil';
+export const UserText = 'Usuario';
+export const UsersText = 'Usuarios';
+export const SystemUsersText = 'Gest. Usuarios';
+export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
+export const UserRegisterText = 'Registro de Usuario';
+export const UserEditText = 'Modificar Usuario';
+export const UserDetailText = 'Detalle de Usuario';
+export const UserDetailAreaText = `Detalle de Usuario -  ${AppName}`;
+export const CurrentAvatarText = 'Foto de perfil actual';
+export const RemoveProfilePictureText = 'Restablecer foto de perfil';
+export const ResetPasswordText = 'Reiniciar contraseña';
+export const SendPasswordRecoveryText = 'Enviar e-mail de recuperación';
+export const UserUpdatedAtText = 'Ult. Mod. al Usuario';
+
+// --- 6. SUPPLIER ---
+export const SupplierText = 'Proveedor';
 export const SuppliersText = 'Proveedores';
+export const SupplierListText = 'Listado de Proveedores';
+export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
+export const CreateSupplierText = 'Registro de Proveedor';
+export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
+export const EditSupplierText = 'Modificando Proveedor';
+export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
+export const SupplierDetailText = 'Detalle de Proveedor';
+export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
+
+// --- 7. CUSTOMER ---
+export const CustomerText = 'Cliente';
+export const CustomersText = 'Clientes';
+export const CreateCustomerText = 'Registro de Cliente';
+export const CreateCustomerAreaText = `Registro de Cliente - ${AppName}`;
+export const EditCustomerText = 'Modificando Cliente';
+export const EditCustomerAreaText = `Editar Cliente - ${AppName}`;
+export const CustomerDetailText = 'Detalle de Cliente';
+export const CustomerDetailAreaText = `Detalle de Cliente - ${AppName}`;
+export const CustomersListAreaText = `Listado de Clientes - ${AppName}`;
+
+// --- 8. PRODUCT & PRESENTATION ---
+export const ProductText = 'Producto';
 export const ProductsText = 'Productos';
+export const ProductsListAreaText = `Listado de Productos - ${AppName}`;
+export const CreateProductText = 'Registro de Producto';
+export const CreateProductAreaText = `Registro de Producto - ${AppName}`;
+export const EditProductText = 'Modificar Producto';
+export const EditProductAreaText = `Editar Producto - ${AppName}`;
+export const ProductDetailText = `Detalle de Producto`;
+export const ProductDetailAreaText = `Detalle de Producto - ${AppName}`;
+export const ProductSearchText = 'Búsqueda de Producto';
+export const SelectProductText = 'Seleccione un producto';
+export const BarcodeText = 'Código de Barras';
+export const ShortBarcodeText = 'Cód. Barras';
+export const RandomizeBarcodeText = 'Aleatorizar código de barras';
+export const BuyPriceText = 'Precio de Compra';
+export const SellPriceText = 'Precio de Venta';
+export const ProfitText = 'Ganancia';
+export const StockText = 'Stock';
+export const SalableText = 'Vendible';
+
+export const PresentationText = 'Presentación';
+export const PresentationsText = 'Presentaciones';
+export const PresentationManagementText = 'Gest. Presentaciones';
+export const PresentationsListAreaText = `Listado de Presentaciones de Productos - ${AppName}`;
+export const NewPresentationText = 'Registro de Presentation de Producto';
+export const EditPresentationText = 'Modificar Presentación de Producto';
+
+// --- 9. ROLES & ABILITIES ---
+export const RoleText = 'Rol';
+export const SystemRolesText = 'Gest. Roles';
+export const RolesListAreaText = `Listado de Roles - ${AppName}`;
+export const CreateRoleText = 'Registro de Rol';
+export const CreateRoleAreaText = `Registro de Rol - ${AppName}`;
+export const EditRoleText = 'Editar rol';
+export const EditRoleAreaText = `Editar Rol - ${AppName}`;
+export const RoleDetailText = 'Detalle de Rol';
+export const RoleDetailAreaText = `Detalle de Rol - ${AppName}`;
+
+export const AbilityText = 'Permiso';
+export const AbilitiesText = 'Permisos';
+export const SystemAbilitiesText = 'Gest. Permisos';
+export const AbilitiesListAreaText = `Listado de Permisos - ${AppName}`;
+export const NewAbilityText = 'Registro de Permiso';
+export const AbilityEditText = 'Modificar Permiso';
+export const LinkedAbilitiesText = 'Permisos Asociados';
+
+// --- 10. STORE & ASSIGNMENTS ---
+export const StoresListAreaText = `Listado de Tiendas - ${AppName}`;
+export const StoreText = 'Tienda';
+export const StoresText = 'Tiendas';
+export const StoreAddressText = 'Dirección de la Tienda';
+export const AssignedStoreText = 'Tienda Asignada';
+export const StoreIdText = '# Tienda';
+export const StoreProductText = 'Asignación de producto';
+export const StoreProductsText = 'Asignaciones de productos';
+export const AssignmentsText = 'Asignaciones';
+export const StoreProductDetailText = 'Detalle de asignación de producto';
+export const StoreProductsListAreaText = `Listado de Productos Asignados - ${AppName}`;
+export const StoreProductCreateAreaText = `Asignación de Productos - ${AppName}`;
+export const StoreProductEditAreaText = `Gestionar Asignación de Productos - ${AppName}`;
+export const StoreProductDetailAreaText = `Detalle de Asignación de Producto - ${AppName}`;
+export const CreateStoreProductText = 'Asignación de Producto';
+export const EditStoreProductText = 'Modificar asignación de producto';
+export const AffectedByIGVText = 'Afecto al IGV';
+
+// --- 11. BUY ORDERS ---
 export const BuyOrderText = 'Ordene de Compra';
 export const BuyOrdersText = 'Ordenes de Compra';
+export const NewSaleText = 'Nueva venta';
+export const BuyOrdersListAreaText = `Listado de Ordenes de Compra - ${AppName}`;
+export const CreateBuyOrderText = 'Registro de Orden de Compra';
+export const CreateBuyOrderAreaText = `Registro de Orden de Compra - ${AppName}`;
+export const EditBuyOrderText = 'Modificar Orden de Compra';
+export const EditBuyOrderAreaText = `Editar Orden de Compra - ${AppName}`;
+export const BuyOrderDetailText = 'Detalle de Orden de Compra';
+export const BuyOrderDetailAreaText = `Detalle de Orden de Compra - ${AppName}`;
+export const OrderStatusText = 'Estado de Orden';
+export const StatusText = 'Estado';
+export const QuantityText = 'Cantidad';
+export const UnitPriceText = 'Precio Unitario';
+export const SubtotalText = 'Subtotal';
+export const TotalText = 'Total';
+export const TaxNameText = 'Igv';
+export const AddProductText = 'Añadir producto';
+
+// --- 12. SETTINGS & SYSTEM ---
 export const SettingText = 'Configuración';
-export const LogoutText = 'Cerrar Sesión';
-export const ProfileText = 'Perfil';
-export const NewText = 'Nuevo';
-export const ListText = 'Listado';
-export const PresentationManagementText = 'Gest. Presentaciones';
-export const EmptyListText = 'No se encontraron elementos.';
-export const ActionsText = 'Acciones';
-export const SupplierListText = 'Listado de Proveedores';
+export const SystemText = 'Sistema';
+export const SysSettingText = 'Variable';
+export const SysSettingsText = 'Variables';
+export const SettingsListAreaText = `Configuración del Sistema - ${AppName}`;
+export const NewSettingText = 'Registro de variable del sistema';
+export const EditSettingText = 'Modificar variable del sistema';
+export const SettingDetailText = 'Detalle de Variable del Sistema';
+export const NumericValueText = 'Valor Numérico';
+export const ValueType = 'Tipo de Var.';
+
+// --- 13. LOADING & SYSTEM STATUS ---
 export const LoadingText = 'Cargando...';
+export const LoadingForm = 'Cargando formulario...';
+export const SavingText = 'Guardando...';
+export const UpdatingText = 'Actualizando...';
+export const PleaseWaitText = 'Por favor espere';
+export const OkTagText = 'Operación completada';
+export const ErrorTagText = 'Ha ocurrido un error';
+export const InfoTag = 'Información';
+export const WarningText = 'Advertencia';
+export const QuestionText = 'Consulta';
 export const LoadingSuppliersText = 'Cargando proveedores...';
 export const LoadingCustomersText = 'Cargando clientes...';
 export const LoadingUsersText = 'Cargando usuarios...';
+export const LoadingSupplierText = 'Cargando información de proveedor...';
+export const LoadingSettingsText = 'Cargando configuración del sistema...';
+export const LoadingUserText = 'Cargando usuario...';
+export const LoadingCustomerText = 'Cargando información de cliente...';
+export const LoadingRolesText = 'Cargando roles...';
+export const LoadingRoleText = 'Cargando información de rol';
+export const LoadingAbilitiesText = 'Cargando permisos...';
+export const LoadingPresentationsText = 'Cargando presentaciones de productos...';
+export const LoadingProductText = 'Cargando información de producto...';
+export const LoadingProductsText = 'Cargando productos...';
+export const LoadingBuyOrderText = 'Cargando orden de compra...';
+export const LoadingBuyOrdersText = 'Cargando ordenes de compra...';
+export const LoadingStoreProductText = 'Cargando detalle de asignación de producto...';
+export const LoadingStoreProductsText = 'Cargando asignaciones de productos...';
+
+// --- 14. ERRORS & EMPTY STATES ---
+export const EmptyListText = 'No se encontraron elementos.';
 export const SuppliersNotLoaded = 'No se encontraron proveedores con el criterío ingresado.';
 export const CustomersNotLoaded = 'No se encontraron clientes con el criterío ingresado.';
 export const UsersNotLoaded = 'No se encontraron usuarios con el criterío ingresado.';
@@ -46,37 +261,161 @@ export const SettingsNotLoaded =
   'No se encontraron variables del sistema con el criterío ingresado.';
 export const PresentationsNotLoadedText =
   'No se encontraron presentaciones de productos con el criterío ingresado.';
-export const SuppliersListAreaText = `Listado de Proveedores - ${AppName}`;
-export const CustomersListAreaText = `Listado de Clientes - ${AppName}`;
-export const CreateSupplierAreaText = `Registro de Proveedor - ${AppName}`;
-export const CreateRoleAreaText = `Registro de Rol - ${AppName}`;
-export const SupplierDetailAreaText = `Detalle de Proveedor - ${AppName}`;
-export const RoleDetailAreaText = `Detalle de Rol - ${AppName}`;
-export const EditSupplierAreaText = `Editar Proveedor - ${AppName}`;
-export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
-export const StoreProductsListAreaText = `Listado de Productos Asignados - ${AppName}`;
-export const StoreProductCreateAreaText = `Asignación de Productos - ${AppName}`;
-export const StoreProductEditAreaText = `Gestionar Asignación de Productos - ${AppName}`;
-export const StoreProductDetailAreaText = `Detalle de Asignación de Producto - ${AppName}`;
-export const NameText = 'Nombre';
-export const NumericValueText = 'Valor Numérico';
-export const KeyText = 'Clave';
-export const ValueText = 'Valor';
-export const ValueType = 'Tipo de Var.';
-export const RucText = 'Ruc';
-export const PhoneText = 'Teléfono';
-export const CreatedAtText = 'Fecha de Creación';
-export const UpdatedAtText = 'Ult. Mod.';
-export const DeletedAtText = 'Fecha de Eliminación';
-export const StateText = 'Estado';
-export const OrderStatusText = 'Estado de Orden';
-export const EditText = 'Modificar';
-export const DeleteText = 'Eliminar';
-export const DisableText = 'Deshabilitar';
-export const IsActiveText = 'Habilitado';
-export const IsDeletedText = 'Deshabilitado';
-export const SearchText = 'Buscar';
-export const ReloadText = 'Recargar';
+export const RolesNotLoadedText = 'No se encontraron roles con el criterío ingresado.';
+export const AbilitiesNotLoadedText = 'No se encontraron permisos con el criterío ingresado.';
+export const ProductsNotLoaded = 'No se encontraron productos con el criterío ingresado.';
+export const BuyOrdersNotLoaded = 'No se encontraron ordenes de compra con el criterío ingresado.';
+export const StoreProductsNotLoaded =
+  'No se encontraron asignaciones de productos con el criterío ingresado.';
+export const EmptyStoreProductsListText = 'El producto no se encuentra asignado a ninguna tienda.';
+export const EmptyAbilityListText =
+  'El rol del usuario no cuenta con permisos asignados. Comuniquese con administración.';
+export const NoFileSelected = 'Sin archivo seleccionado';
+
+export const SupplierNotFound = 'Proveedor no encontrado.';
+export const UserNotFoundText = 'Usuario no encontrado.';
+export const CustomerNotFoundText = 'Cliente no encontrado';
+export const RoleNotFound = 'Rol no encontrado.';
+export const ProductNotFound = 'Producto no encontrado.';
+export const BuyOrderNotFound = 'Orden de compra no encontrada.';
+export const StoreProductNotFoundText = 'Asignación de producto no encontrada';
+export const _404Text =
+  'Oops! El módulo no existe o no está disponible. Comuniquese con administración o verifique la URL.';
+
+export const FormLoadFailed =
+  'Error durante la carga del formulario, intente nuevamente o comuniquese con administración';
+export const InvalidCredentialsText =
+  'Inicio de sesión fallido, verifique sus credenciales e intente nuevamente.';
+export const LoginErrorText =
+  'Error durante el inicio de sesión, intente nuevamente. Si el problema persiste comuniquese con administración';
+export const ServerErrorText =
+  'Error interno del servidor, operación cancelada. Vuelva a intentarlo o comuniquese con administración';
+export const FetchFailedText =
+  'Conexión con el servidor fallida; intente nuevamente o comuníquese con administración.';
+export const ExpiredSessionText =
+  'Sesión expirada o finalizada remotamente por una cuenta de administrador. Inicie sesión nuevamente.';
+export const OpRollbackText = 'Operación cancelada';
+
+// --- 15. VALIDATION & WARNING ADVICE ---
+export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a otro proveedor.';
+export const UserDniTakenText =
+  'El DNI ingresado ya se encuentra asignado a otro usuario, comuniquese con administración.';
+export const UserEmailTaken =
+  'El correo electrónico ingresado ya se encuentra asignado a otro usuario, comuniquese con administración';
+export const CustomerDniTakenText = 'El DNI ingresado ya se encuentra asignado a otro cliente.';
+export const RoleNameTaken = 'El nombre ingresado ya pertenece a un rol registrado.';
+export const AbilityKeyTakenText = 'La CLAVE ingresada ya se encuentra asignada a otro permiso.';
+export const SysSettingKeyTakenText =
+  'La clave ingresada ya se encuentra asignado a otra variable del sistema.';
+export const DuplicatedPresentationText =
+  'El nombre y valor numérico ingresados ya pertenecen a otra presentación de producto, puede variar el valor numérico para proceder con el registro.';
+export const ProductBarcodeTaken =
+  'El código de barras ingresado ya se encuentra asignado a otro producto.';
+export const BarcodeGenerationFailed =
+  'Error interno del servidor, generación de código de barras aleatorio fallida. Vuelva a intentarlo o comuniquese con administración';
+export const InvalidSettingValueTypeText =
+  'El tipo de variable solo puede ser uno de los siguientes: ENTERO, ENTERO LARGO, DECIMAL, TEXTO, LISTA, BOOLEANO u OTRO.';
+export const InvalidStoreIdText =
+  'La tienda seleccionada no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
+export const InvalidSupplierIdText =
+  'El proveedor seleccionado no se encuentra disponible o es inválido, intente nuevamente o comuniquese con administración';
+export const InvalidRoleIdText =
+  'El rol seleccionado no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
+export const InvalidBuyOrderDetailsPayload =
+  'Los productos seleccionados no se encuentran disponibles, intente nuevamente o comuniquese con administración.';
+
+export const AdminAssignedStoreText =
+  'Los usuarios con el rol de administrador pueden realizar operaciones en todas las tiendas a pesar de estar asignados a la sucursal principal.';
+export const UsernameChangeDisabledOnEditText =
+  'Modificar el DNI del empleado no actualizará su nombre de usuario, tal cambio puede realizarse de forma personal desde el apartado "Mi Perfil".';
+export const LockStoreOnBuyOrderMgmtText =
+  'INFORMACIÓN: Los usuarios sin permisos administrativos solo pueden registrar o modificar ordenes de compra de su tienda asignada.';
+export const UpdatePasswordAlertText =
+  'Actualizar su contraseña requerira que vuelva a iniciar sesión posteriormente. Además, se cerraran todas las sesiones existentes de su cuenta.';
+export const NewAbilityAdvice =
+  'Recuerde que la creación de nuevos permisos debe estar acompañada de una actualización del sistema la cual incluya las acciones correspondientes al permiso.';
+export const EditAbilityAdvice =
+  'IMPORTANTE: Modificar la CLAVE de un permiso puede alterar el funcionamiento del sistema, solo realice esta acción bajo supervisión del área de TI.';
+export const NewSysVarAdvice =
+  'Recuerde que la creación de nuevas variables del sistema deben estar acompañadas de una actualización del sistema la cual incluya las características correspondientes a la variable.';
+export const EditSysVarAdvice =
+  'IMPORTANTE: Modificar el valor de una variable del sistema alterara el comportamiento del mismo, solo realice esta acción bajo supervisión del área de TI.';
+export const ModifySettingsWarning =
+  'Estás accediendo a la configuración del sistema. Modificaciones incorrectas pueden afectar su funcionamiento. <br> <strong>Procede con precaución.</strong>';
+export const NewPresentationAdviceText =
+  'El campo Valor numérico acepta únicamente números enteros expresados en la unidad base del sistema (gramos o mililitros). No se admiten valores decimales ni conversiones automáticas. Ejemplo: 500 (equivale a 500 g o ml)';
+export const CreateProductWarning =
+  'INFORMACIÓN: Al registrar un producto, este pasará a estar disponible en todas las tiendas existentes, las cuales podrán crear órdenes de compra con los productos registrados, para posteriormente modificar sus propiedades individuales (precio, stock, realizar ventas) por cada tienda.';
+export const UpdateProductWarning =
+  'INFORMACIÓN: Modificar el producto actualizará sus propiedades básicas (nombre, descripción, presentación) en todas las tiendas. Para crear y modificar propiedades avanzadas/órdenes de compra, debe realizar la operación en una tienda específica.';
+export const UsingDefaultTaxMessage =
+  'No se pudo recuperar el valor del IGV desde la configuración. Se utilizará el valor predeterminado de 18%. Intente nuevamente, si el problema persiste comuniquese con administración.';
+
+// --- 16. SUCCESS MESSAGES ---
+export const SupplierCreatedText = 'Proveedor registrado correctamente.';
+export const SupplierUpdatedText = 'Proveedor actualizado correctamente.';
+export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
+export const CustomerCreatedText = 'Cliente registrado correctamente.';
+export const CustomerUpdatedText = 'Cliente actualizado correctamente.';
+export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
+export const UserCreatedText =
+  'Usuario registrado correctamente. Se ha enviado un correo electrónico con la información del usuario. Recuerde que la contraseña por defecto es el DNI del empleado.';
+export const UserUpdatedText = 'Usuario actualizado correctamente.';
+export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
+export const UserProfilePictureRemovedText =
+  'Foto de perfil del usuario restablecida correctamente.';
+export const UserPasswordResetSuccesfullyText =
+  'Contraseña del usuario restablecida correctamente, sus sesiones han sido cerradas automáticamente.';
+export const UserPasswordUpdatedText =
+  'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
+export const UserAvatarUpdatedText =
+  'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
+export const RoleCreatedText = 'Rol registrado correctamente.';
+export const RoleUpdatedText = 'Rol actualizado correctamente.';
+export const RoleStatusUpdatedText = 'Visibilidad de rol actualizada correctamente.';
+export const AbilityCreatedText = 'Permiso registrado correctamente.';
+export const AbilityUpdatedText = 'Permiso actualizado correctamente.';
+export const PresentationCreatedText = 'Presentación registrada correctamente.';
+export const PresentationUpdatedText = 'Presentación actualizada correctamente.';
+export const PresentationStatusUpdatedText =
+  'Estado de presentación de producto actualizada correctamente.';
+export const SettingCreatedText = 'Variable del sistema registrada correctamente.';
+export const SettingUpdatedText = 'Variable del sistema actualizada correctamente.';
+export const SettingDeletedText = 'Variable del sistema eliminada correctamente.';
+export const ProductCreatedText = 'Producto registrado correctamente.';
+export const ProductUpdatedText = 'Producto actualizado correctamente.';
+export const ProductStatusUpdatedText = 'Visibilidad de producto actualizada correctamente.';
+export const BuyOrderCreatedText = 'Orden de compra registrada correctamente.';
+export const BuyOrderUpdatedText = 'Orden de compra actualizada correctamente.';
+export const BuyOrderStatusUpdatedText =
+  'Visibilidad de orden de compra actualizada correctamente.';
+export const StoreProductCreatedText = 'Asignación de producto a tienda completada correctamente.';
+export const StoreProductUpdatedText =
+  'Actualización de asignación de producto a tienda completada correctamente.';
+export const StoreProductStatusUpdatedText =
+  'Visibilidad de asignación de producto actualizada correctamente.';
+
+// --- 17. FAILURE MESSAGES ---
+export const SupplierStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';
+export const CustomerStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del cliente. Intente nuevamente o comuniquese con administración.';
+export const UserStatusUpdateFailedText =
+  'Fallo la actualización de estado de cuenta de usuario. Intente nuevamente o comuniquese con administración.';
+export const RoleStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del rol. Intente nuevamente o comuniquese con administración.';
+export const SettingDeletionFailedText =
+  'Fallo la eliminación de la variable del sistema. Intente nuevamente o comuniquese con administración.';
+export const BuyOrderStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad de la orden de compra. Intente nuevamente o comuniquese con administración.';
+export const StoreProductStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad de la asignación de producto. Intente nuevamente o comuniquese con administración.';
+
+// --- 18. DYNAMIC MESSAGES & ACTIONS ---
+export const LogoutText = 'Cerrar Sesión';
+export const ConfirmActionText = 'Confirmar Operación';
+export const ProductIdText = '# Prod.';
+
 export const TableElementsMessage = (
   singularName: string,
   pluralName: string,
@@ -85,34 +424,28 @@ export const TableElementsMessage = (
 ) => {
   return `Mostrando ${elements} ${elements > 1 ? pluralName : singularName} de un total de ${total}.`;
 };
-export const SupplierText = 'Proveedor';
-export const RestoreText = 'Restaurar';
-export const DetailsText = 'Detalles';
-export const ForgotPasswordText = '¿Olvidaste tu contraseña? ';
-export const ClickHereText = 'Click aquí';
-export const RememberMeText = 'Recuérdame';
-export const CreateSupplierText = 'Registro de Proveedor';
-export const CreateCustomerText = 'Registro de Cliente';
-export const EditSupplierText = 'Modificando Proveedor';
-export const AddressText = 'Dirección';
-export const SaveText = 'Guardar';
-export const SavingText = 'Guardando...';
-export const UpdateText = 'Actualizar';
-export const UpdatingText = 'Actualizando...';
-export const ClearText = 'Limpiar';
-export const CancelText = 'Cancelar';
-export const SupplierCreatedText = 'Proveedor registrado correctamente.';
-export const SupplierUpdatedText = 'Proveedor actualizado correctamente.';
-export const OkTagText = 'Operación completada';
-export const UsernameText = 'Nombre de Usuario';
-export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a otro proveedor.';
-export const ErrorTagText = 'Ha ocurrido un error';
-export const OpRollbackText = 'Operación cancelada';
-export const LoadingSupplierText = 'Cargando información de proveedor...';
-export const LoadingSettingsText = 'Cargando configuración del sistema...';
-export const SupplierNotFound = 'Proveedor no encontrado.';
-export const IdText = '#';
-export const IdTextAlt = 'ID';
+
+export const UserEmailUpdatedText = (email: string) => {
+  return `Correo electrónico actualizado correctamente. <br> <strong>NUEVO CORREO ELECTRÓNICO: </strong>${email}`;
+};
+
+export const TotalSystemRolesText = (amount: number) => {
+  return `El sistema cuenta con ${amount} roles registrados.`;
+};
+
+export const CurrentTaxValueText = (tax: number, isDefault: boolean) => {
+  return `Valor actual del IGV: ${tax * 100}%. ${isDefault ? 'Usando el valor por defecto del sistema, vuelva a abrir el formulario o comuniquese con administración' : ''}`;
+};
+
+export const ProductFoundByBarcodeMessage = (product: Product) => {
+  return `El código de barras ingresado se encuentra asignado al siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> ¿Desea <strong>modificar</strong> el producto?`;
+};
+
+export const DuplicatedStoreProductMessage = (product: Product, store: Store) => {
+  return `El siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>DESCRIPCIÓN:</strong> ${product.description} <br> <strong>PRESENTACIÓN:</strong> ${product.presentation?.name ?? 'N/A'} <br>ya se encuentra asignado a la siguiente tienda: <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name}  <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ¿Desea modificar la asignación? También puede asignar el producto a otra tienda.`;
+};
+
+// --- 19. STATUS CHANGE DIALOGS ---
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
   return `¿Está seguro de <strong>${supplier.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
 };
@@ -140,276 +473,9 @@ export const SettingDeletionMessage = (setting: Setting) => {
 export const BuyOrderStatusChangeMessage = (buyOrder: BuyOrder) => {
   return `¿Está seguro de <strong>${buyOrder.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> la siguiente orden de compra? <br> <strong>ID:</strong> ${buyOrder.id} <br> <strong>PROVEEDOR:</strong> ${buyOrder.supplier?.name ?? ''} <br> <strong>TIENDA:</strong> ${buyOrder.store?.name ?? ''} <br> <strong>SUBTOTAL:</strong> ${buyOrder.subtotal} <br> <strong>TOTAL:</strong> ${buyOrder.total}`;
 };
-export const SupplierStatusUpdatedText = 'Visibilidad de proveedor actualizada correctamente.';
-export const CustomerStatusUpdatedText = 'Visibilidad de cliente actualizada correctamente';
-export const UserStatusUpdatedText = 'Estado de cuenta de usuario actualizada correctamente.';
-export const UserProfilePictureRemovedText =
-  'Foto de perfil del usuario restablecida correctamente.';
-export const UserPasswordResetSuccesfullyText =
-  'Contraseña del usuario restablecida correctamente, sus sesiones han sido cerradas automáticamente.';
-export const SupplierStatusUpdateFailedText =
-  'Fallo la actualización de visibilidad del proveedor. Intente nuevamente o comuniquese con administración.';
-export const CustomerStatusUpdateFailedText =
-  'Fallo la actualización de visibilidad del cliente. Intente nuevamente o comuniquese con administración.';
-export const UserStatusUpdateFailedText =
-  'Fallo la actualización de estado de cuenta de usuario. Intente nuevamente o comuniquese con administración.';
-export const ConfirmActionText = 'Confirmar Operación';
-export const LoggingInText = 'Ingresando...';
-export const InvalidCredentialsText =
-  'Inicio de sesión fallido, verifique sus credenciales e intente nuevamente.';
-export const LoginErrorText =
-  'Error durante el inicio de sesión, intente nuevamente. Si el problema persiste comuniquese con administración';
-export const ClosingSessionText = 'Cerrando sesión...';
-export const PleaseWaitText = 'Por favor espere';
-export const GoBackText = 'Átras';
-export const SupplierDetailText = 'Detalle de Proveedor';
-export const NamesText = 'Nombres';
-export const SurnamesText = 'Apellidos';
-export const DniText = 'Dni';
-export const SurnameText = 'Apellido';
-export const RoleText = 'Rol';
-export const AssignedStoreText = 'Tienda Asignada';
-export const AdminAssignedStoreText =
-  'Los usuarios con el rol de administrador pueden realizar operaciones en todas las tiendas a pesar de estar asignados a la sucursal principal.';
-export const DescriptionText = 'Descripción';
-export const ProfileAreaText = `Mi Perfil - ${AppName}`;
-export const EmptyAbilityListText =
-  'El rol del usuario no cuenta con permisos asignados. Comuniquese con administración.';
-export const CurrentEmailText = 'Correo electrónico actual';
-export const NewEmailText = 'Nuevo correo electrónico';
-export const ConfirmEmailText = 'Repetir correo electrónico';
-export const ServerErrorText =
-  'Error interno del servidor, operación cancelada. Vuelva a intentarlo o comuniquese con administración';
-export const BarcodeGenerationFailed =
-  'Error interno del servidor, generación de código de barras aleatorio fallida. Vuelva a intentarlo o comuniquese con administración';
-export const UserEmailUpdatedText = (email: string) => {
-  return `Correo electrónico actualizado correctamente. <br> <strong>NUEVO CORREO ELECTRÓNICO: </strong>${email}`;
-};
-export const UpdatePasswordAlertText =
-  'Actualizar su contraseña requerira que vuelva a iniciar sesión posteriormente. Además, se cerraran todas las sesiones existentes de su cuenta.';
-export const UserPasswordUpdatedText =
-  'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
-export const RegisterDateText = 'Fecha de Registro';
-export const UserUpdatedAtText = 'Ult. Mod. al Usuario';
-export const CurrentAvatarText = 'Foto de perfil actual';
-export const PreviewText = 'Vista previa';
-export const NoFileSelected = 'Sin archivo seleccionado';
-export const SelectProductText = 'Seleccione un producto';
-export const SelectText = 'Seleccionar';
-export const UserAvatarUpdatedText =
-  'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
-export const SystemText = 'Sistema';
-export const SystemUsersText = 'Gest. Usuarios';
-export const SystemRolesText = 'Gest. Roles';
-export const SystemAbilitiesText = 'Gest. Permisos';
-export const UsersListAreaText = `Listado de Usuarios - ${AppName}`;
-export const RolesListAreaText = `Listado de Roles - ${AppName}`;
-export const SettingsListAreaText = `Configuración del Sistema - ${AppName}`;
-export const ProductsListAreaText = `Listado de Productos - ${AppName}`;
-export const CreateProductAreaText = `Registro de Producto - ${AppName}`;
-export const PresentationsListAreaText = `Listado de Presentaciones de Productos - ${AppName}`;
-export const AbilitiesListAreaText = `Listado de Permisos - ${AppName}`;
-export const CreateCustomerAreaText = `Registro de Cliente - ${AppName}`;
-export const WelcomeAreaText = `Dashboard - ${AppName}`;
-export const UserText = 'Usuario';
-export const UsersText = 'Usuarios';
-export const LoadingForm = 'Cargando formulario...';
-export const FormLoadFailed =
-  'Error durante la carga del formulario, intente nuevamente o comuniquese con administración';
-export const UserUpdatedText = 'Usuario actualizado correctamente.';
-export const UserCreatedText =
-  'Usuario registrado correctamente. Se ha enviado un correo electrónico con la información del usuario. Recuerde que la contraseña por defecto es el DNI del empleado.';
-export const UserRegisterText = 'Registro de Usuario';
-export const UserEditText = 'Modificar Usuario';
-export const InvalidStoreIdText =
-  'La tienda seleccionada no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
-export const InvalidSupplierIdText =
-  'El proveedor seleccionado no se encuentra disponible o es inválido, intente nuevamente o comuniquese con administración';
-export const InvalidBuyOrderDetailsPayload =
-  'Los productos seleccionados no se encuentran disponibles, intente nuevamente o comuniquese con administración.';
-export const InvalidRoleIdText =
-  'El rol seleccionado no se encuentra disponible o es inválida, intente nuevamente o comuniquese con administración';
-export const UserDniTakenText =
-  'El DNI ingresado ya se encuentra asignado a otro usuario, comuniquese con administración.';
-export const UserEmailTaken =
-  'El correo electrónico ingresado ya se encuentra asignado a otro usuario, comuniquese con administración';
-export const UsernameChangeDisabledOnEditText =
-  'Modificar el DNI del empleado no actualizará su nombre de usuario, tal cambio puede realizarse de forma personal desde el apartado "Mi Perfil".';
-export const LockStoreOnBuyOrderMgmtText =
-  'INFORMACIÓN: Los usuarios sin permisos administrativos solo pueden registrar o modificar ordenes de compra de su tienda asignada.';
-export const LoadingUserText = 'Cargando usuario...';
-export const UserNotFoundText = 'Usuario no encontrado.';
-export const UserDetailText = 'Detalle de Usuario';
-export const StoreText = 'Tienda';
-export const StoreAddressText = 'Dirección de la Tienda';
-export const RemoveProfilePictureText = 'Restablecer foto de perfil';
-export const ResetPasswordText = 'Reiniciar contraseña';
-export const SendPasswordRecoveryText = 'Enviar e-mail de recuperación';
-export const EditRoleText = 'Editar rol';
-export const UserDetailAreaText = `Detalle de Usuario -  ${AppName}`;
-export const ConfirmText = 'Confirmar';
-export const CustomersText = 'Clientes';
-export const CustomerText = 'Cliente';
-export const CustomerUpdatedText = 'Cliente actualizado correctamente.';
-export const CustomerCreatedText = 'Cliente registrado correctamente.';
-export const CustomerDniTakenText = 'El DNI ingresado ya se encuentra asignado a otro cliente.';
-export const EditCustomerAreaText = `Editar Cliente - ${AppName}`;
-export const EditCustomerText = 'Modificando Cliente';
-export const CustomerNotFoundText = 'Cliente no encontrado';
-export const LoadingCustomerText = 'Cargando información de cliente...';
-export const CustomerDetailAreaText = `Detalle de Cliente - ${AppName}`;
-export const ProductDetailAreaText = `Detalle de Producto - ${AppName}`;
-export const ProductDetailText = `Detalle de Producto`;
-export const CustomerDetailText = 'Detalle de Cliente';
-export const _404Text =
-  'Oops! El módulo no existe o no está disponible. Comuniquese con administración o verifique la URL.';
-export const HereText = 'aquí';
-export const _404AreaText = `Módulo no encontrado - ${AppName}`;
-export const RolesNotLoadedText = 'No se encontraron roles con el criterío ingresado.';
-export const LoadingRolesText = 'Cargando roles...';
-export const TotalSystemRolesText = (amount: number) => {
-  return `El sistema cuenta con ${amount} roles registrados.`;
-};
-export const RoleStatusUpdatedText = 'Visibilidad de rol actualizada correctamente.';
-export const RoleStatusUpdateFailedText =
-  'Fallo la actualización de visibilidad del rol. Intente nuevamente o comuniquese con administración.';
-export const CreateRoleText = 'Registro de Rol';
-export const LoadingRoleText = 'Cargando información de rol';
-export const RoleNotFound = 'Rol no encontrado.';
-export const EditRoleAreaText = `Editar Rol - ${AppName}`;
-export const EditProductAreaText = `Editar Producto - ${AppName}`;
-export const RoleCreatedText = 'Rol registrado correctamente.';
-export const RoleUpdatedText = 'Rol actualizado correctamente.';
-export const RoleNameTaken = 'El nombre ingresado ya pertenece a un rol registrado.';
-export const RoleDetailText = 'Detalle de Rol';
-export const LinkedAbilitiesText = 'Permisos Asociados';
-export const AbilitiesNotLoadedText = 'No se encontraron permisos con el criterío ingresado.';
-export const LoadingAbilitiesText = 'Cargando permisos...';
-export const AbilityText = 'Permiso';
-export const AbilitiesText = 'Permisos';
-export const AbilityCreatedText = 'Permiso registrado correctamente.';
-export const AbilityUpdatedText = 'Permiso actualizado correctamente.';
-export const AbilityKeyTakenText = 'La CLAVE ingresada ya se encuentra asignada a otro permiso.';
-export const NewAbilityText = 'Registro de Permiso';
-export const AbilityEditText = 'Modificar Permiso';
-export const NewAbilityAdvice =
-  'Recuerde que la creación de nuevos permisos debe estar acompañada de una actualización del sistema la cual incluya las acciones correspondientes al permiso.';
-export const EditAbilityAdvice =
-  'IMPORTANTE: Modificar la CLAVE de un permiso puede alterar el funcionamiento del sistema, solo realice esta acción bajo supervisión del área de TI.';
-export const NewSysVarAdvice =
-  'Recuerde que la creación de nuevas variables del sistema deben estar acompañadas de una actualización del sistema la cual incluya las características correspondientes a la variable.';
-export const EditSysVarAdvice =
-  'IMPORTANTE: Modificar el valor de una variable del sistema alterara el comportamiento del mismo, solo realice esta acción bajo supervisión del área de TI.';
-export const ContinueText = 'Continuar';
-export const WarningText = 'Advertencia';
-export const ModifySettingsWarning =
-  'Estás accediendo a la configuración del sistema. Modificaciones incorrectas pueden afectar su funcionamiento. <br> <strong>Procede con precaución.</strong>';
-export const BackText = 'Volver';
-export const LoadingPresentationsText = 'Cargando presentaciones de productos...';
-export const PresentationText = 'Presentación';
-export const PresentationsText = 'Presentaciones';
-export const PresentationCreatedText = 'Presentación registrada correctamente.';
-export const PresentationUpdatedText = 'Presentación actualizada correctamente.';
-export const DuplicatedPresentationText =
-  'El nombre y valor numérico ingresados ya pertenecen a otra presentación de producto, puede variar el valor numérico para proceder con el registro.';
-export const NewPresentationText = 'Registro de Presentación de Producto';
-export const EditPresentationText = 'Modificar Presentación de Producto';
-export const NewPresentationAdviceText =
-  'El campo Valor numérico acepta únicamente números enteros expresados en la unidad base del sistema (gramos o mililitros). No se admiten valores decimales ni conversiones automáticas. Ejemplo: 500 (equivale a 500 g o ml)';
-export const PresentationStatusUpdatedText =
-  'Estado de presentación de producto actualizada correctamente.';
-export const SysSettingText = 'Variable';
-export const SysSettingsText = 'Variables';
-export const SettingDeletedText = 'Variable del sistema eliminada correctamente.';
-export const SettingDeletionFailedText =
-  'Fallo la eliminación de la variable del sistema. Intente nuevamente o comuniquese con administración.';
-export const SettingUpdatedText = 'Variable del sistema actualizada correctamente.';
-export const SettingCreatedText = 'Variable del sistema registrada correctamente.';
-export const SysSettingKeyTakenText =
-  'La clave ingresada ya se encuentra asignado a otra variable del sistema.';
-export const InvalidSettingValueTypeText =
-  'El tipo de variable solo puede ser uno de los siguientes: ENTERO, ENTERO LARGO, DECIMAL, TEXTO, LISTA, BOOLEANO u OTRO.';
-export const NewSettingText = 'Registro de variable del sistema';
-TableElementsMessage;
-export const EditSettingText = 'Modificar variable del sistema';
-export const SettingDetailText = 'Detalle de Variable del Sistema';
-export const ExpiredSessionText =
-  'Sesión expirada o finalizada remotamente por una cuenta de administrador. Inicie sesión nuevamente.';
-export const InfoTag = 'Información';
-export const CreateProductText = 'Registro de Producto';
-export const ProductCreatedText = 'Producto registrado correctamente.';
-export const ProductUpdatedText = 'Producto actualizado correctamente.';
-export const ProductBarcodeTaken =
-  'El código de barras ingresado ya se encuentra asignado a otro producto.';
-export const BarcodeText = 'Código de Barras';
-export const ShortBarcodeText = 'Cód. Barras';
-export const AssignText = 'Asignar';
-export const AssignmentsText = 'Asignaciones';
-export const CreateStoreProductText = 'Asignación de Producto';
-export const RandomizeBarcodeText = 'Aleatorizar código de barras';
-export const EditProductText = 'Modificar Producto';
-export const LoadingProductText = 'Cargando información de producto...';
-export const ProductNotFound = 'Producto no encontrado.';
-export const ProductFoundByBarcodeMessage = (product: Product) => {
-  return `El código de barras ingresado se encuentra asignado al siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> ¿Desea <strong>modificar</strong> el producto?`;
-};
-export const QuestionText = 'Consulta';
-export const CreateProductWarning =
-  'INFORMACIÓN: Al registrar un producto, este pasará a estar disponible en todas las tiendas existentes, las cuales podrán crear órdenes de compra con los productos registrados, para posteriormente modificar sus propiedades individuales (precio, stock, realizar ventas) por cada tienda.';
-export const UpdateProductWarning =
-  'INFORMACIÓN: Modificar el producto actualizará sus propiedades básicas (nombre, descripción, presentación) en todas las tiendas. Para crear y modificar propiedades avanzadas/órdenes de compra, debe realizar la operación en una tienda específica.';
-export const ProductsNotLoaded = 'No se encontraron productos con el criterío ingresado.';
-export const LoadingProductsText = 'Cargando productos...';
-export const ProductText = 'Producto';
-export const BuyPriceText = 'Precio de Compra';
-export const SellPriceText = 'Precio de Venta';
-export const ProfitText = 'Ganancia';
-export const StockText = 'Stock';
-export const SalableText = 'Vendible';
 export const ProductStatusChangeMessage = (product: Product) => {
   return `¿Está seguro de <strong>${product.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> el siguiente producto? <br> <strong>ID:</strong> ${product.id} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>DESCRIPCIÓN</strong> ${product.description}`;
 };
-export const ProductStatusUpdatedText = 'Visibilidad de producto actualizada correctamente.';
-export const BuyOrdersListAreaText = `Listado de Ordenes de Compra - ${AppName}`;
-export const CreateBuyOrderAreaText = `Registro de Orden de Compra - ${AppName}`;
-export const BuyOrderDetailAreaText = `Detalle de Orden de Compra - ${AppName}`;
-export const EditBuyOrderAreaText = `Editar Orden de Compra - ${AppName}`;
-export const CreateBuyOrderText = 'Registro de Orden de Compra';
-export const StatusText = 'Estado';
-export const QuantityText = 'Cantidad';
-export const UnitPriceText = 'Precio Unitario';
-export const TotalText = 'Total';
-export const SubtotalText = 'Subtotal';
-export const TaxNameText = 'Igv';
-export const RemoveText = 'Quitar';
-export const AddProductText = 'Añadir producto';
-export const ProductSearchText = 'Búsqueda de Producto';
-export const BuyOrderCreatedText = 'Orden de compra registrada correctamente.';
-export const BuyOrderUpdatedText = 'Orden de compra actualizada correctamente.';
-export const EditBuyOrderText = 'Modificar Orden de Compra';
-export const LoadingBuyOrderText = 'Cargando orden de compra...';
-export const LoadingBuyOrdersText = 'Cargando ordenes de compra...';
-export const BuyOrderNotFound = 'Orden de compra no encontrada.';
-export const BuyOrdersNotLoaded = 'No se encontraron ordenes de compra con el criterío ingresado.';
-export const FetchFailedText =
-  'Conexión con el servidor fallida; intente nuevamente o comuníquese con administración.';
-export const BuyOrderStatusUpdatedText =
-  'Visibilidad de orden de compra actualizada correctamente.';
-export const BuyOrderStatusUpdateFailedText =
-  'Fallo la actualización de visibilidad de la orden de compra. Intente nuevamente o comuniquese con administración.';
-export const BuyOrderDetailText = 'Detalle de Orden de Compra';
-export const CurrentTaxValueText = (tax: number, isDefault: boolean) => {
-  return `Valor actual del IGV: ${tax * 100}%. ${isDefault ? 'Usando el valor por defecto del sistema, vuelva a abrir el formulario o comuniquese con administración' : ''}`;
+export const StoreProductStatusChangeMessage = (storeProduct: StoreProduct) => {
+  return `¿Está seguro de <strong>${storeProduct.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente asignación de producto? <br> <strong>ID TIENDA:</strong> ${storeProduct.storeId} <br> <strong>ID PRODUCTO:</strong> ${storeProduct.productId} <br> <strong>COD. BARRAS:</strong> ${storeProduct.product?.barcode ?? 'N/A'} <br> <strong>DESCRIPCIÓN</strong> ${storeProduct.product?.description ?? 'N/A'}`;
 };
-export const LoadingStoreProductText = 'Cargando detalle de asignación de producto...';
-export const StoreProductNotFoundText = 'Asignación de producto no encontrada';
-export const EditStoreProductText = 'Modificar asignación de producto';
-export const DuplicatedStoreProductMessage = (product: Product, store: Store) => {
-  return `El siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>DESCRIPCIÓN:</strong> ${product.description} <br> <strong>PRESENTACIÓN:</strong> ${product.presentation?.name ?? 'N/A'} <br>ya se encuentra asignado a la siguiente tienda: <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name}  <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ¿Desea modificar la asignación? También puede asignar el producto a otra tienda.`;
-};
-export const StoreProductCreatedText = 'Asignación de producto a tienda completada correctamente.';
-export const StoreProductUpdatedText =
-  'Actualización de asignación de producto a tienda completada correctamente.';
-export const AffectedByIGVText = 'Afecto al IGV';
-export const UsingDefaultTaxMessage =
-  'No se pudo recuperar el valor del IGV desde la configuración. Se utilizará el valor predeterminado de 18%. Intente nuevamente, si el problema persiste comuniquese con administración.';

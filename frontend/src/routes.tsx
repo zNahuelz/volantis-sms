@@ -29,6 +29,7 @@ import {
   StoreProductDetailAreaText,
   StoreProductEditAreaText,
   StoreProductsListAreaText,
+  StoresListAreaText,
   SupplierDetailAreaText,
   SuppliersListAreaText,
   UserDetailAreaText,
@@ -72,6 +73,7 @@ import StoreProductListView from './features/storeProduct/views/StoreProductList
 import StoreProductCreateView from './features/storeProduct/views/StoreProductCreateView';
 import StoreProductDetailView from './features/storeProduct/views/StoreProductDetailView';
 import StoreProductEditView from './features/storeProduct/views/StoreProductEditView';
+import StoresListView from './features/stores/views/StoresListView';
 
 export const router = createBrowserRouter([
   {
@@ -213,6 +215,20 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: { title: EditSupplierAreaText, abilities: ['sys:admin', 'supplier:edit'] },
                 children: [{ index: true, Component: SupplierEditView }],
+              },
+            ],
+          },
+          //Store routes...
+          {
+            path: 'store',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoresListAreaText,
+                  abilities: ['sys:admin', 'store:index'],
+                },
+                children: [{ index: true, Component: StoresListView }],
               },
             ],
           },

@@ -6,13 +6,16 @@ import { productService } from '../services/productService';
 import Button from '~/components/Button';
 import {
   BarcodeText,
+  BuyPriceText,
   CancelText,
   ConfirmActionText,
   CreatedAtText,
   DeleteText,
   DeletedAtText,
   DescriptionText,
+  DetailsText,
   EditText,
+  EmptyStoreProductsListText,
   ErrorTagText,
   GoBackText,
   IdTextAlt,
@@ -22,26 +25,53 @@ import {
   NameText,
   OkTagText,
   ProductDetailText,
+  ProductIdText,
   ProductNotFound,
   ProductStatusChangeMessage,
   ProductStatusUpdatedText,
+  ProductText,
+  ProfitText,
   RestoreText,
+  SellPriceText,
   StateText,
+  StockText,
+  StoreIdText,
+  StoreProductsText,
+  StoreText,
   SupplierStatusUpdateFailedText,
   UpdatedAtText,
 } from '~/constants/strings';
 import Loading from '~/components/Loading';
 import Input from '~/components/Input';
 import { supplierService } from '~/features/suppliers/services/supplierService';
-import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
+import { DeleteIcon, DetailsIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { Table, type Column } from '~/components/Table';
+import type { StoreProduct } from '~/types/storeProduct';
+import { storeProductService } from '~/features/storeProduct/services/storeProductService';
 
 export default function ProductDetailView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<Product | null>(null);
+  const [storeProducts, setStoreProducts] = useState<StoreProduct[] | null>(null);
   const navigate = useNavigate();
+
+  const columns: Column<StoreProduct>[] = [
+    { key: 'storeId', label: StoreIdText },
+    {
+      key: 'store',
+      label: StoreText,
+      render: (storeProduct) => storeProduct.store?.name ?? 'N/A',
+    },
+    { key: 'buyPrice', label: BuyPriceText },
+    { key: 'sellPrice', label: SellPriceText },
+    { key: 'profit', label: ProfitText },
+    { key: 'stock', label: StockText },
+    { key: 'createdAt', label: CreatedAtText },
+    { key: 'deletedAt', label: StateText },
+  ];
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -57,9 +87,24 @@ export default function ProductDetailView() {
         setLoading(false);
       }
     };
-
     loadProduct();
   }, [id]);
+
+  useEffect(() => {
+    loadStoreProduct();
+  }, [product]);
+
+  const loadStoreProduct = async () => {
+    if (!product) return;
+    try {
+      const res = await storeProductService.showByProductId(Number(id!));
+      setStoreProducts(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const showStatusChangeModal = async (product: Product) => {
     const result = await Swal.fire({
@@ -158,8 +203,33 @@ export default function ProductDetailView() {
               className={product.deletedAt ? 'text-error font-bold' : 'text-success font-bold'}
             ></Input>
           </fieldset>
-          <h1 className='text-error text-2xl font-bold'>Wip...!</h1>
-          {/**WIP: TODO....!*/}
+
+          <div className='col-span-full md:col-span-2 md:col-start-2'>
+            <p className='text-center font-semibold text-sm'>{StoreProductsText.toUpperCase()}</p>
+          </div>
+
+          <div className='col-span-full md:col-span-full'>
+            <Table
+              columns={columns}
+              data={storeProducts}
+              size='table-sm'
+              showActions={true}
+              actions={(row) => (
+                <div>
+                  <Button
+                    className='join-item btn-xs'
+                    color='btn-primary'
+                    icon={DetailsIcon}
+                    title={DetailsText}
+                    onClick={() => {
+                      navigate(`/dashboard/store-product/${row.storeId}/${row.productId}`);
+                    }}
+                  />
+                </div>
+              )}
+              errorMessage={EmptyStoreProductsListText}
+            ></Table>
+          </div>
         </div>
 
         <div className='flex flex-col items-center ps-4 pe-4 pb-4 w-full md:w-auto'>

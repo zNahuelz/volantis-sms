@@ -87,3 +87,9 @@ export const DEFAULT_STORE_PRODUCT_SALE_STATUS = [
   { label: 'VENTA HABILITADA', value: 'true' },
   { label: 'VENTA DESHABILITADA', value: 'false' },
 ];
+
+export const DEFAULT_STORE_PRODUCT_SEARCH_TYPES = [
+  { label: 'POR ID TIENDA', value: 'storeId' },
+  { label: 'POR ID PRODUCTO', value: 'productId' },
+  { label: 'POR COD. BARRAS', value: 'barcode' },
+];

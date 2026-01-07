@@ -10,6 +10,7 @@ import {
   ProductIcon,
   SaleIcon,
   SettingsIcon,
+  StoreIcon,
   SupplierIcon,
   SystemIcon,
 } from '~/constants/iconNames';
@@ -30,6 +31,7 @@ import {
   PresentationManagementText,
   ProductsText,
   SettingText,
+  StoresText,
   SuppliersText,
   SystemAbilitiesText,
   SystemRolesText,
@@ -215,6 +217,25 @@ export default function Sidebar() {
                 <li>
                   <NavLink
                     to='/dashboard/buy-order'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ListText}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={StoreIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{StoresText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/store'
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {ListText}

@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { CreateStoreProductValidator } from '../validators/create_store_product.js';
 import db from '@adonisjs/lucid/services/db';
 import { UpdateStoreProductValidator } from '../validators/update_store_product.js';
+import Store from '../models/store.js';
 
 export default class StoreProductController {
   public async store({ request, response }: HttpContext) {
@@ -65,6 +66,21 @@ export default class StoreProductController {
     });
     await storeProduct.load('store');
     return response.ok(storeProduct);
+  }
+
+  public async showByProductId({ request, response }: HttpContext) {
+    const productId = request.param('productId');
+    const storeProducts = await StoreProduct.query()
+      .where('product_id', productId)
+      .preload('product', (productQuery) => productQuery.preload('presentation'))
+      .preload('store');
+    if (!storeProducts || storeProducts.length <= 0) {
+      return response.notFound({
+        message: `El producto de ID: ${productId} no se encuentra asignado a ninguna tienda.`,
+      });
+    }
+
+    return response.ok(storeProducts);
   }
 
   public async index({ request, response }: HttpContext) {
@@ -161,7 +177,7 @@ export default class StoreProductController {
             profit: data.profit,
             stock: data.stock,
             salable: data.salable,
-            updatedAt: DateTime.now().toJSDate(),
+            updatedAt: DateTime.utc().toJSDate(),
           });
 
         return model;
@@ -195,24 +211,46 @@ export default class StoreProductController {
   public async destroy({ request, response }: HttpContext) {
     const storeId = request.param('storeId');
     const productId = request.param('productId');
-    const storeProduct = await StoreProduct.query()
-      .where('store_id', storeId)
-      .andWhere('product_id', productId)
-      .first();
 
-    if (!storeProduct) {
-      return response.notFound({
-        message: `Asignación de producto: ID TIENDA: ${storeId} - ID PROD.: ${productId} no encontrada.`,
+    try {
+      const storeProduct = await db.transaction(async (trx) => {
+        const model = await StoreProduct.query({ client: trx })
+          .where('store_id', storeId)
+          .andWhere('product_id', productId)
+          .first();
+
+        if (!model) {
+          throw new Error('STORE_PRODUCT_NOT_FOUND');
+        }
+
+        await StoreProduct.query({ client: trx })
+          .where('store_id', storeId)
+          .andWhere('product_id', productId)
+          .update({
+            salable: model.deletedAt ? true : false,
+            deletedAt: model.deletedAt ? null : DateTime.utc().toJSDate(),
+            updatedAt: DateTime.utc().toJSDate(),
+          });
+
+        return model;
+      });
+
+      return response.ok({
+        message: `Visibilidad de asignación de producto: ID TIENDA: ${storeId} - ID PROD.: ${productId} actualizada correctamente.`,
+        storeProduct,
+      });
+    } catch (error) {
+      if (error.message === 'STORE_PRODUCT_NOT_FOUND') {
+        return response.notFound({
+          message: `Asignación de producto: ID TIENDA: ${storeId} - ID PROD.: ${productId} no encontrada.`,
+        });
+      }
+
+      return response.badRequest({
+        message:
+          'Error durante la actualización de la visibilidad de la asignación de producto. Intente nuevamente o comuniquese con administración.',
+        errors: error.message,
       });
     }
-
-    await storeProduct
-      .merge({ deletedAt: storeProduct.deletedAt != null ? null : DateTime.utc() })
-      .save();
-
-    return response.ok({
-      message: `Visibilidad de asignación de producto: ID TIENDA: ${storeId} - ID PROD.: ${productId} actualizada correctamente.`,
-      storeProduct,
-    });
   }
 }
