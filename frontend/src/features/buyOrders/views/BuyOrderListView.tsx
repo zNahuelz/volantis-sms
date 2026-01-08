@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import {
-  DEFAULT_BUY_ORDER_SEARCH_TYPES,
-  DEFAULT_BUY_ORDER_STATUS,
-  DEFAULT_STATUS_TYPES,
-} from '~/constants/arrays';
+import { BUY_ORDER_SEARCH_TYPES, BUY_ORDER_STATUS, DEFAULT_STATUS_TYPES } from '~/constants/arrays';
 import type { BuyOrder } from '~/types/buyOrder';
 import { buyOrderService, type BuyOrderQuery } from '../services/buyOrderService';
 import { Paginator } from '~/components/Paginator';
@@ -77,9 +73,9 @@ export default function BuyOrderListView() {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      field: DEFAULT_BUY_ORDER_SEARCH_TYPES[0].value,
+      field: BUY_ORDER_SEARCH_TYPES[0].value,
       search: '',
-      buyOrderStatusField: DEFAULT_BUY_ORDER_STATUS[0].value,
+      buyOrderStatusField: BUY_ORDER_STATUS[0].value,
       supplierId: suppliers[0]?.id ?? '',
       storeId: stores[0]?.id ?? '',
     },
@@ -263,9 +259,9 @@ export default function BuyOrderListView() {
   useEffect(() => {
     if (suppliers.length && stores.length) {
       reset({
-        field: DEFAULT_BUY_ORDER_SEARCH_TYPES[0].value,
+        field: BUY_ORDER_SEARCH_TYPES[0].value,
         search: '',
-        buyOrderStatusField: DEFAULT_BUY_ORDER_STATUS[0].value,
+        buyOrderStatusField: BUY_ORDER_STATUS[0].value,
         supplierId: suppliers[0].id,
         storeId: stores[0].id,
       });
@@ -284,13 +280,13 @@ export default function BuyOrderListView() {
           className='flex w-full flex-col items-center space-y-2 md:flex md:w-auto md:flex-row md:items-center md:gap-2 md:space-y-0'
         >
           <Select
-            options={DEFAULT_BUY_ORDER_SEARCH_TYPES}
+            options={BUY_ORDER_SEARCH_TYPES}
             width='w-full md:w-50'
             {...register('field', { required: true })}
           />
 
           <Select
-            options={DEFAULT_BUY_ORDER_STATUS}
+            options={BUY_ORDER_STATUS}
             width='w-full md:w-50'
             disabled={!selectedField || selectedField != 'status'}
             {...register('buyOrderStatusField', {

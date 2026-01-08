@@ -58,7 +58,7 @@ import { settingService } from '~/features/settings/services/settingService';
 import type { Setting } from '~/types/setting';
 import Swal from 'sweetalert2';
 import Input from '~/components/Input';
-import { DEFAULT_STORE_PRODUCT_SALE_STATUS } from '~/constants/arrays';
+import { STORE_PRODUCT_SALE_STATUS } from '~/constants/arrays';
 import { storeProductService } from '../services/storeProductService';
 import { useNavigate } from 'react-router';
 
@@ -109,7 +109,7 @@ export default function StoreProductForm({ storeProduct, onSubmit }: StoreProduc
       igv: 0,
       profit: 0,
       stock: 1,
-      salable: DEFAULT_STORE_PRODUCT_SALE_STATUS[0].value,
+      salable: STORE_PRODUCT_SALE_STATUS[0].value,
       igvStatus: true,
     },
   });
@@ -474,7 +474,7 @@ export default function StoreProductForm({ storeProduct, onSubmit }: StoreProduc
       <fieldset className='fieldset'>
         <legend className='fieldset-legend'>{SalableText}</legend>
         <Select
-          options={DEFAULT_STORE_PRODUCT_SALE_STATUS}
+          options={STORE_PRODUCT_SALE_STATUS}
           {...register('salable', {
             setValueAs: (value) => value === 'true',
           })}

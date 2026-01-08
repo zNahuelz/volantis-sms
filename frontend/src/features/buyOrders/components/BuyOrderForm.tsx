@@ -6,7 +6,7 @@ import Input from '~/components/Input';
 import Loading from '~/components/Loading';
 import Modal from '~/components/Modal';
 import Select from '~/components/Select';
-import { DEFAULT_BUY_ORDER_STATUS } from '~/constants/arrays';
+import { BUY_ORDER_STATUS } from '~/constants/arrays';
 import { CancelIcon, ClearIcon, DeleteIcon, SaveIcon, UpdateIcon } from '~/constants/iconNames';
 import {
   ActionsText,
@@ -91,7 +91,7 @@ export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) 
     defaultValues: {
       storeId: defaultStoreId,
       supplierId: buyOrder?.supplierId ?? suppliers[0]?.id ?? '',
-      status: buyOrder?.status ?? DEFAULT_BUY_ORDER_STATUS[0].value ?? '',
+      status: buyOrder?.status ?? BUY_ORDER_STATUS[0].value ?? '',
       subtotal: buyOrder?.subtotal ?? '0',
       igv: buyOrder?.igv ?? '0',
       total: buyOrder?.total ?? '0',
@@ -327,7 +327,7 @@ export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) 
       <fieldset className='fieldset'>
         <legend className='fieldset-legend'>{StatusText}</legend>
         <Select
-          options={DEFAULT_BUY_ORDER_STATUS.map((e) => ({ label: e.label, value: e.value }))}
+          options={BUY_ORDER_STATUS.map((e) => ({ label: e.label, value: e.value }))}
           width='w-full'
           disabled={isSubmitting}
           errorMessage={errors.supplierId?.message}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router';
-import { DEFAULT_STATUS_TYPES, DEFAULT_STORE_PRODUCT_SEARCH_TYPES } from '~/constants/arrays';
+import { DEFAULT_STATUS_TYPES, STORE_PRODUCT_SEARCH_TYPES } from '~/constants/arrays';
 import type { StoreProduct } from '~/types/storeProduct';
 import { storeProductService, type StoreProductQuery } from '../services/storeProductService';
 import { Paginator } from '~/components/Paginator';
@@ -63,7 +63,7 @@ export default function StoreProductListView() {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      field: DEFAULT_STORE_PRODUCT_SEARCH_TYPES[0].value,
+      field: STORE_PRODUCT_SEARCH_TYPES[0].value,
       search: '',
     },
   });
@@ -197,7 +197,7 @@ export default function StoreProductListView() {
           className='flex w-full flex-col items-center space-y-2 md:flex md:w-auto md:flex-row md:items-center md:gap-2 md:space-y-0'
         >
           <Select
-            options={DEFAULT_STORE_PRODUCT_SEARCH_TYPES}
+            options={STORE_PRODUCT_SEARCH_TYPES}
             width='w-full md:w-50'
             {...register('field', { required: true })}
           />

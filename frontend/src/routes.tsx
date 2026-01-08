@@ -9,6 +9,8 @@ import {
   CreateCustomerAreaText,
   CreateProductAreaText,
   CreateRoleAreaText,
+  CreateSaleAreaText,
+  CreateStoreAreaText,
   CreateSupplierAreaText,
   CustomerDetailAreaText,
   CustomersListAreaText,
@@ -16,6 +18,7 @@ import {
   EditCustomerAreaText,
   EditProductAreaText,
   EditRoleAreaText,
+  EditStoreAreaText,
   EditSupplierAreaText,
   LoginAreaText,
   PresentationsListAreaText,
@@ -25,6 +28,7 @@ import {
   RoleDetailAreaText,
   RolesListAreaText,
   SettingsListAreaText,
+  StoreDetailAreaText,
   StoreProductCreateAreaText,
   StoreProductDetailAreaText,
   StoreProductEditAreaText,
@@ -69,11 +73,15 @@ import BuyOrderCreateView from './features/buyOrders/views/BuyOrderCreateView';
 import BuyOrderListView from './features/buyOrders/views/BuyOrderListView';
 import BuyOrderDetailView from './features/buyOrders/views/BuyOrderDetailView';
 import BuyOrderEditView from './features/buyOrders/views/BuyOrderEditView';
-import StoreProductListView from './features/storeProduct/views/StoreProductListView';
-import StoreProductCreateView from './features/storeProduct/views/StoreProductCreateView';
-import StoreProductDetailView from './features/storeProduct/views/StoreProductDetailView';
-import StoreProductEditView from './features/storeProduct/views/StoreProductEditView';
+import StoreProductListView from './features/storeProducts/views/StoreProductListView';
+import StoreProductCreateView from './features/storeProducts/views/StoreProductCreateView';
+import StoreProductDetailView from './features/storeProducts/views/StoreProductDetailView';
+import StoreProductEditView from './features/storeProducts/views/StoreProductEditView';
 import StoresListView from './features/stores/views/StoresListView';
+import StoreCreateView from './features/stores/views/StoreCreateView';
+import StoreDetailView from './features/stores/views/StoreDetailView';
+import StoreEditView from './features/stores/views/StoreEditView';
+import SaleCreateView from './features/sales/views/SaleCreateView';
 
 export const router = createBrowserRouter([
   {
@@ -230,6 +238,30 @@ export const router = createBrowserRouter([
                 },
                 children: [{ index: true, Component: StoresListView }],
               },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreateStoreAreaText,
+                  abilities: ['sys:admin', 'store:store'],
+                },
+                children: [{ index: true, Component: StoreCreateView }],
+              },
+              {
+                path: ':id',
+                element: <AbilityRoute />,
+                handle: {
+                  title: StoreDetailAreaText,
+                  abilities: ['sys:admin', 'store:detail'],
+                },
+                children: [{ index: true, Component: StoreDetailView }],
+              },
+              {
+                path: ':id/edit',
+                element: <AbilityRoute />,
+                handle: { title: EditStoreAreaText, abilities: ['sys:admin', 'store:edit'] },
+                children: [{ index: true, Component: StoreEditView }],
+              },
             ],
           },
           //StoreProduct routes...
@@ -365,6 +397,21 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: { title: AbilitiesListAreaText, abilities: ['sys:admin', 'ability:index'] },
                 children: [{ index: true, Component: AbilitiesListView }],
+              },
+            ],
+          },
+          //Sales routes...
+          {
+            path: 'sale',
+            children: [
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreateSaleAreaText,
+                  abilities: ['sys:admin', 'sale:store'],
+                },
+                children: [{ index: true, Component: SaleCreateView }],
               },
             ],
           },

@@ -69,27 +69,34 @@ export const DEFAULT_STATUS_TYPES = [
   { label: 'SOLO DESHABILITADOS', value: 'deleted' },
 ];
 
-export const DEFAULT_BUY_ORDER_STATUS = [
+export const BUY_ORDER_STATUS = [
   { label: 'SOLICITUD PENDIENTE', value: 'PENDIENTE' },
   { label: 'ENTREGA PENDIENTE', value: 'ENVIADO' },
   { label: 'ORDEN COMPLETADA', value: 'FINALIZADA' },
   { label: 'CANCELADA', value: 'CANCELADA' },
 ];
 
-export const DEFAULT_BUY_ORDER_SEARCH_TYPES = [
+export const BUY_ORDER_SEARCH_TYPES = [
   { label: 'POR ID', value: 'id' },
   { label: 'POR ESTADO', value: 'status' },
   { label: 'POR PROVEEDOR', value: 'supplierId' },
   { label: 'POR POR TIENDA', value: 'storeId' },
 ];
 
-export const DEFAULT_STORE_PRODUCT_SALE_STATUS = [
+export const STORE_PRODUCT_SALE_STATUS = [
   { label: 'VENTA HABILITADA', value: 'true' },
   { label: 'VENTA DESHABILITADA', value: 'false' },
 ];
 
-export const DEFAULT_STORE_PRODUCT_SEARCH_TYPES = [
+export const STORE_PRODUCT_SEARCH_TYPES = [
   { label: 'POR ID TIENDA', value: 'storeId' },
   { label: 'POR ID PRODUCTO', value: 'productId' },
   { label: 'POR COD. BARRAS', value: 'barcode' },
+];
+
+export const STORE_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR NOMBRE', value: 'name' },
+  { label: 'POR RUC', value: 'ruc' },
+  { label: 'POR DIRECCIÓN', value: 'address' },
 ];

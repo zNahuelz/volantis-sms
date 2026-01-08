@@ -4,6 +4,7 @@ import db from '@adonisjs/lucid/services/db';
 import Store from '../models/store.js';
 import { UpdateStoreValidator } from '../validators/update_store.js';
 import { DateTime } from 'luxon';
+import User from '../models/user.js';
 
 export default class StoreController {
   public async store({ request, response }: HttpContext) {
@@ -65,13 +66,13 @@ export default class StoreController {
               q.where('id', search);
               break;
             case 'name':
-              q.where('names', search);
+              q.whereILike('name', `%${search}%`);
               break;
             case 'ruc':
               q.where('ruc', search);
               break;
             case 'address':
-              q.where('address', search);
+              q.whereILike('address', `%${search}%`);
               break;
             case 'all':
             default:
@@ -172,17 +173,71 @@ export default class StoreController {
 
   public async destroy({ request, response }: HttpContext) {
     const id = request.param('id');
-    const store = await Store.find(id);
-    if (!store) {
-      return response.notFound({
-        message: `Tienda de ID: ${id} no encontrada.`,
+
+    try {
+      const store = await db.transaction(async (trx) => {
+        const model = await Store.find(id, { client: trx });
+
+        if (!model) {
+          throw new Error('STORE_NOT_FOUND');
+        }
+
+        const isDeleting = model.deletedAt === null;
+        const now = DateTime.utc();
+
+        model.merge({
+          deletedAt: isDeleting ? now : null,
+        });
+
+        await model.useTransaction(trx).save();
+
+        if (isDeleting) {
+          const users = await model
+            .related('users')
+            .query()
+            .whereNull('deleted_at')
+            .whereDoesntHave('role', (roleQuery) => {
+              roleQuery.whereHas('abilities', (abilityQuery) => {
+                abilityQuery.where('_key', 'sys:admin');
+              });
+            });
+
+          for (const user of users) {
+            user.merge({ deletedAt: now });
+            await user.useTransaction(trx).save();
+            const tokens = await User.accessTokens.all(user);
+
+            await Promise.all(
+              tokens.map((token) => User.accessTokens.delete(user, token.identifier))
+            );
+          }
+        } else {
+          const users = await model.related('users').query().whereNotNull('deleted_at');
+          for (const user of users) {
+            user.merge({ deletedAt: null });
+            await user.save();
+          }
+        }
+
+        return model;
+      });
+
+      return response.ok({
+        message: `Tienda de ID: ${id} actualizada correctamente.`,
+        store,
+      });
+    } catch (error) {
+      if (error.message === 'STORE_NOT_FOUND') {
+        return response.notFound({
+          message: `Tienda de ID: ${id} no encontrada.`,
+        });
+      }
+
+      return response.badRequest({
+        message:
+          'Error durante la deshabilitación de la tienda. Intente nuevamente o comuníquese con administración.',
+        errors: error.message,
       });
     }
-
-    await store.merge({ deletedAt: store.deletedAt != null ? null : DateTime.utc() }).save();
-    return response.ok({
-      message: `Tienda de ID: ${id} actualizada correctamente.`,
-      store,
-    });
   }
 }

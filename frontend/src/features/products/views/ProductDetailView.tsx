@@ -49,7 +49,7 @@ import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
 import { Table, type Column } from '~/components/Table';
 import type { StoreProduct } from '~/types/storeProduct';
-import { storeProductService } from '~/features/storeProduct/services/storeProductService';
+import { storeProductService } from '~/features/storeProducts/services/storeProductService';
 
 export default function ProductDetailView() {
   const { id } = useParams();

@@ -10,6 +10,12 @@ export default class AuthController {
     const { username, password, rememberMe } = await request.validateUsing(LoginValidator);
     const user = await User.verifyCredentials(username, password);
 
+    if (user.deletedAt !== null) {
+      return response.unauthorized({
+        errors: 'Su cuenta de usuario se encuentra deshabilitada. Comuniquese con administración.',
+      });
+    }
+
     await user.load('role', (roleQuery) => {
       roleQuery.preload('abilities');
     });

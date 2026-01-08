@@ -190,6 +190,12 @@ export const StoreProductDetailAreaText = `Detalle de Asignación de Producto - 
 export const CreateStoreProductText = 'Asignación de Producto';
 export const EditStoreProductText = 'Modificar asignación de producto';
 export const AffectedByIGVText = 'Afecto al IGV';
+export const CreateStoreAreaText = `Registro de Tienda - ${AppName}`;
+export const StoreDetailAreaText = `Detalle de Tienda - ${AppName}`;
+export const EditStoreAreaText = `Editar Tienda - ${AppName}`;
+export const CreateStoreText = 'Registro de Tienda';
+export const EditStoreText = 'Modificar Tienda';
+export const StoreDetailText = 'Detalle de Tienda';
 
 // --- 11. BUY ORDERS ---
 export const BuyOrderText = 'Ordene de Compra';
@@ -251,6 +257,8 @@ export const LoadingBuyOrderText = 'Cargando orden de compra...';
 export const LoadingBuyOrdersText = 'Cargando ordenes de compra...';
 export const LoadingStoreProductText = 'Cargando detalle de asignación de producto...';
 export const LoadingStoreProductsText = 'Cargando asignaciones de productos...';
+export const LoadingStoresText = 'Cargando tiendas...';
+export const LoadingStoreText = 'Cargando tienda...';
 
 // --- 14. ERRORS & EMPTY STATES ---
 export const EmptyListText = 'No se encontraron elementos.';
@@ -288,6 +296,8 @@ export const InvalidCredentialsText =
   'Inicio de sesión fallido, verifique sus credenciales e intente nuevamente.';
 export const LoginErrorText =
   'Error durante el inicio de sesión, intente nuevamente. Si el problema persiste comuniquese con administración';
+export const AccountDisabledText =
+  'Error durante el inicio de sesión, su cuenta de usuario se encuentra deshabilitada. Comuniquese con administración.';
 export const ServerErrorText =
   'Error interno del servidor, operación cancelada. Vuelva a intentarlo o comuniquese con administración';
 export const FetchFailedText =
@@ -295,6 +305,8 @@ export const FetchFailedText =
 export const ExpiredSessionText =
   'Sesión expirada o finalizada remotamente por una cuenta de administrador. Inicie sesión nuevamente.';
 export const OpRollbackText = 'Operación cancelada';
+export const StoresNotLoadedText = 'No se encontraron tiendas con el criterío ingresado.';
+export const StoreNotFoundText = 'Tienda no encontrada.';
 
 // --- 15. VALIDATION & WARNING ADVICE ---
 export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a otro proveedor.';
@@ -350,6 +362,7 @@ export const UpdateProductWarning =
   'INFORMACIÓN: Modificar el producto actualizará sus propiedades básicas (nombre, descripción, presentación) en todas las tiendas. Para crear y modificar propiedades avanzadas/órdenes de compra, debe realizar la operación en una tienda específica.';
 export const UsingDefaultTaxMessage =
   'No se pudo recuperar el valor del IGV desde la configuración. Se utilizará el valor predeterminado de 18%. Intente nuevamente, si el problema persiste comuniquese con administración.';
+export const StoreRucTakenText = 'El RUC ingresado ya se encuentra asignado a otra tienda.';
 
 // --- 16. SUCCESS MESSAGES ---
 export const SupplierCreatedText = 'Proveedor registrado correctamente.';
@@ -394,6 +407,9 @@ export const StoreProductUpdatedText =
   'Actualización de asignación de producto a tienda completada correctamente.';
 export const StoreProductStatusUpdatedText =
   'Visibilidad de asignación de producto actualizada correctamente.';
+export const StoreUpdatedText = 'Tienda actualizada correctamente.';
+export const StoreCreatedText = 'Tienda registrada correctamente.';
+export const StoreStatusUpdatedText = 'Visibilidad de tienda actualizada correctamente.';
 
 // --- 17. FAILURE MESSAGES ---
 export const SupplierStatusUpdateFailedText =
@@ -410,6 +426,8 @@ export const BuyOrderStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la orden de compra. Intente nuevamente o comuniquese con administración.';
 export const StoreProductStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la asignación de producto. Intente nuevamente o comuniquese con administración.';
+export const StoreStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad de la tienda. Intente nuevamente o comuniquese con administración.';
 
 // --- 18. DYNAMIC MESSAGES & ACTIONS ---
 export const LogoutText = 'Cerrar Sesión';
@@ -450,7 +468,7 @@ export const SupplierStatusChangeMessage = (supplier: Supplier) => {
   return `¿Está seguro de <strong>${supplier.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
 };
 export const UserStatusChangeMessage = (user: User) => {
-  return `¿Está seguro de <strong>${user.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> al siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni}`;
+  return `¿Está seguro de <strong>${user.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> al siguiente usuario? <br> <strong>ID:</strong> ${user.id} <br> <strong>NOMBRES:</strong> ${user.names} <br> <strong>${DniText.toUpperCase()}:</strong> ${user.dni} <br> ${user.deletedAt == null ? 'El acceso al sistema por parte del usuario se verá restringido y sus sesiones serán cerradas.' : 'El usuario podrá volver a acceder al sistema con normalidad.'}`;
 };
 export const CustomerStatusChangeMessage = (customer: Customer) => {
   return `¿Está seguro de <strong>${customer.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente cliente? <br> <strong>ID:</strong> ${customer.id} <br> <strong>NOMBRE:</strong> ${customer.names} <br> <strong>DNI:</strong> ${customer.dni}`;
@@ -479,3 +497,9 @@ export const ProductStatusChangeMessage = (product: Product) => {
 export const StoreProductStatusChangeMessage = (storeProduct: StoreProduct) => {
   return `¿Está seguro de <strong>${storeProduct.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente asignación de producto? <br> <strong>ID TIENDA:</strong> ${storeProduct.storeId} <br> <strong>ID PRODUCTO:</strong> ${storeProduct.productId} <br> <strong>COD. BARRAS:</strong> ${storeProduct.product?.barcode ?? 'N/A'} <br> <strong>DESCRIPCIÓN</strong> ${storeProduct.product?.description ?? 'N/A'}`;
 };
+export const StoreStatusChangeMessage = (store: Store) => {
+  return `¿Está seguro de <strong>${store.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente tienda? <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name} <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ${store.deletedAt == null ? 'Se deshabilitaran <strong>todas</strong> las cuentas de usuario asociadas a la tienda, a excepción de las que poseen permisos administrativos. <strong>Está operación es revertible.</strong>' : 'Las cuentas de usuario deshabilitadas volverán a estar disponibles inmediatamente.'}`;
+};
+
+// --- 20. SALES ---
+export const CreateSaleAreaText = `Nueva Venta - ${AppName}`;

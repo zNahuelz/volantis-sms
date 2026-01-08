@@ -2,6 +2,7 @@ import Button from '~/components/Button';
 import Input from '~/components/Input';
 import { EmailIcon, PasswordIcon } from '~/constants/iconNames';
 import {
+  AccountDisabledText,
   ClickHereText,
   EmailText,
   ForgotPasswordText,
@@ -38,8 +39,6 @@ export default function LoginForm() {
     },
   });
 
-  const rememberMe = watch('rememberMe');
-
   const onSubmit = async (data: any) => {
     setServerError('');
     try {
@@ -61,6 +60,8 @@ export default function LoginForm() {
           }
         });
         return;
+      } else if (err?.errors?.includes('deshabilitada')) {
+        setServerError(AccountDisabledText);
       } else {
         setServerError(LoginErrorText);
       }

@@ -88,10 +88,13 @@ export default function Sidebar() {
           </li>
 
           <li>
-            <button className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+            <NavLink
+              to='/dashboard/sale/create'
+              className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'
+            >
               <Icon icon={SaleIcon} className='text-lg leading-none'></Icon>
               <span className='font-medium'>{NewSaleText}</span>
-            </button>
+            </NavLink>
           </li>
 
           <li>
@@ -233,6 +236,14 @@ export default function Sidebar() {
                 <span className='font-medium'>{StoresText}</span>
               </summary>
               <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/store/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {NewText}
+                  </NavLink>
+                </li>
                 <li>
                   <NavLink
                     to='/dashboard/store'

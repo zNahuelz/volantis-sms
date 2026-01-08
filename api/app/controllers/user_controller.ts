@@ -170,13 +170,25 @@ export default class UserController {
   public async destroy({ request, response }: HttpContext) {
     const id = request.param('id');
     const user = await User.find(id);
+
     if (!user) {
       return response.notFound({
         message: `Usuario de ID: ${id} no encontrado.`,
       });
     }
 
-    await user.merge({ deletedAt: user.deletedAt != null ? null : DateTime.utc() }).save();
+    const isDisabling = user.deletedAt === null;
+
+    if (isDisabling) {
+      user.merge({ deletedAt: DateTime.utc() });
+      await user.save();
+      const tokens = await User.accessTokens.all(user);
+      await Promise.all(tokens.map((token) => User.accessTokens.delete(user, token.identifier)));
+    } else {
+      user.merge({ deletedAt: null });
+      await user.save();
+    }
+
     return response.ok({
       message: `Cuenta de usuario de ID: ${id} actualizada correctamente.`,
       user,
