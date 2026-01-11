@@ -34,6 +34,7 @@ import {
   StoresText,
   SuppliersText,
   SystemAbilitiesText,
+  SystemPaymentTypes,
   SystemRolesText,
   SystemText,
   SystemUsersText,
@@ -285,6 +286,14 @@ export default function Sidebar() {
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {SystemAbilitiesText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/payment-type'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {SystemPaymentTypes}
                   </NavLink>
                 </li>
               </ul>

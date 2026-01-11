@@ -42,6 +42,9 @@ class StoreProductService extends BaseService<
   showByProductId(productId: number | string) {
     return http.get(`store-product/product-id/${productId}`).json<StoreProduct[]>();
   }
+  showByBarcode(barcode: string, storeId: number | string) {
+    return http.get(`store-product/barcode/${barcode}/${storeId}`).json<StoreProduct>();
+  }
   Update(storeId: number | string, productId: number | string, payload: Partial<StoreProduct>) {
     return http
       .put(`store-product/${storeId}/${productId}`, { json: payload })

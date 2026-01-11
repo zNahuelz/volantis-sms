@@ -7,6 +7,7 @@ import {
   BuyOrdersListAreaText,
   CreateBuyOrderAreaText,
   CreateCustomerAreaText,
+  CreatePaymentTypeAreaText,
   CreateProductAreaText,
   CreateRoleAreaText,
   CreateSaleAreaText,
@@ -16,11 +17,13 @@ import {
   CustomersListAreaText,
   EditBuyOrderAreaText,
   EditCustomerAreaText,
+  EditPaymentTypeAreaText,
   EditProductAreaText,
   EditRoleAreaText,
   EditStoreAreaText,
   EditSupplierAreaText,
   LoginAreaText,
+  PaymentTypesListAreaText,
   PresentationsListAreaText,
   ProductDetailAreaText,
   ProductsListAreaText,
@@ -82,6 +85,9 @@ import StoreCreateView from './features/stores/views/StoreCreateView';
 import StoreDetailView from './features/stores/views/StoreDetailView';
 import StoreEditView from './features/stores/views/StoreEditView';
 import SaleCreateView from './features/sales/views/SaleCreateView';
+import PaymentTypeListView from './features/paymentTypes/views/PaymentTypeListView';
+import PaymentTypeCreateView from './features/paymentTypes/views/PaymentTypeCreateView';
+import PaymentTypeEditView from './features/paymentTypes/views/PaymentTypeEditView';
 
 export const router = createBrowserRouter([
   {
@@ -302,6 +308,38 @@ export const router = createBrowserRouter([
                   abilities: ['sys:admin', 'storeProduct:edit'],
                 },
                 children: [{ index: true, Component: StoreProductEditView }],
+              },
+            ],
+          },
+          //Payment types routes...
+          {
+            path: 'payment-type',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: PaymentTypesListAreaText,
+                  abilities: ['sys:admin', 'paymentType:index'],
+                },
+                children: [{ index: true, Component: PaymentTypeListView }],
+              },
+              {
+                path: 'create',
+                element: <AbilityRoute />,
+                handle: {
+                  title: CreatePaymentTypeAreaText,
+                  abilities: ['sys:admin', 'paymentType:store'],
+                },
+                children: [{ index: true, Component: PaymentTypeCreateView }],
+              },
+              {
+                path: ':id/edit',
+                element: <AbilityRoute />,
+                handle: {
+                  title: EditPaymentTypeAreaText,
+                  abilities: ['sys:admin', 'paymentType:edit'],
+                },
+                children: [{ index: true, Component: PaymentTypeEditView }],
               },
             ],
           },

@@ -99,6 +99,7 @@ export default function BarcodeScanner({ onBarcodeResolved }: BarcodeScannerProp
             },
           })}
           errorMessage={errors.barcode?.message}
+          disabled={isSubmitting}
         />
         <Button
           className='join-item'
@@ -106,8 +107,15 @@ export default function BarcodeScanner({ onBarcodeResolved }: BarcodeScannerProp
           icon={RandomizeIcon}
           title={RandomizeBarcodeText}
           onClick={generateRandomBarcode}
+          disabled={isSubmitting}
         />
-        <Button className='join-item' color='btn-info' label={AssignText} type='submit' />
+        <Button
+          className='join-item'
+          color='btn-info'
+          label={AssignText}
+          type='submit'
+          disabled={isSubmitting}
+        />
       </div>
     </form>
   );

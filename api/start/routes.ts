@@ -22,6 +22,7 @@ import AbilityController from '../app/controllers/ability_controller.js';
 import ProductController from '../app/controllers/product_controller.js';
 import BuyOrderController from '../app/controllers/buy_order_controller.js';
 import StoreProductController from '../app/controllers/store_product_controller.js';
+import PaymentTypeController from '../app/controllers/payment_type_controller.js';
 
 router
   .group(() => {
@@ -89,6 +90,12 @@ router
         router
           .put('/:id', [CustomerController, 'update'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:update'])]);
+        router
+          .get('/dni/:dni', [CustomerController, 'showByDni'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'customer:showByDni', 'sale:store']),
+          ]);
         router
           .get('/:id', [CustomerController, 'show'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'customer:show'])]);
@@ -174,7 +181,10 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:show'])]);
         router
           .get('/key/:key', [SettingController, 'showByKey'])
-          .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:showByKey'])]);
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'setting:showByKey', 'sale:store']),
+          ]);
         router
           .get('/', [SettingController, 'index'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'setting:index'])]);
@@ -223,6 +233,12 @@ router
           .use([
             middleware.auth(),
             middleware.ability(['sys:admin', 'storeProduct:showByProductId']),
+          ]);
+        router
+          .get('/barcode/:barcode/:storeId', [StoreProductController, 'showByBarcode'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'storeProduct:showByBarcode', 'sale:store']),
           ]);
         router
           .get('/:storeId/:productId', [StoreProductController, 'show'])
@@ -277,6 +293,32 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'store:destroy'])]);
       })
       .prefix('store');
+
+    router
+      .group(() => {
+        router
+          .post('/', [PaymentTypeController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'paymentType:store'])]);
+        router
+          .get('/:id', [PaymentTypeController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'paymentType:show'])]);
+        router
+          .get('/', [PaymentTypeController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'paymentType:index'])]);
+        router
+          .get('/index/all', [PaymentTypeController, 'list'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'paymentType:list', 'sale:store']),
+          ]);
+        router
+          .put('/:id', [PaymentTypeController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'paymentType:update'])]);
+        router
+          .delete('/:id', [PaymentTypeController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'paymentType:destroy'])]);
+      })
+      .prefix('payment-type');
 
     router
       .group(() => {

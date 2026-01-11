@@ -99,8 +99,7 @@ export default function ProductDetailView() {
     try {
       const res = await storeProductService.showByProductId(Number(id!));
       setStoreProducts(res);
-    } catch (error) {
-      console.log(error);
+    } catch {
     } finally {
       setLoading(false);
     }

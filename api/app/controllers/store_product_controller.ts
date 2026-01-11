@@ -68,6 +68,23 @@ export default class StoreProductController {
     return response.ok(storeProduct);
   }
 
+  public async showByBarcode({ request, response }: HttpContext) {
+    const barcode = request.param('barcode');
+    const storeId = request.param('storeId');
+    const storeProduct = await StoreProduct.query()
+      .where('store_id', storeId)
+      .andWhereNull('deleted_at')
+      .whereHas('product', (productQuery) => productQuery.where('barcode', barcode))
+      .preload('product', (productQuery) => productQuery.preload('presentation'))
+      .first();
+    if (!storeProduct) {
+      return response.notFound({
+        message: `Producto de código de barras: ${barcode} no se encuentra asignado a la tienda de ID: ${storeId} o no se encuentra disponible.`,
+      });
+    }
+    return response.ok(storeProduct);
+  }
+
   public async showByProductId({ request, response }: HttpContext) {
     const productId = request.param('productId');
     const storeProducts = await StoreProduct.query()

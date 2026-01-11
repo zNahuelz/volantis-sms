@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
+import type { CartItem } from '~/features/sales/views/SaleCreateView';
 import type { BuyOrder } from '~/types/buyOrder';
 import type { Customer } from '~/types/customer';
+import type { PaymentType } from '~/types/paymentType';
 import type { Presentation } from '~/types/presentation';
 import type { Product } from '~/types/product';
 import type { Role } from '~/types/role';
@@ -46,6 +48,9 @@ export const RemoveText = 'Quitar';
 export const HereText = 'aquí';
 export const ClickHereText = 'Click aquí';
 export const PreviewText = 'Vista previa';
+export const RegisterText = 'Registrar';
+export const NextText = 'Siguiente';
+export const HelpText = 'Ayuda';
 
 // --- 3. COMMON TABLE/FORM FIELDS ---
 export const IdText = '#';
@@ -68,6 +73,7 @@ export const PhoneText = 'Teléfono';
 export const AddressText = 'Dirección';
 export const RucText = 'Ruc';
 export const DniText = 'Dni';
+export const BehaviourText = 'Comportamiento';
 
 // --- 4. AUTH & LOGIN ---
 export const LoginText = 'Inicio de Sesión';
@@ -259,6 +265,9 @@ export const LoadingStoreProductText = 'Cargando detalle de asignación de produ
 export const LoadingStoreProductsText = 'Cargando asignaciones de productos...';
 export const LoadingStoresText = 'Cargando tiendas...';
 export const LoadingStoreText = 'Cargando tienda...';
+export const SearchingProductText = 'Buscando producto...';
+export const LoadingPaymentTypesText = 'Cargando tipos de pago...';
+export const LoadingPaymentTypeText = 'Cargando tipo de pago...';
 
 // --- 14. ERRORS & EMPTY STATES ---
 export const EmptyListText = 'No se encontraron elementos.';
@@ -307,6 +316,13 @@ export const ExpiredSessionText =
 export const OpRollbackText = 'Operación cancelada';
 export const StoresNotLoadedText = 'No se encontraron tiendas con el criterío ingresado.';
 export const StoreNotFoundText = 'Tienda no encontrada.';
+export const ServerConnErrorText =
+  'Conexión con el servidor fallida, vuelva a intentarlo o comuniquese con administración.';
+export const NoStoresAvailableText =
+  'Error, no se encontraron tiendas disponibles. Comuniquese con administración.';
+export const SalesModuleLockedNoStores =
+  'No se encontraron tiendas disponibles para realizar la operación de ventas. El módulo se encuentra bloqueado, intente nuevamente o comuniquese con administración.';
+export const PaymentTypeNotFound = 'Tipo de pago no encontrado.';
 
 // --- 15. VALIDATION & WARNING ADVICE ---
 export const SupplierRucTakenText = 'El RUC ingresado ya se encuentra asignado a otro proveedor.';
@@ -363,6 +379,8 @@ export const UpdateProductWarning =
 export const UsingDefaultTaxMessage =
   'No se pudo recuperar el valor del IGV desde la configuración. Se utilizará el valor predeterminado de 18%. Intente nuevamente, si el problema persiste comuniquese con administración.';
 export const StoreRucTakenText = 'El RUC ingresado ya se encuentra asignado a otra tienda.';
+export const PaymentTypeNameTakenText =
+  'El nombre ingresado ya se encuentra asignado a otro tipo de pago.';
 
 // --- 16. SUCCESS MESSAGES ---
 export const SupplierCreatedText = 'Proveedor registrado correctamente.';
@@ -410,6 +428,8 @@ export const StoreProductStatusUpdatedText =
 export const StoreUpdatedText = 'Tienda actualizada correctamente.';
 export const StoreCreatedText = 'Tienda registrada correctamente.';
 export const StoreStatusUpdatedText = 'Visibilidad de tienda actualizada correctamente.';
+export const PaymentTypeStatusUpdatedText =
+  'Visibilidad de tipo de pago actualizada correctamente.';
 
 // --- 17. FAILURE MESSAGES ---
 export const SupplierStatusUpdateFailedText =
@@ -428,6 +448,12 @@ export const StoreProductStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la asignación de producto. Intente nuevamente o comuniquese con administración.';
 export const StoreStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la tienda. Intente nuevamente o comuniquese con administración.';
+export const ProductSearchByBarcodeFailedText =
+  'El producto no se encuentra asignado a la tienda o no existe, verifique los datos ingresados y vuelva a intentarlo. Si el problema persiste comuniquese con administración.';
+export const CustomerNotFoundByDniText =
+  'El DNI ingresado no se encuentra asignado a ningún cliente del sistema o el mismo se encuentra deshabilitado. <br> <strong>Recuerde que puede realizar ventas ingresando el DNI 0.</strong><br> ¿Desea proceder con el registro del cliente?';
+export const PaymentTypeStatusUpdateFailedText =
+  'Fallo la actualización de visibilidad del tipo de pago. Intente nuevamente o comuniquese con administración.';
 
 // --- 18. DYNAMIC MESSAGES & ACTIONS ---
 export const LogoutText = 'Cerrar Sesión';
@@ -462,6 +488,19 @@ export const ProductFoundByBarcodeMessage = (product: Product) => {
 export const DuplicatedStoreProductMessage = (product: Product, store: Store) => {
   return `El siguiente producto: <br> <strong>ID:</strong> ${product.id} <br> <strong>COD. BARRAS:</strong> ${product.barcode} <br> <strong>NOMBRE:</strong> ${product.name} <br> <strong>DESCRIPCIÓN:</strong> ${product.description} <br> <strong>PRESENTACIÓN:</strong> ${product.presentation?.name ?? 'N/A'} <br>ya se encuentra asignado a la siguiente tienda: <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name}  <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ¿Desea modificar la asignación? También puede asignar el producto a otra tienda.`;
 };
+
+export const LowStockAlert = (storeProduct: StoreProduct) => {
+  return `El stock registrado en el sistema del producto: ${storeProduct.product?.name ?? ''} es de ${storeProduct.stock} unidades.
+  Puede continuar con la venta si tiene los productos a mano, caso contrario disminuya la cantidad del producto e informe al cliente.
+  <strong>Recuerde mantener el stock de los productos actualizado.</strong>`;
+};
+
+export const LowStockAlertAlt = (cartItem: CartItem) => {
+  return `El stock registrado en el sistema del producto: ${cartItem.product?.name ?? ''} es de ${cartItem.stock} unidades. Puede continuar si tiene los productos a mano, caso contrario disminuya la cantidad e informe al cliente.`;
+};
+
+export const PaymentTypesHelp = `El sistema posee diversos tipos de pago cuyos comportamientos se clasifican en: <br> <br> <ul><li><span class='font-bold'>- HASH REQUERIDO (o DIGITAL) :</span> <br>
+Durante el proceso de registro de venta,  solicitarán el ingreso de un HASH de pago, el cual es generado por el punto de venta o aplicativo del servicio digital de pago del cliente y no requieren el ingreso del monto de pago (efectivo entregado por el usuario).</li><br><li><span class='font-bold'>- HASH NO REQUERIDO (o EFECTIVO/CASH):</span> No requieren HASH de pago y solo necesitan el monto de dinero en efectivo entregado por el cliente.</li></ul> `;
 
 // --- 19. STATUS CHANGE DIALOGS ---
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
@@ -500,6 +539,27 @@ export const StoreProductStatusChangeMessage = (storeProduct: StoreProduct) => {
 export const StoreStatusChangeMessage = (store: Store) => {
   return `¿Está seguro de <strong>${store.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente tienda? <br> <strong>ID:</strong> ${store.id} <br> <strong>NOMBRE:</strong> ${store.name} <br> <strong>DIRECCIÓN:</strong> ${store.address} <br> ${store.deletedAt == null ? 'Se deshabilitaran <strong>todas</strong> las cuentas de usuario asociadas a la tienda, a excepción de las que poseen permisos administrativos. <strong>Está operación es revertible.</strong>' : 'Las cuentas de usuario deshabilitadas volverán a estar disponibles inmediatamente.'}`;
 };
+export const PaymentTypeStatusChangeMessage = (paymentType: PaymentType) => {
+  return `¿Está seguro de <strong>${paymentType.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente tipo de pago? <br> <strong>ID:</strong> ${paymentType.id} <br> <strong>NOMBRE:</strong> ${paymentType.name} <br> Está operación es <strong>reversible,</strong> tendrá efecto inmediato.`;
+};
 
 // --- 20. SALES ---
 export const CreateSaleAreaText = `Nueva Venta - ${AppName}`;
+export const CreateSaleText = 'Registro de Venta';
+export const EmptyCartText = 'Vaciar carrito';
+export const EmptyCartAddProductsText =
+  'Carrito de compras vacio, escanee productos para continuar.';
+export const EditQuantityText = 'Editar cantidad';
+
+// --- 21. PAYMENT TYPES ---
+export const PaymentTypeText = 'Tipo de Pago';
+export const PaymentTypesText = 'Tipos de Pago';
+export const PaymentTypesListAreaText = `Listado de Tipos de Pago - ${AppName}`;
+export const CreatePaymentTypeAreaText = `Registro de Tipo de Pago - ${AppName}`;
+export const EditPaymentTypeAreaText = `Editar Tipo de Pago - ${AppName}`;
+export const SystemPaymentTypes = 'Gest. Tipos de Pago';
+export const PaymentTypesNotLoaded = 'No se encontraron tipos de pago con el criterío ingresado.';
+export const PaymentTypeUpdatedText = 'Tipo de pago actualizado correctamente.';
+export const PaymentTypeCreatedText = 'Tipo de pago registrado correctamente.';
+export const CreatePaymentTypeText = 'Registro de Tipo de Pago';
+export const EditPaymentTypeText = 'Modificando Tipo de Pago';

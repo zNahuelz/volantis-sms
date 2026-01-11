@@ -32,6 +32,9 @@ class CustomerService extends BaseService<Customer, CustomerQuery, CustomerRespo
       sortDir: 'orderDir',
     });
   }
+  showByDni(dni: string) {
+    return http.get(`customer/dni/${dni}`).json<Customer>();
+  }
 }
 
 export const customerService = new CustomerService();

@@ -8,6 +8,7 @@ export const CloseIcon = 'ic:baseline-close';
 export const SearchIcon = 'ic:outline-search';
 export const ReloadIcon = 'ic:outline-refresh';
 export const _404Icon = 'ic:sharp-developer-board-off';
+export const HelpIcon = 'ic:baseline-help-outline';
 
 // --- 2. ACTION & CRUD OPERATIONS ---
 export const AddIcon = 'ic:baseline-plus';
@@ -20,6 +21,10 @@ export const CancelIcon = 'ic:sharp-cancel-presentation';
 export const ClearIcon = 'ic:sharp-document-scanner';
 export const DetailsIcon = 'ic:outline-more-horiz';
 export const RandomizeIcon = 'ic:baseline-autorenew';
+export const MakePaymentIcon = 'ic:sharp-payments';
+export const RemoveIcon = 'ic:sharp-playlist-remove';
+export const MinusIcon = 'ic:baseline-minus';
+export const CheckIcon = 'ic:baseline-check';
 
 // --- 3. FORMS & DATA FIELDS ---
 export const NameIcon = 'ic:baseline-format-color-text';
@@ -66,3 +71,4 @@ export const WarningIcon = 'ic:baseline-warning-amber';
 export const ErrorIcon = 'ic:baseline-report-gmailerrorred';
 export const NotificationsIcon = 'ic:round-notifications-active';
 export const EmptyNotificationsIcon = 'ic:round-notifications-none';
+export const EmptyCartIcon = 'ic:outline-remove-shopping-cart';

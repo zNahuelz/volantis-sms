@@ -8,6 +8,14 @@ export default class extends BaseSeeder {
     if (hasRecords) {
       return;
     }
-    await CustomerFactory.createMany(100);
+    await Customer.create({
+      names: 'CLIENTE',
+      surnames: 'ORDINARIO',
+      dni: '00000000',
+      phone: '000000000',
+      email: 'default-customer@volantis.com',
+      address: 'Av. Globo Terraqueo 102',
+    });
+    await CustomerFactory.createMany(99);
   }
 }

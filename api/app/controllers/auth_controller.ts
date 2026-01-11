@@ -33,6 +33,7 @@ export default class AuthController {
         id: user.id,
         names: user.names,
         surnames: user.surnames,
+        dni: user.dni,
         username: user.username,
         email: user.email,
         profilePicture: user.profilePicture,

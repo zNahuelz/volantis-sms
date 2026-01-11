@@ -100,3 +100,14 @@ export const STORE_SEARCH_TYPES = [
   { label: 'POR RUC', value: 'ruc' },
   { label: 'POR DIRECCIÓN', value: 'address' },
 ];
+
+export const PAYMENT_TYPES_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR NOMBRE', value: 'name' },
+  { label: 'POR COMPORTAMIENTO', value: 'action' },
+];
+
+export const PAYMENT_TYPES_ACTIONS = [
+  { label: 'HASH NO REQUERIDO', value: 'CASH' },
+  { label: 'HASH REQUERIDO', value: 'DIGITAL' },
+];

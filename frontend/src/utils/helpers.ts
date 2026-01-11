@@ -21,3 +21,22 @@ export function formatAsTime(time: string | any) {
   dayjs.extend(customParseFormat);
   return time ? dayjs(time, 'HH:mm:ss').format('hh:mm A') : '';
 }
+
+export function formatTwoDecimals(val: number): string {
+  try {
+    return new Intl.NumberFormat('es-PE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(val);
+  } catch {
+    return val.toString();
+  }
+}
+
+export function sunatRound(val: number): number {
+  try {
+    return Math.round((val + Number.EPSILON) * 100) / 100;
+  } catch {
+    return val;
+  }
+}

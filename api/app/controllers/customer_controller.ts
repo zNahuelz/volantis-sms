@@ -57,6 +57,20 @@ export default class CustomerController {
     return response.ok(customer);
   }
 
+  public async showByDni({ request, response }: HttpContext) {
+    const dni = request.param('dni');
+    const customer = await Customer.query()
+      .where('dni', dni === '0' ? '00000000' : dni)
+      .whereNull('deleted_at')
+      .first();
+    if (!customer) {
+      return response.notFound({
+        message: `Cliente de DNI: ${dni} no encontrado.`,
+      });
+    }
+    return response.ok(customer);
+  }
+
   public async index({ request, response }: HttpContext) {
     try {
       const page = request.input('page', 1);

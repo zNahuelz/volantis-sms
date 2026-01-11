@@ -10,6 +10,9 @@ export default class PaymentType extends BaseModel {
   @column()
   declare name: string;
 
+  @column()
+  declare action: string;
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;
 
