@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http';
-import { CreateCustomerValidator } from '../validators/create_customer.js';
+import { CreateCustomerValidator } from '../validators/customer/create_customer.js';
 import db from '@adonisjs/lucid/services/db';
 import Customer from '../models/customer.js';
-import { UpdateCustomerValidator } from '../validators/update_customer.js';
+import { UpdateCustomerValidator } from '../validators/customer/update_customer.js';
 import { DateTime } from 'luxon';
 
 export default class CustomerController {

@@ -11,6 +11,7 @@ import type { Store } from '~/types/store';
 import type { StoreProduct } from '~/types/storeProduct';
 import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
+import type { VoucherSerie } from '~/types/voucherSerie';
 
 // --- 1. APP IDENTITY & AREA TEXTS ---
 export const AppName = 'Volantis';
@@ -74,6 +75,7 @@ export const AddressText = 'Dirección';
 export const RucText = 'Ruc';
 export const DniText = 'Dni';
 export const BehaviourText = 'Comportamiento';
+export const ResetText = 'Restablecer';
 
 // --- 4. AUTH & LOGIN ---
 export const LoginText = 'Inicio de Sesión';
@@ -502,6 +504,19 @@ export const LowStockAlertAlt = (cartItem: CartItem) => {
 export const PaymentTypesHelp = `El sistema posee diversos tipos de pago cuyos comportamientos se clasifican en: <br> <br> <ul><li><span class='font-bold'>- HASH REQUERIDO (o DIGITAL) :</span> <br>
 Durante el proceso de registro de venta,  solicitarán el ingreso de un HASH de pago, el cual es generado por el punto de venta o aplicativo del servicio digital de pago del cliente y no requieren el ingreso del monto de pago (efectivo entregado por el usuario).</li><br><li><span class='font-bold'>- HASH NO REQUERIDO (o EFECTIVO/CASH):</span> No requieren HASH de pago y solo necesitan el monto de dinero en efectivo entregado por el cliente.</li></ul> `;
 
+export const VoucherSeriesHelp = `<span class="font-light">Los comprobantes siguen el formato B### / F### - 000000##, por ejemplo: B004-00000045 o F003-00000012, donde:</span>
+  <ul class="list-disc pl-5 mt-2 text-left font-light">
+    <li>B o F indica el tipo de comprobante (Boleta o Factura).</li>
+    <li>El número de serie (001–999) es único y debe estar habilitado por tipo.</li>
+    <li>Solo puede existir una serie activa por tipo de comprobante.</li>
+    <li>El correlativo se gestiona automáticamente por el sistema.</li>
+    <li>Si el número ingresado ya fue utilizado, se ajustará al siguiente disponible de forma automática al registrar una compra.</li>
+  </ul>
+  <span class="font-bold text-error">No es necesario preocuparse por duplicados: el sistema garantiza la secuencia continua y única de los comprobantes.</span>`;
+
+export const VoucherTypesHelp =
+  'Los tipos de comprobantes de pago por defecto del sistema son <strong>BOLETA</strong> y <strong>FACTURA</strong>, los cuales pueden tener varias series para comprobantes de pago registradas; con una sola de ellas activa por cada tipo. <br><br> La opción <strong>RESTABLECER</strong> solo se encuentra habilitada si el sistema no tiene tipos de comprobantes de pago registrados.';
+
 // --- 19. STATUS CHANGE DIALOGS ---
 export const SupplierStatusChangeMessage = (supplier: Supplier) => {
   return `¿Está seguro de <strong>${supplier.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente proveedor? <br> <strong>ID:</strong> ${supplier.id} <br> <strong>NOMBRE:</strong> ${supplier.name} <br> <strong>RUC:</strong> ${supplier.ruc}`;
@@ -542,14 +557,21 @@ export const StoreStatusChangeMessage = (store: Store) => {
 export const PaymentTypeStatusChangeMessage = (paymentType: PaymentType) => {
   return `¿Está seguro de <strong>${paymentType.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> el siguiente tipo de pago? <br> <strong>ID:</strong> ${paymentType.id} <br> <strong>NOMBRE:</strong> ${paymentType.name} <br> Está operación es <strong>reversible,</strong> tendrá efecto inmediato.`;
 };
+export const VoucherSerieStatusChangeMessage = (voucherSerie: VoucherSerie) => {
+  return `¿Está seguro de ${voucherSerie.isActive ? 'deshabilitar' : 'habilitar'} la siguiente serie? <br>
+    SERIE: ${voucherSerie.seriesCode} - CORRELATIVO: ${voucherSerie.currentNumber} <br>
+    ${!voucherSerie.isActive ? 'Los nuevos comprobantes de pago serán generados siguiendo ese patrón.' : 'Los comprobantes de pago dejarán de generarse usando ese patrón.'}`;
+};
 
 // --- 20. SALES ---
+export const SalesListAreaText = `Listado de Ventas - ${AppName}`;
 export const CreateSaleAreaText = `Nueva Venta - ${AppName}`;
 export const CreateSaleText = 'Registro de Venta';
 export const EmptyCartText = 'Vaciar carrito';
 export const EmptyCartAddProductsText =
   'Carrito de compras vacio, escanee productos para continuar.';
 export const EditQuantityText = 'Editar cantidad';
+export const LoadingPaymentModal = 'Cargando formulario de pago...';
 
 // --- 21. PAYMENT TYPES ---
 export const PaymentTypeText = 'Tipo de Pago';
@@ -563,3 +585,57 @@ export const PaymentTypeUpdatedText = 'Tipo de pago actualizado correctamente.';
 export const PaymentTypeCreatedText = 'Tipo de pago registrado correctamente.';
 export const CreatePaymentTypeText = 'Registro de Tipo de Pago';
 export const EditPaymentTypeText = 'Modificando Tipo de Pago';
+
+// --- 22. VOUCHERS ---
+export const SeriesCodeText = 'Cod. Serie';
+export const CurrentCorrelativeText = 'Correlativo Actual';
+export const VoucherSeriesNotLoadedText =
+  'No se encontraron series de comprobantes de pago con el criterío ingresado.';
+export const VoucherTypesNotLoadedText =
+  'No se encontraron tipos de comprobantes de pago con el criterío ingresado.';
+export const VoucherTypeText = 'Tipo de Comp. Pago';
+export const VoucherTypeAltText = 'Tipo de comprobante de pago';
+export const VoucherTypesText = 'Tipos de comprobantes de pago';
+export const VoucherSeriesListAreaText = `Listado de Series de Comp. de Pago - ${AppName}`;
+export const VoucherTypesListAreaText = `Listado de Tipos de Comp. de Pago - ${AppName}`;
+export const SystemVoucherSeries = 'Gest. Series Comp. Pago';
+export const SystemVoucherTypes = 'Gest. Tipos Comp. Pago';
+export const VoucherSerieText = 'Serie de comprobante de pago';
+export const VoucherSeriesText = 'Series de comprobantes de pago';
+export const LoadingVoucherSeriesText = 'Cargando series de comprobantes de pago...';
+export const VoucherSerieCreatedText = 'Serie de comprobante de pago registrada correctamente.';
+export const VoucherSerieUpdatedText = 'Serie de comprobante de pago actualizada correctamente.';
+export const DuplicatedVoucherSerieText =
+  'La serie ingresada ya se encuentra registrada en el sistema o tiene formato inválido.';
+export const CorrelativeText = 'Correlativo';
+export const NewVoucherSerieText = 'Registro de serie de comp. de pago';
+export const EditVoucherSerieText = 'Modificar serie de comp. de pago';
+export const EnableText = 'Habilitar';
+export const VoucherSerieStatusChangedText =
+  'Serie de comprobantes de pago habilitada correctamente.';
+export const VoucherSerieStatusChangeFailedText =
+  'Fallo la modificación del estado de la serie de comprobante de pago. Intente nuevamente o comuniquese con administración.';
+export const SeriesAmountText = 'Cant. Series';
+export const LoadingVoucherTypesText = 'Cargando tipos de comprobantes de pago...';
+export const VoucherTypeDetailText = 'Detalle de Tipo de Comp. de Pago';
+export const VoucherTypesRestorationCompText =
+  'Los tipos de comprobantes de pago han sido regenerados correctamente.';
+export const VoucherTypesRestorationFailText =
+  'Error durante la regeneración de tipos de comprobantes de pago, esta opción solo puede realizarse cuando el sistema <strong>NO PRESENTA</strong> tipos de comprobantes de pago registrados. Comuniquese con administración.';
+export const VoucherTypeRestorationMessage =
+  '¿Está seguro de que desea regenerar los tipos de comprobantes de pago? Está acción solo puede realizarse cuando el sistema <strong>NO</strong> cuenta con estos tipos registrados, caso contrario la operación sera cancelada. Comuniquese con administración.';
+export const CashReceivedText = 'Monto Recibido';
+export const PaymentHashText = 'Hash de Pago';
+export const ChangeText = 'Cambio';
+export const FinishSaleText = 'Finalizar Venta';
+export const SaleSavedText =
+  'Compra registrada correctamente, será redigirido al comprobante de pago...';
+export const PaymentProcessFailedText =
+  'Error durante el registro de la venta, intente nuevamente. <br> <strong>Comuniquese con administración si el problema persiste.</strong>';
+export const PaymentAreaText = 'Área de Pagos';
+export const SalesText = 'Ventas';
+export const SaleText = 'Venta';
+export const VoucherText = 'Comprobante de Pago';
+export const VouchersText = 'Comprobantes de Pago';
+export const VoucherAltText = 'Comp. Pago';
+export const VouchersAltText = 'Comps. Pago';

@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import Ability from '../models/ability.js';
-import { CreateAbilityValidator } from '../validators/create_ability.js';
+import { CreateAbilityValidator } from '../validators/ability/create_ability.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateAbilityValidator } from '../validators/update_ability.js';
+import { UpdateAbilityValidator } from '../validators/ability/update_ability.js';
 
 export default class AbilityController {
   public async store({ request, response }: HttpContext) {

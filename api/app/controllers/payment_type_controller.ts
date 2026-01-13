@@ -1,9 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http';
-import { CreatePaymentTypeValidator } from '../validators/create_payment_type.js';
+import { CreatePaymentTypeValidator } from '../validators/paymentType/create_payment_type.js';
 import db from '@adonisjs/lucid/services/db';
 import PaymentType from '../models/payment_type.js';
 import { DateTime } from 'luxon';
-import { UpdatePaymentTypeValidator } from '../validators/update_payment_type.js';
+import { UpdatePaymentTypeValidator } from '../validators/paymentType/update_payment_type.js';
 
 export default class PaymentTypeController {
   public async store({ request, response }: HttpContext) {
@@ -167,12 +167,21 @@ export default class PaymentTypeController {
   }
 
   public async destroy({ request, response }: HttpContext) {
-    //TODO: Only allow when there's at least 1 available payment type (enabled).
     const id = request.param('id');
     const paymentType = await PaymentType.find(id);
 
     if (!paymentType) {
       return response.notFound({ message: `Tipo de pago de ID: ${id} no encontrado.` });
+    }
+
+    const paymentTypes = await PaymentType.query().whereNull('deleted_at');
+    const isDestroy = paymentType.deletedAt == null ? true : false;
+
+    if (paymentTypes.length <= 1 && isDestroy) {
+      return response.badRequest({
+        message:
+          'El sistema requiere al menos un tipo de pago habilitado para funcionar correctamente. Operación cancelada.',
+      });
     }
 
     await paymentType

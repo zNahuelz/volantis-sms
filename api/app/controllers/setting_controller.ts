@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http';
-import { CreateSettingValidator } from '../validators/create_setting.js';
+import { CreateSettingValidator } from '../validators/setting/create_setting.js';
 import db from '@adonisjs/lucid/services/db';
 import Setting from '../models/setting.js';
-import { UpdateSettingValidator } from '../validators/update_setting.js';
+import { UpdateSettingValidator } from '../validators/setting/update_setting.js';
 
 export default class SettingController {
   public async store({ request, response }: HttpContext) {

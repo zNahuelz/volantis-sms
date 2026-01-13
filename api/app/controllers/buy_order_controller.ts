@@ -2,8 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http';
 import BuyOrder from '../models/buy_order.js';
 import { DateTime } from 'luxon';
 import db from '@adonisjs/lucid/services/db';
-import { CreateBuyOrderValidator } from '../validators/create_buy_order.js';
-import { UpdateBuyOrderValidator } from '../validators/update_buy_order.js';
+import { CreateBuyOrderValidator } from '../validators/buyOrder/create_buy_order.js';
+import { UpdateBuyOrderValidator } from '../validators/buyOrder/update_buy_order.js';
 
 export default class BuyOrderController {
   public async store({ request, response }: HttpContext) {

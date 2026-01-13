@@ -1,9 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import User from '../models/user.js';
-import { LoginValidator } from '../validators/login.js';
-import { UpdateUserEmailValidator } from '../validators/update_user_email.js';
+import { LoginValidator } from '../validators/auth/login.js';
+import { UpdateUserEmailValidator } from '../validators/auth/update_user_email.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateUserPasswordValidator } from '../validators/update_user_password.js';
+import { UpdateUserPasswordValidator } from '../validators/auth/update_user_password.js';
 
 export default class AuthController {
   async login({ request, response, auth }: HttpContext) {

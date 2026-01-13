@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http';
-import { CreatePresentationValidator } from '../validators/create_presentation.js';
+import { CreatePresentationValidator } from '../validators/presentation/create_presentation.js';
 import Presentation from '../models/presentation.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdatePresentationValidator } from '../validators/update_presentation.js';
+import { UpdatePresentationValidator } from '../validators/presentation/update_presentation.js';
 import { DateTime } from 'luxon';
 
 export default class PresentationController {

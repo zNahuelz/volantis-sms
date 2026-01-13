@@ -40,3 +40,17 @@ export function sunatRound(val: number): number {
     return val;
   }
 }
+
+export function generateSerie(number, type) {
+  if (!Number.isInteger(number) || number < 1 || number > 999) {
+    throw new Error('El número debe ser entero entre 1 y 999');
+  }
+
+  const prefix = type === 'BOL' ? 'B' : type === 'FACT' ? 'F' : null;
+  if (!prefix) {
+    throw new Error('El tipo debe ser BOLETA o FACTURA.');
+  }
+
+  const formattedNumber = String(number).padStart(3, '0');
+  return `${prefix}${formattedNumber}`;
+}

@@ -32,6 +32,10 @@ class PaymentTypeService extends BaseService<PaymentType, PaymentTypeQuery, Paym
       sortDir: 'orderDir',
     });
   }
+
+  list(status?: 'available' | 'all') {
+    return http.get(`payment-type/index/all?status=${status}`).json<PaymentType[]>();
+  }
 }
 
 export const paymentTypeService = new PaymentTypeService();

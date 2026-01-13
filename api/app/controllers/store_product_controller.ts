@@ -1,10 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import StoreProduct from '../models/store_product.js';
 import { DateTime } from 'luxon';
-import { CreateStoreProductValidator } from '../validators/create_store_product.js';
+import { CreateStoreProductValidator } from '../validators/storeProduct/create_store_product.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateStoreProductValidator } from '../validators/update_store_product.js';
-import Store from '../models/store.js';
+import { UpdateStoreProductValidator } from '../validators/storeProduct/update_store_product.js';
 
 export default class StoreProductController {
   public async store({ request, response }: HttpContext) {
@@ -105,7 +104,7 @@ export default class StoreProductController {
       const page = request.input('page', 1);
       const limit = request.input('limit', 10);
       const search = request.input('search', '');
-      const searchBy = request.input('searchBy', 'all'); // 'storeId' | 'productId' | 'barcode'
+      const searchBy = request.input('searchBy', 'all'); // 'storeId' | 'productId' | 'storeId' | 'barcode'
       const status = request.input('status', 'available'); // 'available' | 'deleted' | 'all'
       const orderBy = request.input('orderBy', 'updatedAt');
       const orderDir = request.input('orderDir', 'desc'); // 'asc' | 'desc'

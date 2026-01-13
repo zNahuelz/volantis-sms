@@ -56,7 +56,7 @@ export default function SearchCustomer({ onCustomerResolved }: SearchCustomerPro
           reverseButtons: true,
         }).then((r) => {
           if (r.isConfirmed) navigate(`/dashboard/customer/create`);
-          else window.location.reload();
+          else return;
         });
       } else {
         Swal.fire(ErrorTagText, ServerConnErrorText, 'error').then((r) => {

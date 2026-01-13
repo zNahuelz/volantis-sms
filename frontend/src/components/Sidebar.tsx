@@ -13,6 +13,7 @@ import {
   StoreIcon,
   SupplierIcon,
   SystemIcon,
+  VoucherIcon,
 } from '~/constants/iconNames';
 import {
   AppDescription,
@@ -30,6 +31,7 @@ import {
   PleaseWaitText,
   PresentationManagementText,
   ProductsText,
+  SalesText,
   SettingText,
   StoresText,
   SuppliersText,
@@ -38,6 +40,9 @@ import {
   SystemRolesText,
   SystemText,
   SystemUsersText,
+  SystemVoucherSeries,
+  SystemVoucherTypes,
+  VouchersAltText,
 } from '~/constants/strings';
 import { useAuth } from '~/context/authContext';
 import appIcon from '../assets/images/volLogoTransparent.png';
@@ -233,6 +238,33 @@ export default function Sidebar() {
           <li>
             <details>
               <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
+                <Icon icon={VoucherIcon} className='text-lg leading-none' />
+                <span className='font-medium'>{SalesText}</span>
+              </summary>
+              <ul className='mt-2 ml-6 space-y-1'>
+                <li>
+                  <NavLink
+                    to='/dashboard/sale/create'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {NewSaleText}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/sale'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {`${ListText} - ${VouchersAltText}`}
+                  </NavLink>
+                </li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary className='hover:bg-primary/50 flex items-center gap-3 rounded-lg px-3 py-2 transition-colors'>
                 <Icon icon={StoreIcon} className='text-lg leading-none' />
                 <span className='font-medium'>{StoresText}</span>
               </summary>
@@ -290,10 +322,26 @@ export default function Sidebar() {
                 </li>
                 <li>
                   <NavLink
+                    to='/dashboard/voucher-serie'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {SystemVoucherSeries}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to='/dashboard/payment-type'
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {SystemPaymentTypes}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/voucher-type'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {SystemVoucherTypes}
                   </NavLink>
                 </li>
               </ul>

@@ -173,7 +173,7 @@ export default function PaymentTypeListView() {
     } catch (error) {
       Swal.fire({
         title: ErrorTagText,
-        html: PaymentTypeStatusUpdateFailedText,
+        html: !error.message ? PaymentTypeStatusUpdateFailedText : error.message,
         icon: 'error',
         timer: swalDismissalTime,
         showConfirmButton: false,

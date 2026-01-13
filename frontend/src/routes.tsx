@@ -30,6 +30,7 @@ import {
   ProfileAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
+  SalesListAreaText,
   SettingsListAreaText,
   StoreDetailAreaText,
   StoreProductCreateAreaText,
@@ -41,6 +42,8 @@ import {
   SuppliersListAreaText,
   UserDetailAreaText,
   UsersListAreaText,
+  VoucherSeriesListAreaText,
+  VoucherTypesListAreaText,
   WelcomeAreaText,
   _404AreaText,
 } from './constants/strings';
@@ -88,6 +91,9 @@ import SaleCreateView from './features/sales/views/SaleCreateView';
 import PaymentTypeListView from './features/paymentTypes/views/PaymentTypeListView';
 import PaymentTypeCreateView from './features/paymentTypes/views/PaymentTypeCreateView';
 import PaymentTypeEditView from './features/paymentTypes/views/PaymentTypeEditView';
+import VoucherSeriesListView from './features/voucherSeries/views/VoucherSeriesListView';
+import VoucherTypesListView from './features/voucherTypes/views/VoucherTypesListView';
+import SalesListView from './features/sales/views/SalesListView';
 
 export const router = createBrowserRouter([
   {
@@ -443,6 +449,11 @@ export const router = createBrowserRouter([
             path: 'sale',
             children: [
               {
+                element: <AbilityRoute />,
+                handle: { title: SalesListAreaText, abilities: ['sys:admin', 'sale:index'] },
+                children: [{ index: true, Component: SalesListView }],
+              },
+              {
                 path: 'create',
                 element: <AbilityRoute />,
                 handle: {
@@ -478,6 +489,34 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: { title: UserDetailAreaText, abilities: ['sys:admin', 'user:detail'] },
                 children: [{ index: true, Component: UserDetailView }],
+              },
+            ],
+          },
+          //Voucher series routes...
+          {
+            path: 'voucher-serie',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: VoucherSeriesListAreaText,
+                  abilities: ['sys:admin', 'voucherSerie:index'],
+                },
+                children: [{ index: true, Component: VoucherSeriesListView }],
+              },
+            ],
+          },
+          //Voucher types routes...
+          {
+            path: 'voucher-type',
+            children: [
+              {
+                element: <AbilityRoute />,
+                handle: {
+                  title: VoucherTypesListAreaText,
+                  abilities: ['sys:admin', 'voucherType:index'],
+                },
+                children: [{ index: true, Component: VoucherTypesListView }],
               },
             ],
           },

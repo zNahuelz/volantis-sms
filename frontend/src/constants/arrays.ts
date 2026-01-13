@@ -111,3 +111,20 @@ export const PAYMENT_TYPES_ACTIONS = [
   { label: 'HASH NO REQUERIDO', value: 'CASH' },
   { label: 'HASH REQUERIDO', value: 'DIGITAL' },
 ];
+
+export const VOUCHER_SERIES_STATUS_TYPES = [
+  { label: 'TODOS', value: 'all' },
+  { label: 'SERIES ACTIVAS', value: 'active' },
+  { label: 'SERIES INACTIVAS', value: 'inactive' },
+];
+
+export const VOUCHER_SERIES_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR SERIE', value: 'seriesCode' },
+  { label: 'POR CORRELATIVO', value: 'currentNumber' },
+];
+
+export const VOUCHER_TYPES_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR NOMBRE', value: 'name' },
+];

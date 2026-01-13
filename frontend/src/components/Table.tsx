@@ -29,7 +29,7 @@ type TableProps<T> = {
   size?: string;
   showActions?: boolean;
 };
-//TODO:: Move dynamic css to each table implementation. See: PaymentTypeTable.
+
 export function Table<T>({
   columns,
   data,

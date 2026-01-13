@@ -28,7 +28,7 @@ export default class Sale extends BaseModel {
   @column()
   declare total: number;
 
-  @column()
+  @column({ columnName: '_set' })
   declare set: string;
 
   @column()
@@ -45,9 +45,6 @@ export default class Sale extends BaseModel {
 
   @column()
   declare voucherTypeId: number;
-
-  @column()
-  declare voucherSeriesId: number;
 
   @column()
   declare paymentTypeId: number;
@@ -75,9 +72,6 @@ export default class Sale extends BaseModel {
 
   @belongsTo(() => VoucherType)
   declare voucherType: BelongsTo<typeof VoucherType>;
-
-  @belongsTo(() => VoucherSerie)
-  declare voucherSeries: BelongsTo<typeof VoucherSerie>;
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>;

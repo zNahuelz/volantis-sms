@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import Supplier from '../models/supplier.js';
-import { CreateSupplierValidator } from '../validators/create_supplier.js';
+import { CreateSupplierValidator } from '../validators/supplier/create_supplier.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateSupplierValidator } from '../validators/update_supplier.js';
+import { UpdateSupplierValidator } from '../validators/supplier/update_supplier.js';
 import { DateTime } from 'luxon';
 
 export default class SupplierController {

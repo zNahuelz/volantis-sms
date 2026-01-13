@@ -16,6 +16,7 @@ import {
   LowStockAlert,
   NamesText,
   NextText,
+  PaymentAreaText,
   ProductText,
   QuantityText,
   SalesModuleLockedNoStores,
@@ -60,6 +61,9 @@ import type { Product } from '~/types/product';
 import { Table, type Column } from '~/components/Table';
 import { formatTwoDecimals, sunatRound } from '~/utils/helpers';
 import CartItemEditModal from '../components/CartItemEditModal';
+import Modal from '~/components/Modal';
+import MakePaymentForm, { type PrePaymentPayload } from '../components/MakePaymentForm';
+import { saleService } from '../services/saleService';
 
 export type CartItem = {
   productId: number;
@@ -72,7 +76,6 @@ export type CartItem = {
 };
 
 export default function SaleCreateView() {
-  //TODO!! ===>> SAVE SALE.
   const [loading, setLoading] = useState(true);
   const [customerLocked, setCustomerLocked] = useState(false);
   const [customerInfo, setCustomerInfo] = useState<Customer>();
@@ -90,6 +93,10 @@ export default function SaleCreateView() {
   const [total, setTotal] = useState(0.0);
 
   const [editItem, setEditItem] = useState<CartItem | null>(null);
+  const [makePaymentModalVisible, setMakePaymentModalVisible] = useState(false);
+  const [prePayload, setPrePayload] = useState<PrePaymentPayload | null>();
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const authStore = useAuth();
 
@@ -285,6 +292,24 @@ export default function SaleCreateView() {
     Swal.fire(InfoTag, LowStockAlert(storeProduct), 'info');
   };
 
+  const makePayment = () => {
+    const prePayload = {
+      igv: igv,
+      subtotal: subtotal,
+      total: total,
+      storeId: selectedStore.id,
+      customerId: customerInfo.id,
+      userId: authStore.user?.id,
+      cartItems: cart.map((e) => ({
+        productId: e.productId,
+        quantity: e.quantity,
+        unitPrice: e.sellPrice,
+      })),
+    };
+    setPrePayload(prePayload);
+    setMakePaymentModalVisible(true);
+  };
+
   return (
     <div className='md:m-5 md:flex md:flex-col md:items-center'>
       <div className='border-success border md:w-[600px]'>
@@ -361,7 +386,7 @@ export default function SaleCreateView() {
                     <ProductScanner
                       storeId={selectedStore.id}
                       onProductResolved={handleProductResolved}
-                      isDisabled={editItem != null}
+                      isDisabled={editItem != null || makePaymentModalVisible}
                     ></ProductScanner>
                   </div>
                 </div>
@@ -389,20 +414,20 @@ export default function SaleCreateView() {
                           icon={RemoveIcon}
                           color='btn-error'
                           onClick={() => removeFromCart(row.productId)}
-                          disabled={editItem != null}
+                          disabled={editItem != null || makePaymentModalVisible}
                         ></Button>
                         <Button
                           className='join-item btn-xs'
                           color='btn-neutral'
                           icon={MinusIcon}
-                          disabled={editItem != null}
+                          disabled={editItem != null || makePaymentModalVisible}
                           onClick={() => removeOneFromCart(row.productId)}
                         ></Button>
                         <Button
                           className='join-item btn-xs'
                           color='btn-info'
                           icon={EditIcon}
-                          disabled={editItem != null}
+                          disabled={editItem != null || makePaymentModalVisible}
                           onClick={() => setEditItem(row)}
                         ></Button>
                       </div>
@@ -439,13 +464,16 @@ export default function SaleCreateView() {
                       label={CancelText}
                       icon={CancelIcon}
                       onClick={() => window.location.reload()}
+                      disabled={makePaymentModalVisible}
                     ></Button>
                     <Button
                       className='join-item'
                       color='btn-secondary'
                       label={EmptyCartText}
                       icon={ClearIcon}
-                      disabled={!cart || cart.length <= 0 || editItem != null}
+                      disabled={
+                        !cart || cart.length <= 0 || editItem != null || makePaymentModalVisible
+                      }
                       onClick={() => clearCart()}
                     ></Button>
                     <Button
@@ -453,7 +481,18 @@ export default function SaleCreateView() {
                       color='btn-success'
                       label={NextText}
                       icon={MakePaymentIcon}
-                      disabled={!cart || cart.length <= 0 || !customerLocked || !storeLocked}
+                      disabled={
+                        !cart ||
+                        cart.length <= 0 ||
+                        !customerLocked ||
+                        !storeLocked ||
+                        makePaymentModalVisible ||
+                        isProcessingPayment
+                      }
+                      onClick={() => {
+                        setIsProcessingPayment(true);
+                        makePayment();
+                      }}
                     ></Button>
                   </div>
                 </div>
@@ -468,6 +507,7 @@ export default function SaleCreateView() {
           )}
         </div>
       </div>
+      {/*** Edit cart item modal */}
       <CartItemEditModal
         open={!!editItem}
         item={editItem}
@@ -478,6 +518,24 @@ export default function SaleCreateView() {
           setEditItem(null);
         }}
       />
+
+      {/*** Make payment modal */}
+      <Modal
+        open={makePaymentModalVisible}
+        title={PaymentAreaText.toUpperCase()}
+        onClose={() => setMakePaymentModalVisible(false)}
+        disableClose={isFormSubmitting}
+        width='max-w-lg'
+      >
+        <MakePaymentForm
+          onSubmit={(data) => saleService.create(data)}
+          prePayload={prePayload}
+          onSubmittingChange={setIsFormSubmitting}
+          closeParentModal={() => {
+            setMakePaymentModalVisible(false);
+          }}
+        ></MakePaymentForm>
+      </Modal>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import Role from '../models/role.js';
 import { DateTime } from 'luxon';
-import { CreateRoleValidator } from '../validators/create_role.js';
+import { CreateRoleValidator } from '../validators/role/create_role.js';
 import db from '@adonisjs/lucid/services/db';
 import Ability from '../models/ability.js';
-import { UpdateRoleValidator } from '../validators/update_role.js';
+import { UpdateRoleValidator } from '../validators/role/update_role.js';
 
 export default class RoleController {
   public async store({ request, response }: HttpContext) {

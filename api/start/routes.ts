@@ -23,6 +23,9 @@ import ProductController from '../app/controllers/product_controller.js';
 import BuyOrderController from '../app/controllers/buy_order_controller.js';
 import StoreProductController from '../app/controllers/store_product_controller.js';
 import PaymentTypeController from '../app/controllers/payment_type_controller.js';
+import VoucherSerieController from '../app/controllers/voucher_serie_controller.js';
+import VoucherTypeController from '../app/controllers/voucher_type_controller.js';
+import SaleController from '../app/controllers/sale_controller.js';
 
 router
   .group(() => {
@@ -200,6 +203,14 @@ router
     router
       .group(() => {
         router
+          .post('/', [SaleController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'sale:store'])]);
+      })
+      .prefix('sale');
+
+    router
+      .group(() => {
+        router
           .post('/', [SupplierController, 'store'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'supplier:store'])]);
         router
@@ -339,6 +350,55 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'user:destroy'])]);
       })
       .prefix('user');
+
+    router
+      .group(() => {
+        router
+          .post('/', [VoucherSerieController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherSerie:store'])]);
+        router
+          .get('/:id', [VoucherSerieController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherSerie:show'])]);
+        router
+          .get('/', [VoucherSerieController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherSerie:index'])]);
+        router
+          .put('/:id', [VoucherSerieController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherSerie:update'])]);
+        router
+          .delete('/:id', [VoucherSerieController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherSerie:destroy'])]);
+      })
+      .prefix('voucher-serie');
+
+    router
+      .group(() => {
+        router
+          .post('/', [VoucherTypeController, 'store'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:store'])]);
+        router
+          .post('/regenerate', [VoucherTypeController, 'regenerateTypes'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:regenerate'])]);
+        router
+          .get('/:id', [VoucherTypeController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:show'])]);
+        router
+          .get('/', [VoucherTypeController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:index'])]);
+        router
+          .get('/index/all', [VoucherTypeController, 'list'])
+          .use([
+            middleware.auth(),
+            middleware.ability(['sys:admin', 'voucherType:list', 'sale:store']),
+          ]);
+        router
+          .put('/:id', [VoucherTypeController, 'update'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:update'])]);
+        router
+          .delete('/:id', [VoucherTypeController, 'destroy'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'voucherType:destroy'])]);
+      })
+      .prefix('voucher-type');
 
     router
       .group(() => {

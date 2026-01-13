@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http';
-import { CreateStoreValidator } from '../validators/create_store.js';
+import { CreateStoreValidator } from '../validators/store/create_store.js';
 import db from '@adonisjs/lucid/services/db';
 import Store from '../models/store.js';
-import { UpdateStoreValidator } from '../validators/update_store.js';
+import { UpdateStoreValidator } from '../validators/store/update_store.js';
 import { DateTime } from 'luxon';
 import User from '../models/user.js';
 

@@ -1,9 +1,9 @@
 import type { HttpContext } from '@adonisjs/core/http';
 import User from '../models/user.js';
 import { DateTime } from 'luxon';
-import { CreateUserValidator } from '../validators/create_user.js';
+import { CreateUserValidator } from '../validators/user/create_user.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateUserValidator } from '../validators/update_user.js';
+import { UpdateUserValidator } from '../validators/user/update_user.js';
 
 export default class UserController {
   public async store({ request, response }: HttpContext) {

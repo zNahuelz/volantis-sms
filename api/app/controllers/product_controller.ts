@@ -1,8 +1,8 @@
 import { HttpContext } from '@adonisjs/core/http';
 import Product from '../models/product.js';
-import { CreateProductValidator } from '../validators/create_product.js';
+import { CreateProductValidator } from '../validators/product/create_product.js';
 import db from '@adonisjs/lucid/services/db';
-import { UpdateProductValidator } from '../validators/update_product.js';
+import { UpdateProductValidator } from '../validators/product/update_product.js';
 import { DateTime } from 'luxon';
 
 export default class ProductController {
