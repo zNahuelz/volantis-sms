@@ -128,3 +128,13 @@ export const VOUCHER_TYPES_SEARCH_TYPES = [
   { label: 'POR ID', value: 'id' },
   { label: 'POR NOMBRE', value: 'name' },
 ];
+
+export const SALE_SEARCH_TYPES = [
+  { label: 'POR ID', value: 'id' },
+  { label: 'POR SERIE', value: 'set' },
+  { label: 'POR CORRELATIVO', value: 'correlative' },
+  { label: 'POR CLIENTE - DNI', value: 'dni' },
+  { label: 'POR TIENDA', value: 'storeId' },
+  { label: 'POR TIPO DE PAGO', value: 'paymentTypeId' },
+  { label: 'POR COMP. DE VENTA', value: 'voucherTypeId' },
+];

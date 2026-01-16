@@ -10,7 +10,6 @@ import Loading from '~/components/Loading';
 
 export default function BuyOrderEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [buyOrder, setBuyOrder] = useState<
     Partial<{

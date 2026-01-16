@@ -8,7 +8,6 @@ import {
   SettingsNotLoaded,
   UpdatedAtText,
   ValueText,
-  ValueType,
 } from '~/constants/strings';
 import type { Setting } from '~/types/setting';
 

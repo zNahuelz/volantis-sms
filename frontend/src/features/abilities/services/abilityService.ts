@@ -1,7 +1,6 @@
 import { http } from '~/api/httpWrapper';
 import { BaseService } from '~/services/baseService';
 import type { Ability } from '~/types/ability';
-import type { Role } from '~/types/role';
 
 export interface AbilityMeta {
   total: number;

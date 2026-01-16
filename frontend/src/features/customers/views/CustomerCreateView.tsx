@@ -1,4 +1,4 @@
-import { CreateCustomerAreaText, CreateCustomerText } from '~/constants/strings';
+import { CreateCustomerText } from '~/constants/strings';
 import CustomerForm from '../components/CustomerForm';
 import { customerService } from '../services/customerService';
 

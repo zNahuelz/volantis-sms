@@ -1,13 +1,11 @@
 import type { VoucherSerie } from '~/types/voucherSerie';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { VOUCHER_SERIES_SEARCH_TYPES, VOUCHER_SERIES_STATUS_TYPES } from '~/constants/arrays';
 import { voucherSerieService, type VoucherSerieQuery } from '../services/voucherSerieService';
 import {
   CancelText,
   ConfirmActionText,
-  DeleteText,
   DisableText,
   EditText,
   EditVoucherSerieText,
@@ -20,7 +18,6 @@ import {
   NewVoucherSerieText,
   OkTagText,
   ReloadText,
-  RestoreText,
   SearchText,
   TableElementsMessage,
   VoucherSerieStatusChangeFailedText,
@@ -33,13 +30,11 @@ import {
 import { Paginator } from '~/components/Paginator';
 import Button from '~/components/Button';
 import {
-  DeleteIcon,
   DisabledIcon,
   EditIcon,
   EnabledIcon,
   HelpIcon,
   ReloadIcon,
-  RestoreIcon,
   SearchIcon,
 } from '~/constants/iconNames';
 import clsx from 'clsx';
@@ -47,7 +42,6 @@ import VoucherSerieTable from '../components/VoucherSerieTable';
 import Loading from '~/components/Loading';
 import Input from '~/components/Input';
 import Select from '~/components/Select';
-import { NavLink } from 'react-router';
 import Modal from '~/components/Modal';
 import VoucherSerieForm from '../components/VoucherSerieForm';
 import Swal from 'sweetalert2';
@@ -55,18 +49,21 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function VoucherSeriesListView() {
   const [data, setData] = useState<VoucherSerie[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
   const [newSerieModalVisible, setNewSerieModalVisible] = useState(false);
   const [editSerieModalVisible, setEditSerieModalVisible] = useState(false);
   const [selectedSerie, setSelectedSerie] = useState<VoucherSerie>();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-  const navigate = useNavigate();
+  const [query, setQuery] = useState<VoucherSerieQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'active',
+  });
 
   const {
     register,
@@ -85,56 +82,39 @@ export default function VoucherSeriesListView() {
 
   const selectedField = watch('field');
 
-  const loadVoucherSeries = async () => {
+  const fetchVoucherSeries = async (q: VoucherSerieQuery) => {
     setLoading(true);
-
-    const query: VoucherSerieQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await voucherSerieService.index(query);
+      const response = await voucherSerieService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadVoucherSeries = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadVoucherSeries();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'active',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: VoucherSerieQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await voucherSerieService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -194,12 +174,8 @@ export default function VoucherSeriesListView() {
   };
 
   useEffect(() => {
-    loadVoucherSeries();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadVoucherSeries();
-  }, [status]);
+    fetchVoucherSeries(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -300,19 +276,13 @@ export default function VoucherSeriesListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={VOUCHER_SERIES_STATUS_TYPES}
       />
 

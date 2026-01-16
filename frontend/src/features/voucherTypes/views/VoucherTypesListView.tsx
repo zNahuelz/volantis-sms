@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 import { DEFAULT_STATUS_TYPES, VOUCHER_TYPES_SEARCH_TYPES } from '~/constants/arrays';
 import type { VoucherType } from '~/types/voucherType';
 import { voucherTypeService, type VoucherTypeQuery } from '../services/voucherTypeService';
@@ -22,7 +21,6 @@ import {
   VoucherTypeAltText,
   VoucherTypeDetailText,
   VoucherTypeRestorationMessage,
-  VoucherTypeText,
   VoucherTypesHelp,
   VoucherTypesRestorationCompText,
   VoucherTypesRestorationFailText,
@@ -37,25 +35,23 @@ import Select from '~/components/Select';
 import Swal from 'sweetalert2';
 import Modal from '~/components/Modal';
 import VoucherTypeDetail from '../components/VoucherTypeDetail';
-import {
-  ErrorColor,
-  SuccessColor,
-  longSwalDismissalTime,
-  swalDismissalTime,
-} from '~/constants/values';
+import { ErrorColor, SuccessColor, longSwalDismissalTime } from '~/constants/values';
 
 export default function VoucherTypesListView() {
   const [data, setData] = useState<VoucherType[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
   const [voucherTypeDetailVisible, setVoucherTypeDetailVisible] = useState(false);
   const [selectedVoucherType, setSelectedVoucherType] = useState<VoucherType | null>();
-  const navigate = useNavigate();
+  const [query, setQuery] = useState<VoucherTypeQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
 
   const {
     register,
@@ -74,56 +70,39 @@ export default function VoucherTypesListView() {
 
   const selectedField = watch('field');
 
-  const loadVoucherTypes = async () => {
+  const fetchVoucherTypes = async (q: VoucherTypeQuery) => {
     setLoading(true);
-
-    const query: VoucherTypeQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await voucherTypeService.index(query);
+      const response = await voucherTypeService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadVoucherTypes = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadVoucherTypes();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: VoucherTypeQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await voucherTypeService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -181,12 +160,8 @@ export default function VoucherTypesListView() {
   };
 
   useEffect(() => {
-    loadVoucherTypes();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadVoucherTypes();
-  }, [status]);
+    fetchVoucherTypes(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -200,7 +175,7 @@ export default function VoucherTypesListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => showRestoreTypesModal()}
-          disabled={data.length >= 2}
+          disabled={data.length >= 2 || query.status === 'deleted'}
         />
 
         <form
@@ -278,19 +253,13 @@ export default function VoucherTypesListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

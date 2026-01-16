@@ -40,7 +40,6 @@ import {
   StoreText,
   SurnamesText,
   UpdatedAtText,
-  UserDetailAreaText,
   UserDetailText,
   UserEditText,
   UserNotFoundText,
@@ -69,14 +68,12 @@ import Modal from '~/components/Modal';
 import UserForm from '../components/UserForm';
 import { useAuth } from '~/context/authContext';
 import defaultPfp from '../../../assets/images/defaultPfp.png';
-import Alert from '~/components/Alert';
 import { Table, type Column } from '~/components/Table';
 import type { Ability } from '~/types/ability';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function UserDetailView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [editUserModalVisible, setEditUserModalVisible] = useState(false);

@@ -8,7 +8,6 @@ import {
   StoreText,
   SupplierText,
   TotalText,
-  UpdatedAtText,
 } from '~/constants/strings';
 import type { BuyOrder } from '~/types/buyOrder';
 

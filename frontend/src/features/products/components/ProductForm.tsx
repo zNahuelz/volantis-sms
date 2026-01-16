@@ -12,7 +12,6 @@ import {
   ClearIcon,
   DescriptionIcon,
   NameIcon,
-  RucIcon,
   SaveIcon,
   UpdateIcon,
 } from '~/constants/iconNames';
@@ -31,7 +30,6 @@ import {
   ProductBarcodeTaken,
   ProductCreatedText,
   ProductUpdatedText,
-  RucText,
   SaveText,
   SavingText,
   UpdateProductWarning,
@@ -63,8 +61,6 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
   const [presentations, setPresentations] = useState<Presentation[]>([]);
   const [isLocked, setIsLocked] = useState(false);
   const [barcodeLocked, setBarcodeLocked] = useState(isEdit);
-
-  const navigate = useNavigate();
 
   const {
     register,

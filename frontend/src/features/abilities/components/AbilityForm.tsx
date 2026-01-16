@@ -53,7 +53,6 @@ export default function AbilityForm({
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-    watch,
     setError,
   } = useForm({
     defaultValues: {

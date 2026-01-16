@@ -6,7 +6,6 @@ import {
   CancelText,
   ContinueText,
   EditQuantityText,
-  LowStockAlert,
   LowStockAlertAlt,
   QuantityText,
 } from '~/constants/strings';

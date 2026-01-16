@@ -22,7 +22,6 @@ import {
   RestoreText,
   RucText,
   StateText,
-  SupplierDetailAreaText,
   SupplierDetailText,
   SupplierNotFound,
   SupplierStatusChangeMessage,
@@ -43,7 +42,6 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function SupplierDetailView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [supplier, setSupplier] = useState<Supplier | null>(null);
   const navigate = useNavigate();

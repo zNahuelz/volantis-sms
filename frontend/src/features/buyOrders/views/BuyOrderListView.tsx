@@ -50,17 +50,21 @@ import clsx from 'clsx';
 
 export default function BuyOrderListView() {
   const [data, setData] = useState<BuyOrder[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
   const [lockSearchBySupplier, setLockSearchBySupplier] = useState(false);
   const [lockSearchByStore, setLockSearchByStore] = useState(false);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [stores, setStores] = useState<Store[]>([]);
+  const [query, setQuery] = useState<BuyOrderQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
   const navigate = useNavigate();
 
   const {
@@ -83,36 +87,29 @@ export default function BuyOrderListView() {
 
   const selectedField = watch('field');
 
-  const loadBuyOrders = async () => {
+  const fetchBuyOrders = async (q: BuyOrderQuery) => {
     setLoading(true);
-
-    const query: BuyOrderQuery = {
-      page,
-      limit,
-      search: '',
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-      status: status,
-    };
-
     try {
-      const response = await buyOrderService.index(query);
+      const response = await buyOrderService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadBuyOrders = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadBuyOrders();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: {
@@ -123,22 +120,12 @@ export default function BuyOrderListView() {
     supplierId: string;
   }) => {
     setLoading(true);
-    const query: BuyOrderQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: resolveSearchValue(values),
-      status: status,
-    };
-    try {
-      const response = await buyOrderService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -242,12 +229,8 @@ export default function BuyOrderListView() {
   }, []);
 
   useEffect(() => {
-    loadBuyOrders();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadBuyOrders();
-  }, [status]);
+    fetchBuyOrders(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -399,19 +382,13 @@ export default function BuyOrderListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

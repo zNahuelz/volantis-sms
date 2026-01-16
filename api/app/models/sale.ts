@@ -5,7 +5,6 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations';
 import Customer from './customer.js';
 import PaymentType from './payment_type.js';
 import VoucherType from './voucher_type.js';
-import VoucherSerie from './voucher_serie.js';
 import SaleDetail from './sale_detail.js';
 import User from './user.js';
 

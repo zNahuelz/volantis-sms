@@ -119,9 +119,7 @@ export default function RoleForm({ defaultValues, onSubmit }: RoleFormProps) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
-    watch,
     setError,
     clearErrors,
   } = useForm<RoleFormData>({

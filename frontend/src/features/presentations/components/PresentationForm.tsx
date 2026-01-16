@@ -52,7 +52,6 @@ export default function PresentationForm({
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-    watch,
     setError,
   } = useForm<Presentation>({
     defaultValues: {

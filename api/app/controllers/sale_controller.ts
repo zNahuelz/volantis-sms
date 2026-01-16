@@ -103,4 +103,106 @@ export default class SaleController {
       });
     }
   }
+
+  public async show({ request, response }: HttpContext) {
+    const id = request.param('id');
+
+    const sale = await Sale.find(id);
+
+    if (!sale) {
+      return response.notFound({
+        message: `Comprobante de venta de ID: ${id} no encontrado.`,
+      });
+    }
+
+    await sale.load('customer');
+    await sale.load('paymentType');
+    await sale.load('voucherType');
+    await sale.load('store');
+    await sale.load('user');
+    await sale.load('saleDetails', async (saleDetailQuery) => {
+      await saleDetailQuery.preload('product', (productQuery) => {
+        productQuery.preload('presentation');
+      });
+    });
+
+    return response.ok(sale);
+  }
+
+  public async index({ request, response }: HttpContext) {
+    try {
+      const page = request.input('page', 1);
+      const limit = request.input('limit', 10);
+      const search = request.input('search', '');
+      const searchBy = request.input('searchBy', 'all'); // 'id' | 'set' | 'correlative' | 'dni' | 'storeId'  | 'paymentTypeId' | 'voucherTypeId' | 'all'
+      const status = request.input('status', 'available'); // 'available' | 'deleted' | 'all'
+      const orderBy = request.input('orderBy', 'createdAt');
+      const orderDir = request.input('orderDir', 'desc'); // 'asc' | 'desc'
+
+      const query = Sale.query();
+
+      if (search) {
+        query.where((q) => {
+          switch (searchBy) {
+            case 'id':
+              q.where('id', search);
+              break;
+            case 'set':
+              q.whereILike('_set', `%${search}%`);
+              break;
+            case 'correlative':
+              q.whereILike('correlative', `%${search}%`);
+              break;
+            case 'dni':
+              q.whereHas('customer', (customerQuery) => {
+                customerQuery.where('dni', search);
+              });
+              break;
+            case 'storeId':
+              q.where('store_id', search);
+              break;
+            case 'paymentTypeId':
+              q.where('payment_type_id', search);
+              break;
+            case 'voucherTypeId':
+              q.where('voucher_type_id', search);
+              break;
+            case 'all':
+            default:
+              q.whereILike('_set', `%${search}%`)
+                .orWhereILike('correlative', `%${search}%`)
+                .orWhereHas('customer', (customerQuery) => {
+                  customerQuery.where('dni', search);
+                });
+              break;
+          }
+        });
+      }
+
+      switch (status) {
+        case 'deleted':
+          query.whereNotNull('deleted_at');
+          break;
+        case 'available':
+          query.whereNull('deleted_at');
+          break;
+        case 'all':
+          break;
+      }
+
+      const sales = await query
+        .preload('customer')
+        .preload('store')
+        .orderBy(orderBy, orderDir)
+        .paginate(page, limit);
+
+      sales.baseUrl(request.url());
+      return response.ok(sales);
+    } catch (error) {
+      return response.internalServerError({
+        message: 'Error en el listado de comprobantes de venta, intente nuevamente.',
+        error: error.message,
+      });
+    }
+  }
 }

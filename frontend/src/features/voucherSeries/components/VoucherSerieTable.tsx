@@ -4,7 +4,6 @@ import {
   CurrentCorrelativeText,
   FetchFailedText,
   IdText,
-  IsActiveText,
   SeriesCodeText,
   StateText,
   UpdatedAtText,

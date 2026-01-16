@@ -19,6 +19,7 @@ import {
   CorrelativeText,
   DuplicatedVoucherSerieText,
   ErrorTagText,
+  FormLoadFailed,
   LoadingForm,
   OkTagText,
   OpRollbackText,
@@ -176,6 +177,10 @@ export default function VoucherSerieForm({
     return (
       <Loading loadMessage={LoadingForm} color={isEdit ? 'text-info' : 'text-success'}></Loading>
     );
+  }
+
+  if (!loading && isLocked) {
+    return <div className='p-4 text-center text-error font-semibold'>{FormLoadFailed}</div>;
   }
 
   return (

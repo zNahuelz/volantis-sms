@@ -46,7 +46,6 @@ import type { Setting } from '~/types/setting';
 import Swal from 'sweetalert2';
 import { Icon } from '@iconify/react';
 import {
-  AddIcon,
   CancelIcon,
   ClearIcon,
   EditIcon,
@@ -217,7 +216,6 @@ export default function SaleCreateView() {
   const addToCart = (sP: StoreProduct) => {
     setCart((prev) => {
       const index = prev.findIndex((e) => e.productId === sP.product?.id);
-
       // Product already in cart
       if (index !== -1) {
         const existing = prev[index];
@@ -238,7 +236,6 @@ export default function SaleCreateView() {
             : item
         );
       }
-
       // Product not in cart
       if (sP.stock <= 0) {
         showStockAlert(sP);
@@ -523,7 +520,11 @@ export default function SaleCreateView() {
       <Modal
         open={makePaymentModalVisible}
         title={PaymentAreaText.toUpperCase()}
-        onClose={() => setMakePaymentModalVisible(false)}
+        onClose={() => {
+          setMakePaymentModalVisible(false);
+          setIsProcessingPayment(false);
+          setIsFormSubmitting(false);
+        }}
         disableClose={isFormSubmitting}
         width='max-w-lg'
       >

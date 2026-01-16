@@ -40,7 +40,6 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function StoreDetailView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [store, setStore] = useState<Store | null>(null);
   const navigate = useNavigate();

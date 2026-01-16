@@ -42,7 +42,6 @@ import type { Ability } from '~/types/ability';
 
 export default function RoleDetailView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<Role | null>(null);
   const navigate = useNavigate();

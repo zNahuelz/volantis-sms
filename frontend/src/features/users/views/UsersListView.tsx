@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import {
   CancelText,
   ConfirmActionText,
@@ -21,7 +21,6 @@ import {
   UserStatusUpdateFailedText,
   UserStatusUpdatedText,
   UserText,
-  UsersListAreaText,
   UsersText,
 } from '~/constants/strings';
 import type { User } from '~/types/user';
@@ -51,17 +50,21 @@ import { useAuth } from '~/context/authContext';
 
 export default function UsersListView() {
   const [data, setData] = useState<User[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [newUserModalVisible, setNewUserModalVisible] = useState(false);
   const [editUserModalVisible, setEditUserModalVisible] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User>();
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<UserQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
   const navigate = useNavigate();
 
   const { user } = useAuth();
@@ -83,56 +86,39 @@ export default function UsersListView() {
 
   const selectedField = watch('field');
 
-  const loadUsers = async () => {
+  const fetchUsers = async (q: UserQuery) => {
     setLoading(true);
-
-    const query: UserQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await userService.index(query);
+      const response = await userService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadUsers = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadUsers();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: UserQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await userService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -187,12 +173,8 @@ export default function UsersListView() {
   };
 
   useEffect(() => {
-    loadUsers();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadUsers();
-  }, [status]);
+    fetchUsers(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -305,19 +287,13 @@ export default function UsersListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

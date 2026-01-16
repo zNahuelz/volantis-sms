@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-
 import { useNavigate } from 'react-router';
 import { isInteger } from '~/utils/helpers';
 import { roleService } from '../services/roleService';
@@ -10,7 +9,6 @@ import RoleForm, { type RoleFormData, type RoleFormProps } from '../components/R
 
 export default function RoleEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<Partial<RoleFormData> | null>(null);
   const navigate = useNavigate();

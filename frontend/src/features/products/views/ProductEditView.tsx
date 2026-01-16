@@ -8,7 +8,6 @@ import { isInteger } from '~/utils/helpers';
 
 export default function ProductEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState<Partial<ProductFormData> | null>(null);
   const navigate = useNavigate();

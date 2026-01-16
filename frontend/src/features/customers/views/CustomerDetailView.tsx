@@ -5,7 +5,6 @@ import {
   CancelText,
   ConfirmActionText,
   CreatedAtText,
-  CustomerDetailAreaText,
   CustomerDetailText,
   CustomerNotFoundText,
   CustomerStatusChangeMessage,
@@ -22,7 +21,6 @@ import {
   IsActiveText,
   IsDeletedText,
   LoadingCustomerText,
-  NameText,
   NamesText,
   OkTagText,
   PhoneText,
@@ -43,7 +41,6 @@ import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconN
 
 export default function CustomerDetailView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const navigate = useNavigate();

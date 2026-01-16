@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import Button from '~/components/Button';
 import Select from '~/components/Select';
 import { SearchIcon } from '~/constants/iconNames';
-import { NoStoresAvailableText, SearchText, SelectText } from '~/constants/strings';
+import { NoStoresAvailableText, SelectText } from '~/constants/strings';
 import type { Store } from '~/types/store';
 
 interface StoreSelectorProps {

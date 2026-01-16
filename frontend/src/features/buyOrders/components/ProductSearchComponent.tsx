@@ -1,4 +1,3 @@
-import Modal from '~/components/Modal';
 import { useState, useEffect } from 'react';
 import type { Product } from '~/types/product';
 import { productService, type ProductQuery } from '~/features/products/services/productService';
@@ -6,11 +5,10 @@ import { DEFAULT_STATUS_TYPES, PRODUCT_SEARCH_TYPES } from '~/constants/arrays';
 import { useForm } from 'react-hook-form';
 import Select from '~/components/Select';
 import Input from '~/components/Input';
-import { AddIcon, DetailsIcon, ReloadIcon, SearchIcon } from '~/constants/iconNames';
+import { AddIcon, ReloadIcon, SearchIcon } from '~/constants/iconNames';
 import Button from '~/components/Button';
 import {
   AddProductText,
-  DetailsText,
   LoadingProductsText,
   ProductText,
   ProductsText,
@@ -28,13 +26,17 @@ interface ProductSearchComponentProps {
 
 export default function ProductSearchComponent({ onSelectProduct }: ProductSearchComponentProps) {
   const [data, setData] = useState<Product[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<ProductQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
 
   const {
     register,
@@ -53,56 +55,39 @@ export default function ProductSearchComponent({ onSelectProduct }: ProductSearc
 
   const selectedField = watch('field');
 
-  const loadProducts = async () => {
+  const fetchProducts = async (q: ProductQuery) => {
     setLoading(true);
-
-    const query: ProductQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await productService.index(query);
+      const response = await productService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadProducts = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadProducts();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: ProductQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await productService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -114,12 +99,8 @@ export default function ProductSearchComponent({ onSelectProduct }: ProductSearc
   };
 
   useEffect(() => {
-    loadProducts();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadProducts();
-  }, [status]);
+    fetchProducts(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -195,19 +176,13 @@ export default function ProductSearchComponent({ onSelectProduct }: ProductSearc
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

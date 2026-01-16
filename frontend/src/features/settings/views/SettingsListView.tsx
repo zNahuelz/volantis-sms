@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { SETTING_SEARCH_TYPES, SYSTEM_VAR_TYPES } from '~/constants/arrays';
 import type { Setting } from '~/types/setting';
 import { settingService, type SettingQuery } from '../services/settingService';
@@ -45,8 +45,6 @@ import SettingDetails from '../components/SettingDetails';
 
 export default function SettingsListView() {
   const [data, setData] = useState<Setting[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -57,6 +55,13 @@ export default function SettingsListView() {
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [dismissedWarning, setDismissedWarning] = useState(false);
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<SettingQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
   const navigate = useNavigate();
 
   const {
@@ -77,54 +82,39 @@ export default function SettingsListView() {
 
   const selectedField = watch('field');
 
-  const loadSettings = async () => {
+  const fetchSettings = async (q: SettingQuery) => {
     setLoading(true);
-
-    const query: SettingQuery = {
-      page,
-      limit,
-      search: '',
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await settingService.index(query);
+      const response = await settingService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadSettings = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadSettings();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string; valueTypeField: string }) => {
     setLoading(true);
-    const query: SettingQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.field === 'valueType' ? values.valueTypeField : values.search,
-    };
-    try {
-      const response = await settingService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -200,9 +190,9 @@ export default function SettingsListView() {
   };
 
   useEffect(() => {
-    loadSettings();
+    fetchSettings(query);
     showWarning();
-  }, [page, limit]);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -317,14 +307,11 @@ export default function SettingsListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
       />
 
       <h1 className='mt-1 text-center font-medium'>

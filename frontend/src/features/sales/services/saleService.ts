@@ -1,6 +1,5 @@
 import { http } from '~/api/httpWrapper';
 import { BaseService } from '~/services/baseService';
-import type { Role } from '~/types/role';
 import type { Sale } from '~/types/sale';
 
 export interface SaleMeta {

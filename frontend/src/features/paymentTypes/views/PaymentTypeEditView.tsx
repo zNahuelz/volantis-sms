@@ -8,14 +8,12 @@ import Loading from '~/components/Loading';
 import {
   EditPaymentTypeText,
   LoadingPaymentTypeText,
-  LoadingPaymentTypesText,
   PaymentTypeNotFound,
 } from '~/constants/strings';
 import PaymentTypeForm from '../components/PaymentTypeForm';
 
 export default function PaymentTypeEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [paymentType, setPaymentType] = useState<Partial<PaymentTypeFormData> | null>(null);
   const navigate = useNavigate();

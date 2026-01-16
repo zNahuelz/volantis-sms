@@ -30,6 +30,7 @@ import {
   ProfileAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
+  SaleDetailAreaText,
   SalesListAreaText,
   SettingsListAreaText,
   StoreDetailAreaText,
@@ -65,7 +66,6 @@ import { AbilityRoute } from './features/auth/components/AbilityRoute';
 import ViewNotFound from './components/ViewNotFound';
 import RolesListView from './features/roles/views/RolesListView';
 import RoleCreateView from './features/roles/views/RoleCreateView';
-import { EditRoleIcon } from './constants/iconNames';
 import RoleEditView from './features/roles/views/RoleEditView';
 import RoleDetailView from './features/roles/views/RoleDetailView';
 import AbilitiesListView from './features/abilities/views/AbilitiesListView';
@@ -94,6 +94,7 @@ import PaymentTypeEditView from './features/paymentTypes/views/PaymentTypeEditVi
 import VoucherSeriesListView from './features/voucherSeries/views/VoucherSeriesListView';
 import VoucherTypesListView from './features/voucherTypes/views/VoucherTypesListView';
 import SalesListView from './features/sales/views/SalesListView';
+import SaleDetailView from './features/sales/views/SaleDetailView';
 
 export const router = createBrowserRouter([
   {
@@ -461,6 +462,15 @@ export const router = createBrowserRouter([
                   abilities: ['sys:admin', 'sale:store'],
                 },
                 children: [{ index: true, Component: SaleCreateView }],
+              },
+              {
+                path: ':id',
+                element: <AbilityRoute />,
+                handle: {
+                  title: SaleDetailAreaText,
+                  abilities: ['sys:admin', 'sale:detail'],
+                },
+                children: [{ index: true, Component: SaleDetailView }],
               },
             ],
           },

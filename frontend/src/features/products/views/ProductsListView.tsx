@@ -44,13 +44,17 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function ProductsListView() {
   const [data, setData] = useState<Product[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<ProductQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
   const navigate = useNavigate();
 
   const {
@@ -70,56 +74,40 @@ export default function ProductsListView() {
 
   const selectedField = watch('field');
 
-  const loadProducts = async () => {
+  const fetchProducts = async (q: ProductQuery) => {
     setLoading(true);
-
-    const query: ProductQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
+    setFetchFailed(false);
     try {
-      const response = await productService.index(query);
+      const response = await productService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadProducts = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadProducts();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
-  const onSubmit = async (values: { field: string; search: string }) => {
+  const onSubmit = (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: ProductQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await productService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -174,12 +162,8 @@ export default function ProductsListView() {
   };
 
   useEffect(() => {
-    loadProducts();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadProducts();
-  }, [status]);
+    fetchProducts(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -281,19 +265,13 @@ export default function ProductsListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

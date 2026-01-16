@@ -1,6 +1,5 @@
 import { Table, type Column } from '~/components/Table';
 import {
-  CreatedAtText,
   FetchFailedText,
   IdText,
   NameText,

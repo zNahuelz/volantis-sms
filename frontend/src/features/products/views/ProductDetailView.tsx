@@ -25,11 +25,9 @@ import {
   NameText,
   OkTagText,
   ProductDetailText,
-  ProductIdText,
   ProductNotFound,
   ProductStatusChangeMessage,
   ProductStatusUpdatedText,
-  ProductText,
   ProfitText,
   RestoreText,
   SellPriceText,
@@ -43,7 +41,6 @@ import {
 } from '~/constants/strings';
 import Loading from '~/components/Loading';
 import Input from '~/components/Input';
-import { supplierService } from '~/features/suppliers/services/supplierService';
 import { DeleteIcon, DetailsIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';

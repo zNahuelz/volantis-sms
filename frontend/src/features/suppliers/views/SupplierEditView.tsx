@@ -1,9 +1,4 @@
-import {
-  EditSupplierAreaText,
-  EditSupplierText,
-  LoadingSupplierText,
-  SupplierNotFound,
-} from '~/constants/strings';
+import { EditSupplierText, LoadingSupplierText, SupplierNotFound } from '~/constants/strings';
 import SupplierForm, { type SupplierFormData } from '../components/SupplierForm';
 import { supplierService } from '../services/supplierService';
 import { useNavigate, useParams } from 'react-router';
@@ -13,7 +8,6 @@ import { isInteger } from '~/utils/helpers';
 
 export default function SupplierEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [supplier, setSupplier] = useState<Partial<SupplierFormData> | null>(null);
   const navigate = useNavigate();

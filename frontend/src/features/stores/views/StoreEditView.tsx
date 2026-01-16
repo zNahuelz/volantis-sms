@@ -6,12 +6,10 @@ import { isInteger } from '~/utils/helpers';
 import { storeService } from '../services/storeService';
 import Loading from '~/components/Loading';
 import { EditStoreText, LoadingStoreText, StoreNotFoundText } from '~/constants/strings';
-import StoreTable from '../components/StoreTable';
 import StoreForm from '../components/StoreForm';
 
 export default function StoreEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [store, setStore] = useState<Partial<StoreFormData> | null>(null);
   const navigate = useNavigate();

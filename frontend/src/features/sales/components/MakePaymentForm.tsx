@@ -10,13 +10,12 @@ import {
   ErrorTagText,
   FinishSaleText,
   LoadingPaymentModal,
+  MakePaymentLockedText,
   OkTagText,
   PaymentHashText,
   PaymentProcessFailedText,
   PaymentTypeText,
   SaleSavedText,
-  SaveText,
-  SavingText,
   SubtotalText,
   TaxNameText,
   TotalText,
@@ -26,11 +25,13 @@ import { voucherTypeService } from '~/features/voucherTypes/services/voucherType
 import { paymentTypeService } from '~/features/paymentTypes/services/paymentTypeService';
 import Select from '~/components/Select';
 import Input from '~/components/Input';
-import { CancelIcon, MakePaymentIcon, MoneyIcon } from '~/constants/iconNames';
+import { CancelIcon, ErrorIcon, MakePaymentIcon, MoneyIcon } from '~/constants/iconNames';
 import Button from '~/components/Button';
 import { sunatRound } from '~/utils/helpers';
 import Swal from 'sweetalert2';
 import { longSwalDismissalTime } from '~/constants/values';
+import { useNavigate } from 'react-router';
+import { Icon } from '@iconify/react';
 
 export type PrePaymentPayload = {
   igv: number;
@@ -59,6 +60,7 @@ export default function MakePaymentForm({
   const [voucherTypes, setVoucherTypes] = useState<VoucherType[]>([]);
   const [paymentTypes, setPaymentTypes] = useState<PaymentType[]>([]);
   const [isLocked, setIsLocked] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -92,7 +94,7 @@ export default function MakePaymentForm({
 
   const submitHandler = async (data: any) => {
     try {
-      await onSubmit({
+      const res = await onSubmit({
         ...prePayload,
         ...data,
         cashReceived: cashReceived ?? 0,
@@ -105,8 +107,11 @@ export default function MakePaymentForm({
         timer: longSwalDismissalTime,
         showConfirmButton: false,
       }).then((r) => {
-        //TODO: SALE DETAIL - VOUCHER PDF!
-        if (r.dismiss) window.location.reload();
+        //TODO: GO TO PDF...!
+        if (r.dismiss) {
+          if (res?.sale?.id) navigate(`/dashboard/sale/${res?.sale?.id}`);
+          else navigate('/dashboard/sale');
+        }
       });
     } catch (err) {
       Swal.fire({
@@ -195,8 +200,9 @@ export default function MakePaymentForm({
 
   if (!loading && isLocked) {
     return (
-      <div>
-        <h1>Formulario bloqueado....!!! Intente nuevamente.</h1>
+      <div className='flex flex-col items-center'>
+        <Icon icon={ErrorIcon} className='text-[100px] text-error'></Icon>
+        <h1 className='text-lg text-center'>{MakePaymentLockedText}</h1>
       </div>
     );
   }

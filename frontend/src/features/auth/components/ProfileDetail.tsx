@@ -18,7 +18,7 @@ import {
 import Alert from '~/components/Alert';
 import { Table, type Column } from '~/components/Table';
 import type { Ability } from '~/types/ability';
-import { formatAsDate, formatAsDatetime } from '~/utils/helpers';
+import { formatAsDatetime } from '~/utils/helpers';
 const API_URL = import.meta.env.VITE_API_URL;
 
 type Props = {

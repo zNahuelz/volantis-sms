@@ -205,6 +205,12 @@ router
         router
           .post('/', [SaleController, 'store'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'sale:store'])]);
+        router
+          .get('/:id', [SaleController, 'show'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'sale:show'])]);
+        router
+          .get('/', [SaleController, 'index'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'sale:index'])]);
       })
       .prefix('sale');
 

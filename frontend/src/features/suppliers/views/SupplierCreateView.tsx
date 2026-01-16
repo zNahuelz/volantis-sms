@@ -1,4 +1,4 @@
-import { CreateSupplierAreaText, CreateSupplierText } from '~/constants/strings';
+import { CreateSupplierText } from '~/constants/strings';
 import SupplierForm from '../components/SupplierForm';
 import { supplierService } from '../services/supplierService';
 

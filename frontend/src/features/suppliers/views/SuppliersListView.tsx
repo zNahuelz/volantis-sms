@@ -22,12 +22,9 @@ import {
   LoadingSuppliersText,
   NewText,
   OkTagText,
-  OpRollbackText,
   ReloadText,
   RestoreText,
   SearchText,
-  SupplierListText,
-  SuppliersListAreaText,
   SupplierStatusChangeMessage,
   SupplierStatusUpdatedText,
   SupplierStatusUpdateFailedText,
@@ -50,13 +47,17 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function SuppliersListView() {
   const [data, setData] = useState<Supplier[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<SupplierQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
   const navigate = useNavigate();
 
   const {
@@ -76,56 +77,39 @@ export default function SuppliersListView() {
 
   const selectedField = watch('field');
 
-  const loadSuppliers = async () => {
+  const fetchSuppliers = async (q: SupplierQuery) => {
     setLoading(true);
-
-    const query: SupplierQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await supplierService.index(query);
+      const response = await supplierService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadSuppliers = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadSuppliers();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: SupplierQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await supplierService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -180,12 +164,8 @@ export default function SuppliersListView() {
   };
 
   useEffect(() => {
-    loadSuppliers();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadSuppliers();
-  }, [status]);
+    fetchSuppliers(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -288,19 +268,13 @@ export default function SuppliersListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

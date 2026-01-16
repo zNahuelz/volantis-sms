@@ -56,6 +56,7 @@ export const HelpText = 'Ayuda';
 // --- 3. COMMON TABLE/FORM FIELDS ---
 export const IdText = '#';
 export const IdTextAlt = 'ID';
+export const IdTextLong = 'Identificador';
 export const NameText = 'Nombre';
 export const NamesText = 'Nombres';
 export const SurnameText = 'Apellido';
@@ -635,7 +636,21 @@ export const PaymentProcessFailedText =
 export const PaymentAreaText = 'Área de Pagos';
 export const SalesText = 'Ventas';
 export const SaleText = 'Venta';
+export const SaleTextAlt = 'Comprobante de venta';
+export const SalesTextAlt = 'Comprobantes de venta';
 export const VoucherText = 'Comprobante de Pago';
 export const VouchersText = 'Comprobantes de Pago';
-export const VoucherAltText = 'Comp. Pago';
-export const VouchersAltText = 'Comps. Pago';
+export const VoucherAltText = 'Comp. Venta';
+export const VouchersAltText = 'Comps. Venta';
+export const SalesNotLoadedText =
+  'No se encontraron comprobantes de venta con el criterío ingresado.';
+export const LoadingSalesText = 'Cargando comprobantes de venta...';
+export const SaleNotFoundText = 'Comprobante de venta no encontrado.';
+export const LoadingSaleText = 'Cargando comprobante de venta';
+export const SaleDetailAreaText = `Detalle de Venta - ${AppName}`;
+export const SaleDetailText = 'Detalle de Comprobante de Pago';
+export const SoldByText = 'Vendido por';
+export const EmptySaleText =
+  'El comprobante de venta no contiene productos, intente nuevamente o comuniquese con administración.';
+export const MakePaymentLockedText =
+  'Error durante la carga de tipos de comprobantes de pago o tipos de pago, intente nuevamente (cierre y vuelva a abrir está interfaz) o comuniquese con administración. Recuerde que el sistema debe contar con tipos de comprobantes de pago, series y tipos de pago activos para realizar el proceso de venta.';

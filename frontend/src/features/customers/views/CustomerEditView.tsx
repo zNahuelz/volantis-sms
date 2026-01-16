@@ -1,9 +1,4 @@
-import {
-  CustomerNotFoundText,
-  EditCustomerAreaText,
-  EditCustomerText,
-  LoadingCustomerText,
-} from '~/constants/strings';
+import { CustomerNotFoundText, EditCustomerText, LoadingCustomerText } from '~/constants/strings';
 import CustomerForm, { type CustomerFormData } from '../components/CustomerForm';
 import { customerService } from '../services/customerService';
 import Loading from '~/components/Loading';
@@ -13,7 +8,6 @@ import { isInteger } from '~/utils/helpers';
 
 export default function CustomerEditView() {
   const { id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState<Partial<CustomerFormData> | null>(null);
   const navigate = useNavigate();

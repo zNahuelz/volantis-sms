@@ -1,3 +1,32 @@
+import type { Customer } from './customer';
+import type { PaymentType } from './paymentType';
+import type { SaleDetail } from './saleDetail';
+import type { Store } from './store';
+import type { User } from './user';
+import type { VoucherType } from './voucherType';
+
 export type Sale = {
   id: number;
+  change: number;
+  cashReceived: number;
+  igv: number;
+  subtotal: number;
+  total: number;
+  set: string;
+  correlative: string;
+  paymentHash: string | null;
+  storeId?: number;
+  customerId?: number;
+  voucherTypeId?: number;
+  paymentTypeId?: number;
+  userId?: number;
+  store?: Store;
+  customer?: Customer;
+  paymentType?: PaymentType;
+  voucherType?: VoucherType;
+  user?: User;
+  saleDetails?: SaleDetail[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 };

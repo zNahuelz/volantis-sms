@@ -11,16 +11,13 @@ import { CancelIcon, ClearIcon, DeleteIcon, SaveIcon, UpdateIcon } from '~/const
 import {
   ActionsText,
   AddProductText,
-  BarcodeText,
   BuyOrderCreatedText,
   BuyOrderUpdatedText,
   CancelText,
   ClearText,
-  EmailText,
   ErrorTagText,
   FormLoadFailed,
   IdText,
-  IdTextAlt,
   InvalidBuyOrderDetailsPayload,
   InvalidStoreIdText,
   InvalidSupplierIdText,
@@ -31,7 +28,6 @@ import {
   ProductSearchText,
   ProductText,
   QuantityText,
-  RemoveText,
   SaveText,
   SavingText,
   ShortBarcodeText,
@@ -44,12 +40,11 @@ import {
   UnitPriceText,
   UpdateText,
   UpdatingText,
-  UsernameChangeDisabledOnEditText,
 } from '~/constants/strings';
 import { useAuth } from '~/context/authContext';
 import { storeService } from '~/features/stores/services/storeService';
 import { supplierService } from '~/features/suppliers/services/supplierService';
-import type { BuyOrderDetail, BuyOrder } from '~/types/buyOrder';
+import type { BuyOrder } from '~/types/buyOrder';
 import type { Store } from '~/types/store';
 import type { Supplier } from '~/types/supplier';
 import ProductSearchComponent from './ProductSearchComponent';

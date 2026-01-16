@@ -58,7 +58,7 @@ export default class VoucherSerieController {
       const limit = request.input('limit', 10);
       const search = request.input('search', '');
       const searchBy = request.input('searchBy', 'all'); // 'id' | 'seriesCode' | 'currentNumber' | 'all'
-      const status = request.input('status', 'available'); // 'active' | 'inactive' | 'all'
+      const status = request.input('status', 'active'); // 'active' | 'inactive' | 'all'
       const orderBy = request.input('orderBy', 'series_code');
       const orderDir = request.input('orderDir', 'asc'); // 'asc' | 'desc'
 

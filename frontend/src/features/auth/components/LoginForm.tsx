@@ -4,7 +4,6 @@ import { EmailIcon, PasswordIcon } from '~/constants/iconNames';
 import {
   AccountDisabledText,
   ClickHereText,
-  EmailText,
   ForgotPasswordText,
   InvalidCredentialsText,
   LoggingInText,
@@ -30,7 +29,6 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-    watch,
   } = useForm({
     defaultValues: {
       username: '',

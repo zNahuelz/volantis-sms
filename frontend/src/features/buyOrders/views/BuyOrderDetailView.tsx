@@ -6,14 +6,12 @@ import { formatAsDatetime, isInteger } from '~/utils/helpers';
 import { buyOrderService } from '../services/buyOrderService';
 import Loading from '~/components/Loading';
 import {
-  ActionsText,
   BarcodeText,
   BuyOrderDetailText,
   BuyOrderNotFound,
   CreatedAtText,
   DeleteText,
   DeletedAtText,
-  DescriptionText,
   EditText,
   GoBackText,
   IdText,
@@ -26,7 +24,6 @@ import {
   ProductText,
   QuantityText,
   RestoreText,
-  ShortBarcodeText,
   StateText,
   StoreText,
   SubtotalText,
@@ -90,7 +87,7 @@ export default function BuyOrderDetailView() {
             <legend className='fieldset-legend'>{StoreText}</legend>
             <Input
               value={buyOrder.store?.name ?? 'N/A'}
-              className='hover:text-primary'
+              className='hover:text-primary hover:font-bold'
               readOnly
               onDoubleClick={() => navigate(`/dashboard/store/${buyOrder.store?.id}`)}
             ></Input>
@@ -100,7 +97,7 @@ export default function BuyOrderDetailView() {
             <legend className='fieldset-legend'>{SupplierText}</legend>
             <Input
               value={buyOrder.supplier?.name ?? 'N/A'}
-              className='hover:text-primary'
+              className='hover:text-primary hover:font-bold'
               onDoubleClick={() => navigate(`/dashboard/supplier/${buyOrder.supplier?.id}`)}
               readOnly
             ></Input>
@@ -183,7 +180,7 @@ export default function BuyOrderDetailView() {
                       <tr key={detail.productId} className='hover:bg-secondary/10'>
                         <td>{detail.productId ?? 0}</td>
                         <td
-                          className='hover:text-primary'
+                          className='hover:text-primary hover:font-bold'
                           onDoubleClick={() =>
                             navigate(`/dashboard/product/${detail.productId ?? ''}`)
                           }

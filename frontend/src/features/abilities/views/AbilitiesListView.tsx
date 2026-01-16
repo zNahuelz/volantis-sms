@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import type { Ability } from '~/types/ability';
 import { abilityService, type AbilityQuery } from '../services/abilityService';
 import {
@@ -7,17 +7,13 @@ import {
   AbilityEditText,
   AbilityText,
   BackText,
-  CancelText,
   ContinueText,
-  DeleteText,
-  DetailsText,
   EditText,
   LoadingAbilitiesText,
   ModifySettingsWarning,
   NewAbilityText,
   NewText,
   ReloadText,
-  RestoreText,
   SearchText,
   TableElementsMessage,
   WarningText,
@@ -38,19 +34,23 @@ import { ErrorColor, SuccessColor } from '~/constants/values';
 
 export default function AbilitiesListView() {
   const [data, setData] = useState<Ability[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
-  const navigate = useNavigate();
   const [newAbilityModalVisible, setNewAbilityModalVisible] = useState(false);
   const [editAbilityModalVisible, setEditAbilityModalVisible] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [selectedAbility, setSelectedAbility] = useState<Ability>();
   const [dismissedWarning, setDismissedWarning] = useState(false);
   const [fetchFailed, setFetchFailed] = useState(false);
+  const [query, setQuery] = useState<AbilityQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
+  const navigate = useNavigate();
 
   const {
     register,
@@ -69,56 +69,39 @@ export default function AbilitiesListView() {
 
   const selectedField = watch('field');
 
-  const loadAbilities = async () => {
+  const fetchAbilities = async (q: AbilityQuery) => {
     setLoading(true);
-
-    const query: AbilityQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await abilityService.index(query);
+      const response = await abilityService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadAbilities = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadAbilities();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: AbilityQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await abilityService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -151,15 +134,11 @@ export default function AbilitiesListView() {
     }
   };
 
-  useEffect(() => {
-    loadAbilities();
-    showWarning();
-  }, [page, limit]);
+  useEffect(() => showWarning(), []);
 
   useEffect(() => {
-    loadAbilities();
-    showWarning();
-  }, [status]);
+    fetchAbilities(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -248,19 +227,13 @@ export default function AbilitiesListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 

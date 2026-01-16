@@ -12,9 +12,7 @@ import {
   ProductFoundByBarcodeMessage,
   QuestionText,
   RandomizeBarcodeText,
-  SearchText,
   ServerErrorText,
-  WarningText,
 } from '~/constants/strings';
 import { productService } from '../services/productService';
 import { useNavigate } from 'react-router';
@@ -30,9 +28,7 @@ export default function BarcodeScanner({ onBarcodeResolved }: BarcodeScannerProp
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm({
     defaultValues: { barcode: '' },
   });

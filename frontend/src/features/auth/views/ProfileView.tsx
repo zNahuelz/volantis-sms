@@ -3,15 +3,10 @@ import ProfileDetail from '../components/ProfileDetail';
 import ChangeEmailForm from '../components/ChangeEmailForm';
 import ChangePasswordForm from '../components/ChangePasswordForm';
 import ChangeAvatarForm from '../components/ChangeAvatarForm';
-import {
-  ClosingSessionText,
-  PleaseWaitText,
-  ProfileAreaText,
-  UpdatePasswordAlertText,
-} from '~/constants/strings';
+import { ClosingSessionText, PleaseWaitText, UpdatePasswordAlertText } from '~/constants/strings';
 import Loading from '~/components/Loading';
 import { profileService } from '../services/authService';
-import { authStore, useAuth } from '~/context/authContext';
+import { useAuth } from '~/context/authContext';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
 import Alert from '~/components/Alert';

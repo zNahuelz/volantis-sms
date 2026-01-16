@@ -49,18 +49,21 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 
 export default function PresentationsListView() {
   const [data, setData] = useState<Presentation[]>([]);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('available');
   const [newPresentationModalVisible, setNewPresentationModalVisible] = useState(false);
   const [editPresentationModalVisible, setEditPresentationModalVisible] = useState(false);
   const [selectedPresentation, setSelectedPresentation] = useState<Presentation>();
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [fetchFailed, setFetchFailed] = useState(false);
-  const navigate = useNavigate();
+  const [query, setQuery] = useState<PresentationQuery>({
+    page: 1,
+    limit: 10,
+    search: '',
+    field: undefined,
+    status: 'available',
+  });
 
   const {
     register,
@@ -79,56 +82,39 @@ export default function PresentationsListView() {
 
   const selectedField = watch('field');
 
-  const loadPresentations = async () => {
+  const fetchPresentations = async (q: PresentationQuery) => {
     setLoading(true);
-
-    const query: PresentationQuery = {
-      page,
-      limit,
-      search: '',
-      status: status,
-      field: undefined,
-      sortBy: undefined,
-      sortDir: undefined,
-    };
-
     try {
-      const response = await presentationService.index(query);
+      const response = await presentationService.index(q);
       setData(response.data);
       setTotalPages(response.meta.lastPage);
       setTotalItems(response.meta.total);
-      setLoading(false);
     } catch {
       handleFailedFetch();
+    } finally {
+      setLoading(false);
     }
   };
 
   const reloadPresentations = async () => {
     reset();
-    setData([]);
-    setPage(1);
-    setLimit(10);
-    await loadPresentations();
+    setQuery({
+      page: 1,
+      limit: 10,
+      search: '',
+      field: undefined,
+      status: 'available',
+    });
   };
 
   const onSubmit = async (values: { field: string; search: string }) => {
     setLoading(true);
-    const query: PresentationQuery = {
-      page,
-      limit,
+    setQuery((q) => ({
+      ...q,
       field: values.field,
       search: values.search,
-      status: status,
-    };
-    try {
-      const response = await presentationService.index(query);
-      setData(response.data);
-      setTotalPages(response.meta.lastPage);
-      setTotalItems(response.meta.total);
-      setLoading(false);
-    } catch {
-      handleFailedFetch();
-    }
+      page: 1,
+    }));
   };
 
   const handleFailedFetch = () => {
@@ -183,12 +169,8 @@ export default function PresentationsListView() {
   };
 
   useEffect(() => {
-    loadPresentations();
-  }, [page, limit]);
-
-  useEffect(() => {
-    loadPresentations();
-  }, [status]);
+    fetchPresentations(query);
+  }, [query]);
 
   useEffect(() => {
     resetField('search');
@@ -281,19 +263,13 @@ export default function PresentationsListView() {
       )}
 
       <Paginator
-        page={page}
-        limit={limit}
+        page={query.page}
+        limit={query.limit}
         totalPages={totalPages}
-        onPageChange={setPage}
-        onLimitChange={(newLimit) => {
-          setLimit(newLimit);
-          setPage(1);
-        }}
-        status={status}
-        onStatusChange={(newStatus) => {
-          setStatus(newStatus);
-          setPage(1);
-        }}
+        onPageChange={(page) => setQuery((q) => ({ ...q, page }))}
+        onLimitChange={(limit) => setQuery((q) => ({ ...q, limit, page: 1 }))}
+        status={query.status}
+        onStatusChange={(status) => setQuery((q) => ({ ...q, status, page: 1 }))}
         statusTypes={DEFAULT_STATUS_TYPES}
       />
 
