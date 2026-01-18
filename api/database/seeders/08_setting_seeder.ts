@@ -7,11 +7,20 @@ export default class extends BaseSeeder {
     if (hasRecords) {
       return;
     }
-    await Setting.create({
-      key: 'VALOR_IGV',
-      value: '0.18',
-      valueType: 'decimal',
-      description: 'Controla el valor del IGV en el sistema.',
-    });
+    await Setting.createMany([
+      {
+        key: 'VALOR_IGV',
+        value: '0.18',
+        valueType: 'decimal',
+        description: 'Controla el valor del IGV en el sistema.',
+      },
+      {
+        key: 'MODO_VENTAS',
+        value: 'free',
+        valueType: 'string',
+        description:
+          'Módulo de ventas: "strict" => No permite vender productos con stock <= 0 | "free" => Permite vender productos con stock <= 0',
+      },
+    ]);
   }
 }

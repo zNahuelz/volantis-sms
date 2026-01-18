@@ -61,6 +61,9 @@ router
           .post('reset-password-r/:id', [AuthController, 'resetPassword'])
           .use([middleware.auth(), middleware.ability(['sys:admin', 'auth:remotePasswordReset'])]);
         router.get('profile', [AuthController, 'profile']).use(middleware.auth());
+        router.post('recover-account', [AuthController, 'sendRecoveryEmail']);
+        router.post('verify-token', [AuthController, 'verifyRecoveryToken']);
+        router.post('update-password-token', [AuthController, 'updatePasswordWithToken']);
       })
       .prefix('auth');
     router

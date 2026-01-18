@@ -22,6 +22,7 @@ export const WelcomeAreaText = `Dashboard - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const ProfileAreaText = `Mi Perfil - ${AppName}`;
 export const _404AreaText = `Módulo no encontrado - ${AppName}`;
+export const RecoverAccountAreaText = `Recuperación de Cuenta - ${AppName}`;
 
 // --- 2. UI LABELS & NAVIGATION ---
 export const HomeText = 'Inicio';
@@ -94,6 +95,16 @@ export const NewEmailText = 'Nuevo correo electrónico';
 export const ConfirmEmailText = 'Repetir correo electrónico';
 export const LoggingInText = 'Ingresando...';
 export const ClosingSessionText = 'Cerrando sesión...';
+export const RecoverAccountText = 'Recuperación de Cuenta';
+export const LoadingAccountRecoveryText = 'Cargando recuperación de cuenta...';
+export const PasswordRecoveryMessage =
+  "<p class='text-center font-light text-[14px]'>El siguiente formulario le permite recuperar el acceso a su cuenta en caso de haber olvidado su contraseña. <br>Debe llenar el formulario con un correo electrónico válido; posteriormente debe esperar un correo con instrucciones para recuperar el acceso a su cuenta.</p>";
+export const ChangePasswordWithTokenMessage =
+  "<p class='text-center font-light text-[14px]'>El siguiente formulario le permite recuperar el acceso a su cuenta en caso de haber olvidado su contraseña. <br>Debe llenar los campos con su nueva contraseña, posteriormente podrá iniciar sesión normalmente con sus nuevas credenciales. <br><span class='font-bold text-red-500'>Si no solicito la recuperación de su cuenta, puede salir de esta página.</span>";
+export const RecoveryMailSentText =
+  'Operación completada correctamente. Si el e-mail ingresado pertenece a un usuario las instrucciones para recuperar su cuenta seran enviadas.';
+export const InvalidOrExpiredTokenText =
+  'El token de recuperación es inválido o ha expirado, vuelva a intentarlo. Si el problema persiste comuniquese con administración.';
 
 // --- 5. USER & PROFILE ---
 export const ProfileText = 'Perfil';
@@ -401,7 +412,7 @@ export const UserProfilePictureRemovedText =
 export const UserPasswordResetSuccesfullyText =
   'Contraseña del usuario restablecida correctamente, sus sesiones han sido cerradas automáticamente.';
 export const UserPasswordUpdatedText =
-  'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas lase sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
+  'Contraseña actualizada correctamente, debe volver a iniciar sesión con sus nuevas credenciales. Todas las sesiones abiertas con su cuenta de usuario han sido cerradas automáticamente.';
 export const UserAvatarUpdatedText =
   'Foto de perfil actualizada correctamente, podría tardar unos minutos en visualizarse correctamente.';
 export const RoleCreatedText = 'Rol registrado correctamente.';

@@ -105,7 +105,14 @@ export default function LoginForm() {
       </label>
       <p className='mb-2 text-center text-sm'>
         {ForgotPasswordText}
-        <span className='text-primary/50 hover:text-primary font-bold'>{ClickHereText}</span>
+        <span
+          className='text-primary/50 hover:text-primary font-bold'
+          onClick={() => {
+            if (!isSubmitting) navigate('/recover-account');
+          }}
+        >
+          {ClickHereText}
+        </span>
       </p>
       <p className='text-error text-sm text-center mb-2'>{serverError}</p>
       <div className='flex flex-col items-center'>

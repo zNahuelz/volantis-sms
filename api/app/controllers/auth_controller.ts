@@ -4,6 +4,14 @@ import { LoginValidator } from '../validators/auth/login.js';
 import { UpdateUserEmailValidator } from '../validators/auth/update_user_email.js';
 import db from '@adonisjs/lucid/services/db';
 import { UpdateUserPasswordValidator } from '../validators/auth/update_user_password.js';
+import { AccountRecoveryValidator } from '../validators/auth/account_recovery.js';
+import RecoveryToken from '../models/recovery_token.js';
+import crypto from 'node:crypto';
+import env from '../../start/env.js';
+import { DateTime } from 'luxon';
+import mail from '@adonisjs/mail/services/main';
+import { VerifyRecoveryTokenValidator } from '../validators/auth/verify_recovery_token.js';
+import { UpdatePasswordWithTokenValidator } from '../validators/auth/update_password_with_token.js';
 
 export default class AuthController {
   async login({ request, response, auth }: HttpContext) {
@@ -81,10 +89,24 @@ export default class AuthController {
         meta: { userId: user.id },
       });
 
+      const oldEmail = user.email.toUpperCase();
+
       await db.transaction(async (trx) => {
         user.useTransaction(trx);
         user.email = data.newEmail.trim().toUpperCase();
         await user.save();
+      });
+
+      await mail.sendLater((message) => {
+        message
+          .bcc([oldEmail, user.email])
+          .subject('SISTEMA VOLANTIS - CORREO ELECTRÓNICO ACTUALIZADO')
+          .htmlView('emails/email_updated', {
+            date: DateTime.utc().setLocale('es').toFormat('dd LLL yyyy'),
+            time: DateTime.utc().toFormat("HH 'horas con' mm 'minutos.'"),
+            user,
+            oldEmail: oldEmail,
+          });
       });
 
       return response.ok({
@@ -128,6 +150,17 @@ export default class AuthController {
             User.accessTokens.delete(user, token.identifier);
           })
         );
+      });
+
+      await mail.sendLater((message) => {
+        message
+          .to(user.email)
+          .subject('SISTEMA VOLANTIS - CONTRASEÑA ACTUALIZADA')
+          .htmlView('emails/reset_password', {
+            date: DateTime.utc().setLocale('es').toFormat('dd LLL yyyy'),
+            time: DateTime.utc().toFormat("HH 'horas con' mm 'minutos.'"),
+            user,
+          });
       });
 
       return response.ok({
@@ -201,5 +234,124 @@ export default class AuthController {
     };
 
     return response.ok(userData);
+  }
+
+  public async sendRecoveryEmail({ request, response }: HttpContext) {
+    const data = await request.validateUsing(AccountRecoveryValidator);
+
+    const user = await User.findBy('email', data.email);
+    if (!user) {
+      return response.ok({
+        message:
+          'Operación completada correctamente. Si el e-mail ingresado pertenece a un usuario las instrucciones para recuperar su cuenta seran enviadas.',
+      });
+    }
+
+    try {
+      await db.transaction(async (trx) => {
+        await RecoveryToken.query({ client: trx })
+          .where('email', data.email.toUpperCase())
+          .delete();
+        const rawToken = crypto.randomBytes(75).toString('base64url');
+        const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+        const recoveryLink = `${env.get('REACT_FRONTEND_URL', 'http://localhost:3000')}/recover-account?token=${rawToken}`;
+        await RecoveryToken.create(
+          {
+            email: data.email.toUpperCase(),
+            token: tokenHash,
+            expiration: DateTime.utc().plus({ minutes: 5 }),
+          },
+          { client: trx }
+        );
+
+        await mail.sendLater((message) => {
+          message
+            .to(data.email)
+            .subject('SISTEMA VOLANTIS - RECUPERACIÓN DE CUENTA')
+            .htmlView('emails/recover_account', { recoveryLink, user });
+        });
+      });
+    } catch (error) {
+      return response.internalServerError({
+        message: 'Error! Operación cancelada, intente nuevamente o comuniquese con administración.',
+      });
+    }
+
+    return response.ok({
+      message:
+        'Operación completada correctamente. Si el e-mail ingresado pertenece a un usuario las instrucciones para recuperar su cuenta seran enviadas.',
+    });
+  }
+
+  public async verifyRecoveryToken({ request, response }: HttpContext) {
+    const data = await request.validateUsing(VerifyRecoveryTokenValidator);
+
+    const tokenHash = crypto.createHash('sha256').update(data.token).digest('hex');
+
+    const dbToken = await RecoveryToken.findBy('token', tokenHash);
+
+    if (!dbToken) {
+      return response.notFound({
+        message:
+          'El token de recuperación es inválido o ha expirado, vuelva a intentarlo. Si el problema persiste comuniquese con administración.',
+      });
+    }
+
+    if (dbToken.expiration < DateTime.utc()) {
+      return response.notFound({
+        message:
+          'El token de recuperación es inválido o ha expirado, vuelva a intentarlo. Si el problema persiste comuniquese con administración.',
+      });
+    }
+
+    return response.ok({
+      message: 'Token válido.',
+    });
+  }
+
+  public async updatePasswordWithToken({ request, response }: HttpContext) {
+    const data = await request.validateUsing(UpdatePasswordWithTokenValidator);
+    const tokenHash = crypto.createHash('sha256').update(data.token).digest('hex');
+
+    const dbToken = await RecoveryToken.findBy('token', tokenHash);
+
+    if (!dbToken) {
+      return response.notFound({
+        message: 'Error! Token inválido o expirado.',
+      });
+    }
+
+    if (dbToken.expiration < DateTime.utc()) {
+      return response.notFound({
+        message: 'Error! Token expirado o invalido.',
+      });
+    }
+
+    const user = await User.findBy('email', dbToken.email);
+    if (!user) {
+      return response.notFound({
+        message: 'Error! Usuario no encontrado.',
+      });
+    }
+
+    try {
+      await db.transaction(async (trx) => {
+        user.useTransaction(trx);
+        dbToken.useTransaction(trx);
+        await user.merge({ password: data.password }).save();
+        await dbToken.delete();
+        const tokens = await User.accessTokens.all(user);
+        await Promise.all(tokens.map((token) => User.accessTokens.delete(user, token.identifier)));
+      });
+    } catch (error) {
+      return response.internalServerError({
+        message:
+          'Error interno del servidor, operación cancelada. Intente nuevamente o comuniquese con administración.',
+      });
+    }
+
+    return response.ok({
+      message: 'Contraseña actualizada correctamente. Inicie sesión con sus nuevas credenciales.',
+    });
   }
 }

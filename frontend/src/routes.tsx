@@ -28,6 +28,7 @@ import {
   ProductDetailAreaText,
   ProductsListAreaText,
   ProfileAreaText,
+  RecoverAccountAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
   SaleDetailAreaText,
@@ -95,6 +96,7 @@ import VoucherSeriesListView from './features/voucherSeries/views/VoucherSeriesL
 import VoucherTypesListView from './features/voucherTypes/views/VoucherTypesListView';
 import SalesListView from './features/sales/views/SalesListView';
 import SaleDetailView from './features/sales/views/SaleDetailView';
+import PasswordRecoveryView from './features/auth/views/PasswordRecoveryView';
 
 export const router = createBrowserRouter([
   {
@@ -104,6 +106,17 @@ export const router = createBrowserRouter([
         path: '/',
         Component: LoginView,
         handle: { title: LoginAreaText },
+      },
+    ],
+  },
+
+  {
+    element: <GuestRoute />,
+    children: [
+      {
+        path: '/recover-account',
+        Component: PasswordRecoveryView,
+        handle: { title: RecoverAccountAreaText },
       },
     ],
   },

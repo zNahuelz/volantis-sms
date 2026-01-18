@@ -47,3 +47,17 @@ export const updateProfilePictureService = async (file: File) => {
     })
     .json<{ message: string; url: string; file: string }>();
 };
+
+export const sendRecoveryMailService = (email: string) => {
+  return http.post('auth/recover-account', { json: { email } }).json<{ message: string }>();
+};
+
+export const verifyRecoveryTokenService = (token: string) => {
+  return http.post('auth/verify-token', { json: { token } }).json<{ message: string }>();
+};
+
+export const updatePasswordWithTokenService = (token: string, password: string) => {
+  return http
+    .post('auth/update-password-token', { json: { token, password } })
+    .json<{ message: string }>();
+};
