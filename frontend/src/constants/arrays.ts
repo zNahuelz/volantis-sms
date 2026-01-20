@@ -138,3 +138,10 @@ export const SALE_SEARCH_TYPES = [
   { label: 'POR TIPO DE PAGO', value: 'paymentTypeId' },
   { label: 'POR COMP. DE VENTA', value: 'voucherTypeId' },
 ];
+
+export const SALES_REPORT_MODES = [
+  { label: 'VENTAS - POR DÍA', value: 'by_day' },
+  { label: 'VENTAS - POR SEMANA', value: 'by_week' },
+  { label: 'VENTAS - POR MES', value: 'by_month' },
+  { label: 'VENTAS - POR AÑO', value: 'by_year' },
+];

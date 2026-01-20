@@ -29,9 +29,11 @@ import {
   ProductsListAreaText,
   ProfileAreaText,
   RecoverAccountAreaText,
+  ReportsAreaText,
   RoleDetailAreaText,
   RolesListAreaText,
   SaleDetailAreaText,
+  SalePdfAreaText,
   SalesListAreaText,
   SettingsListAreaText,
   StoreDetailAreaText,
@@ -97,6 +99,8 @@ import VoucherTypesListView from './features/voucherTypes/views/VoucherTypesList
 import SalesListView from './features/sales/views/SalesListView';
 import SaleDetailView from './features/sales/views/SaleDetailView';
 import PasswordRecoveryView from './features/auth/views/PasswordRecoveryView';
+import SalePdfView from './features/sales/views/SalePdfView';
+import ReportModuleView from './features/reports/views/ReportModuleView';
 
 export const router = createBrowserRouter([
   {
@@ -477,6 +481,15 @@ export const router = createBrowserRouter([
                 children: [{ index: true, Component: SaleCreateView }],
               },
               {
+                path: 'report',
+                element: <AbilityRoute />,
+                handle: {
+                  title: ReportsAreaText,
+                  abilities: ['sys:admin', 'report:module'],
+                },
+                children: [{ index: true, Component: ReportModuleView }],
+              },
+              {
                 path: ':id',
                 element: <AbilityRoute />,
                 handle: {
@@ -484,6 +497,15 @@ export const router = createBrowserRouter([
                   abilities: ['sys:admin', 'sale:detail'],
                 },
                 children: [{ index: true, Component: SaleDetailView }],
+              },
+              {
+                path: ':id/pdf',
+                element: <AbilityRoute />,
+                handle: {
+                  title: SalePdfAreaText,
+                  abilities: ['sys:admin', 'report:salePdf'],
+                },
+                children: [{ index: true, Component: SalePdfView }],
               },
             ],
           },

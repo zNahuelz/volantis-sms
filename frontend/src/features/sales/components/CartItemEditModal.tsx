@@ -7,6 +7,7 @@ import {
   ContinueText,
   EditQuantityText,
   LowStockAlertAlt,
+  NoStockAlertAlt,
   QuantityText,
 } from '~/constants/strings';
 import { CheckIcon, CloseIcon, SaveIcon } from '~/constants/iconNames';
@@ -15,16 +16,27 @@ import Input from '~/components/Input';
 interface Props {
   open: boolean;
   item: CartItem | null;
+  mode?: string;
   onClose: () => void;
   onConfirm: (quantity: number) => void;
 }
 
-export default function CartItemEditModal({ open, item, onClose, onConfirm }: Props) {
+export default function CartItemEditModal({
+  open,
+  item,
+  mode = 'free',
+  onClose,
+  onConfirm,
+}: Props) {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (item) setQuantity(item.quantity);
   }, [item]);
+
+  const normalizedMode = mode?.toLowerCase() ?? 'free';
+  const isFreeMode = normalizedMode === 'free';
+  const isStrictMode = normalizedMode === 'strict';
 
   if (!item) return null;
 
@@ -47,8 +59,12 @@ export default function CartItemEditModal({ open, item, onClose, onConfirm }: Pr
           ></Input>
         </fieldset>
 
-        {quantity > item.stock && (
+        {isFreeMode && quantity > item.stock && (
           <p className='text-xs text-info text-center'>{LowStockAlertAlt(item)}</p>
+        )}
+
+        {isStrictMode && quantity > item.stock && (
+          <p className='text-xs text-error text-center'>{NoStockAlertAlt(item)}</p>
         )}
 
         <div className='flex justify-center gap-2'>
@@ -63,8 +79,11 @@ export default function CartItemEditModal({ open, item, onClose, onConfirm }: Pr
             <Button
               color='btn-primary'
               className='join-item'
-              onClick={() => onConfirm(quantity)}
-              disabled={quantity < 0}
+              onClick={() => {
+                if (isStrictMode && quantity > item.stock) return;
+                onConfirm(quantity);
+              }}
+              disabled={quantity < 0 || (isStrictMode && quantity > item.stock)}
               icon={CheckIcon}
               title={ContinueText.toUpperCase()}
             />

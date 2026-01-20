@@ -16,10 +16,12 @@ import {
   LowStockAlert,
   NamesText,
   NextText,
+  NoStockAlert,
   PaymentAreaText,
   ProductText,
   QuantityText,
   SalesModuleLockedNoStores,
+  SalesModuleModeText,
   SellPriceText,
   StoreText,
   SubtotalText,
@@ -34,6 +36,7 @@ import type { Store } from '~/types/store';
 import Button from '~/components/Button';
 import {
   ADMIN_ABILITY_KEY,
+  DEFAULT_SALE_MODE_SETTING_KEY,
   DEFAULT_TAX_SETTING_KEY,
   DEFAULT_TAX_VALUE,
   SuccessColor,
@@ -83,6 +86,8 @@ export default function SaleCreateView() {
   const [stores, setStores] = useState<Store[]>([]);
   const [taxSetting, setTaxSetting] = useState<Setting>();
   const [usingDefaultTax, setUsingDefaultTax] = useState(false);
+  const [modeSetting, setModeSetting] = useState<Setting>();
+  const [usingDefaultMode, setUsingDefaultMode] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [lockedModuleMessage, setLockedModuleMessage] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -117,24 +122,29 @@ export default function SaleCreateView() {
     let mounted = true;
 
     async function loadData() {
-      const [storesResult, taxSettingResult] = await Promise.allSettled([
+      const [storesResult, taxSettingResult, modeSettingResult] = await Promise.allSettled([
         storeService.list('available'),
         settingService.showByKey(DEFAULT_TAX_SETTING_KEY),
+        settingService.showByKey(DEFAULT_SALE_MODE_SETTING_KEY),
       ]);
 
       if (!mounted) return;
 
       const storeFailed = storesResult.status === 'rejected';
       const taxSettingFailed = taxSettingResult.status === 'rejected';
+      const modeSettingFailed = modeSettingResult.status === 'rejected';
 
       let storesData: Store[] = [];
       let taxSettingValue: Setting = null;
+      let modeSettingValue: Setting = null;
 
       if (!storeFailed) storesData = storesResult.value;
       if (!taxSettingFailed) taxSettingValue = taxSettingResult.value;
+      if (!modeSettingFailed) modeSettingValue = modeSettingResult.value;
 
       setStores(storesData);
       setTaxSetting(taxSettingValue);
+      setModeSetting(modeSettingValue);
 
       if (storeFailed || storesData.length === 0) {
         setIsLocked(true);
@@ -146,6 +156,17 @@ export default function SaleCreateView() {
         setUsingDefaultTax(true);
         showDefaultTaxAlert();
       }
+
+      if (
+        modeSettingFailed ||
+        !modeSettingValue ||
+        (modeSettingValue.value?.toLowerCase() !== 'free' &&
+          modeSettingValue.value?.toLowerCase() !== 'strict')
+      ) {
+        setModeSetting(null);
+        setUsingDefaultMode(true);
+      }
+
       setLoading(false);
     }
 
@@ -215,13 +236,22 @@ export default function SaleCreateView() {
 
   const addToCart = (sP: StoreProduct) => {
     setCart((prev) => {
+      const mode = usingDefaultMode ? 'free' : modeSetting?.value?.toLowerCase();
+      const isFreeMode = mode === 'free';
+      const isStrictMode = mode === 'strict';
+
       const index = prev.findIndex((e) => e.productId === sP.product?.id);
+
       // Product already in cart
       if (index !== -1) {
         const existing = prev[index];
 
         if (existing.quantity + 1 > sP.stock) {
-          showStockAlert(sP);
+          if (isFreeMode) showStockAlert(sP);
+          if (isStrictMode) {
+            showNoStockAlert(sP);
+            return prev;
+          }
         }
 
         return prev.map((item, i) =>
@@ -236,9 +266,14 @@ export default function SaleCreateView() {
             : item
         );
       }
+
       // Product not in cart
       if (sP.stock <= 0) {
-        showStockAlert(sP);
+        if (isFreeMode) showStockAlert(sP);
+        if (isStrictMode) {
+          showNoStockAlert(sP);
+          return prev;
+        }
       }
 
       return [
@@ -286,7 +321,11 @@ export default function SaleCreateView() {
   };
 
   const showStockAlert = (storeProduct: StoreProduct) => {
-    Swal.fire(InfoTag, LowStockAlert(storeProduct), 'info');
+    Swal.fire(InfoTag.toUpperCase(), LowStockAlert(storeProduct), 'info');
+  };
+
+  const showNoStockAlert = (storeProduct: StoreProduct) => {
+    Swal.fire(InfoTag.toUpperCase(), NoStockAlert(storeProduct), 'info');
   };
 
   const makePayment = () => {
@@ -495,10 +534,10 @@ export default function SaleCreateView() {
                 </div>
               </div>
               <h1 className='text-error text-xs col-span-full text-center'>
-                {CurrentTaxValueText(
+                {`${CurrentTaxValueText(
                   usingDefaultTax ? DEFAULT_TAX_VALUE : Number(taxSetting.value),
                   usingDefaultTax
-                )}
+                )} - ${SalesModuleModeText(usingDefaultMode ? 'free' : modeSetting?.value)}`}
               </h1>
             </div>
           )}
@@ -508,6 +547,7 @@ export default function SaleCreateView() {
       <CartItemEditModal
         open={!!editItem}
         item={editItem}
+        mode={usingDefaultMode ? 'free' : modeSetting?.value.toLowerCase()}
         onClose={() => setEditItem(null)}
         onConfirm={(quantity) => {
           if (!editItem) return;

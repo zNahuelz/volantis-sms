@@ -6,8 +6,13 @@ import { useForm } from 'react-hook-form';
 import { DEFAULT_STATUS_TYPES, SALE_SEARCH_TYPES } from '~/constants/arrays';
 import {
   DetailsText,
+  DownloadPdfText,
+  DownloadingText,
+  ErrorTagText,
+  GoToPdfText,
   LoadingSalesText,
   NewText,
+  PdfDownloadFailed,
   ReloadText,
   SaleTextAlt,
   SalesTextAlt,
@@ -16,7 +21,7 @@ import {
 } from '~/constants/strings';
 import { Paginator } from '~/components/Paginator';
 import Button from '~/components/Button';
-import { DetailsIcon, ReloadIcon, SearchIcon } from '~/constants/iconNames';
+import { DetailsIcon, DownloadIcon, PdfIcon, ReloadIcon, SearchIcon } from '~/constants/iconNames';
 import SaleTable from '../components/SaleTable';
 import Loading from '~/components/Loading';
 import Input from '~/components/Input';
@@ -27,6 +32,9 @@ import type { VoucherType } from '~/types/voucherType';
 import { storeService } from '~/features/stores/services/storeService';
 import { paymentTypeService } from '~/features/paymentTypes/services/paymentTypeService';
 import { voucherTypeService } from '~/features/voucherTypes/services/voucherTypeService';
+import { useAuth } from '~/context/authContext';
+import Swal from 'sweetalert2';
+import { longSwalDismissalTime } from '~/constants/values';
 
 export default function SalesListView() {
   const [data, setData] = useState<Sale[]>([]);
@@ -47,6 +55,8 @@ export default function SalesListView() {
     field: undefined,
     status: 'available',
   });
+  const [downloading, setDownloading] = useState(false);
+  const authStore = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -174,6 +184,46 @@ export default function SalesListView() {
       mounted = false;
     };
   }, []);
+
+  const downloadVoucherPdf = async (row: Sale) => {
+    setDownloading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/report/sale-pdf/${row.id}?download=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Descarga de PDF fallida: (${response.status})`);
+      }
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      try {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${row.set}-${row.correlative}.pdf`;
+        a.click();
+      } finally {
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: ErrorTagText,
+        html: PdfDownloadFailed,
+        timer: longSwalDismissalTime,
+        showConfirmButton: false,
+      });
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     fetchSales(query);
@@ -315,6 +365,25 @@ export default function SalesListView() {
                 title={DetailsText}
                 onClick={() => {
                   navigate(`/dashboard/sale/${row.id}`);
+                }}
+              />
+              <Button
+                className='join-item btn-sm'
+                color='btn-error'
+                icon={PdfIcon}
+                title={GoToPdfText.toUpperCase()}
+                onClick={() => {
+                  navigate(`/dashboard/sale/${row.id}/pdf`);
+                }}
+              />
+              <Button
+                className='join-item btn-sm'
+                color='btn-success'
+                icon={!downloading ? DownloadIcon : ''}
+                isLoading={downloading}
+                title={!downloading ? DownloadPdfText.toUpperCase() : DownloadingText.toUpperCase()}
+                onClick={() => {
+                  downloadVoucherPdf(row);
                 }}
               />
             </div>

@@ -26,6 +26,7 @@ import PaymentTypeController from '../app/controllers/payment_type_controller.js
 import VoucherSerieController from '../app/controllers/voucher_serie_controller.js';
 import VoucherTypeController from '../app/controllers/voucher_type_controller.js';
 import SaleController from '../app/controllers/sale_controller.js';
+import ReportController from '../app/controllers/report_controller.js';
 
 router
   .group(() => {
@@ -176,6 +177,17 @@ router
           .use([middleware.auth(), middleware.ability(['sys:admin', 'product:destroy'])]);
       })
       .prefix('product');
+
+    router
+      .group(() => {
+        router
+          .get('/sale-pdf/:id', [ReportController, 'getVoucherPdfById'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'report:salePdf'])]);
+        router
+          .get('/sales', [ReportController, 'generateSalesReport'])
+          .use([middleware.auth(), middleware.ability(['sys:admin', 'report:sales'])]);
+      })
+      .prefix('report');
 
     router
       .group(() => {

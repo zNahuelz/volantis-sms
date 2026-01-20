@@ -27,6 +27,7 @@ export const RemoveIcon = 'ic:sharp-playlist-remove';
 export const RestoreIcon = 'ic:outline-restore';
 export const SaveIcon = 'ic:sharp-save';
 export const UpdateIcon = 'ic:sharp-save-all';
+export const DownloadIcon = 'ic:baseline-download';
 
 // --- 3. FORMS & DATA FIELDS ---
 export const AddressIcon = 'ic:baseline-maps-home-work';
@@ -77,3 +78,6 @@ export const SettingsIcon = 'ic:baseline-settings';
 export const SuccessIcon = 'ic:baseline-check-circle-outline';
 export const SystemIcon = 'ic:sharp-display-settings';
 export const WarningIcon = 'ic:baseline-warning-amber';
+export const PdfIcon = 'ic:sharp-picture-as-pdf';
+export const ChartUpIcon = 'ic:outline-stacked-line-chart';
+export const ChartDownIcon = 'ic:sharp-ssid-chart';

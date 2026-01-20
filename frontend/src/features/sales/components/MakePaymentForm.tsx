@@ -107,9 +107,8 @@ export default function MakePaymentForm({
         timer: longSwalDismissalTime,
         showConfirmButton: false,
       }).then((r) => {
-        //TODO: GO TO PDF...!
         if (r.dismiss) {
-          if (res?.sale?.id) navigate(`/dashboard/sale/${res?.sale?.id}`);
+          if (res?.sale?.id) navigate(`/dashboard/sale/${res?.sale?.id}/pdf`);
           else navigate('/dashboard/sale');
         }
       });

@@ -31,6 +31,7 @@ import {
   PleaseWaitText,
   PresentationManagementText,
   ProductsText,
+  ReportsText,
   SalesText,
   SettingText,
   StoresText,
@@ -256,6 +257,14 @@ export default function Sidebar() {
                     className='hover:bg-primary/50 block rounded px-3 py-1'
                   >
                     {`${ListText} - ${VouchersAltText}`}
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to='/dashboard/sale/report'
+                    className='hover:bg-primary/50 block rounded px-3 py-1'
+                  >
+                    {ReportsText}
                   </NavLink>
                 </li>
               </ul>

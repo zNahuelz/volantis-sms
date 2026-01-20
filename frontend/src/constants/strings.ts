@@ -6,6 +6,7 @@ import type { PaymentType } from '~/types/paymentType';
 import type { Presentation } from '~/types/presentation';
 import type { Product } from '~/types/product';
 import type { Role } from '~/types/role';
+import type { Sale } from '~/types/sale';
 import type { Setting } from '~/types/setting';
 import type { Store } from '~/types/store';
 import type { StoreProduct } from '~/types/storeProduct';
@@ -492,7 +493,11 @@ export const TotalSystemRolesText = (amount: number) => {
 };
 
 export const CurrentTaxValueText = (tax: number, isDefault: boolean) => {
-  return `Valor actual del IGV: ${tax * 100}%. ${isDefault ? 'Usando el valor por defecto del sistema, vuelva a abrir el formulario o comuniquese con administración' : ''}`;
+  return `Valor actual del IGV: ${tax * 100}% ${isDefault ? 'Usando el valor por defecto del sistema, vuelva a abrir el formulario o comuniquese con administración' : ''}`;
+};
+
+export const SalesModuleModeText = (mode: string) => {
+  return `${mode.toLowerCase() === 'free' ? 'Modo Libre' : mode.toLowerCase() === 'strict' ? 'Modo Estricto' : 'Modo Libre'}`;
 };
 
 export const ProductFoundByBarcodeMessage = (product: Product) => {
@@ -507,6 +512,14 @@ export const LowStockAlert = (storeProduct: StoreProduct) => {
   return `El stock registrado en el sistema del producto: ${storeProduct.product?.name ?? ''} es de ${storeProduct.stock} unidades.
   Puede continuar con la venta si tiene los productos a mano, caso contrario disminuya la cantidad del producto e informe al cliente.
   <strong>Recuerde mantener el stock de los productos actualizado.</strong>`;
+};
+
+export const NoStockAlert = (storeProduct: StoreProduct) => {
+  return `El stock registrado en el sistema del producto: ${storeProduct.product?.name ?? ''} es de ${storeProduct.stock} unidades. Al no contar con stock disponible <strong>no</strong> no será añadido al carrito/su cantidad no aumentará. <strong>Recuerde mantener el stock de los productos actualizado.</strong> <br> Este comportamiento puede ser cambiado en la configuración del sistema en la opción: <strong>MODO_VENTAS</strong>`;
+};
+
+export const NoStockAlertAlt = (cartItem: CartItem) => {
+  return `El stock registrado en el sistema del producto: ${cartItem.product?.name ?? ''} es de ${cartItem.stock} unidades. Al no contar con stock disponible no no será añadido al carrito/su cantidad no aumentará. Recuerde mantener el stock de los productos actualizado. Este comportamiento puede ser cambiado en la configuración del sistema en la opción: MODO_VENTAS`;
 };
 
 export const LowStockAlertAlt = (cartItem: CartItem) => {
@@ -659,9 +672,44 @@ export const LoadingSalesText = 'Cargando comprobantes de venta...';
 export const SaleNotFoundText = 'Comprobante de venta no encontrado.';
 export const LoadingSaleText = 'Cargando comprobante de venta';
 export const SaleDetailAreaText = `Detalle de Venta - ${AppName}`;
+export const SalePdfAreaText = `Visor de Comprobante de Venta - ${AppName}`;
 export const SaleDetailText = 'Detalle de Comprobante de Pago';
 export const SoldByText = 'Vendido por';
 export const EmptySaleText =
   'El comprobante de venta no contiene productos, intente nuevamente o comuniquese con administración.';
 export const MakePaymentLockedText =
   'Error durante la carga de tipos de comprobantes de pago o tipos de pago, intente nuevamente (cierre y vuelva a abrir está interfaz) o comuniquese con administración. Recuerde que el sistema debe contar con tipos de comprobantes de pago, series y tipos de pago activos para realizar el proceso de venta.';
+
+// --- 23. REPORTS ---
+export const LoadingPdfText = 'Cargando PDF...';
+export const VoucherPdfText = (sale: Sale) => {
+  return `Detalle de Comprobante de Venta #${sale.id} -  ${sale.set}-${sale.correlative}`;
+};
+export const DownloadPdfText = 'Descargar Pdf';
+export const GoToPdfText = 'Ver Pdf';
+export const DownloadingText = 'Descargando...';
+export const PdfDownloadFailed =
+  'Error durante la descarga del archivo PDF. Intente nuevamente, si el problema persiste comuniquese con administración.';
+export const ReportsAreaText = `Área de Reportes - ${AppName}`;
+export const ReportsText = 'Reportes';
+export const SalesReportText = 'Área de Reportes';
+export const ReportTypeText = 'Tipo de Reporte';
+export const DateText = 'Fecha';
+export const GenerateText = 'Generar';
+export const GeneratingText = 'Generando...';
+export const GeneratingReportText = 'Generando reporte...';
+export const NoSalesErrorText =
+  'No se encontraron ventas registradas durante el período ingresado. Vuelva a intentarlo seleccionando un período distinto o registre algunas ventas.';
+export const SalesByPaymentTypeText = 'Ventas por Tipo de Pago';
+export const SalesByVoucherTypeText = 'Ventas por Tipo de Comprobante';
+export const AverageValuesText = 'Valores Promedio';
+export const MetricText = 'Métrica';
+export const TotalSalesText = 'Total (Ventas)';
+export const AverageSaleText = 'Venta Promedio (S./)';
+export const AverageIgvText = 'Impuesto Promedio (S./)';
+export const AverageSubtotalText = 'Subtotal Promedio (S./)';
+export const AverageChangeText = 'Cambio Promedio (S./)';
+export const BestSaleText = 'Mejor Venta';
+export const WorstSaleText = 'Peor Venta';
+export const GoToBestSaleText = 'Ir a mejor venta';
+export const GoToWorstSaleText = 'Ir a peor venta';
