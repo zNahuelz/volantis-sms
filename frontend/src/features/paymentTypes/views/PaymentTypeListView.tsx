@@ -48,8 +48,11 @@ import clsx from 'clsx';
 import { Paginator } from '~/components/Paginator';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
+import { useAuth } from '~/context/authContext';
 
 export default function PaymentTypeListView() {
+  const authStore = useAuth();
   const [data, setData] = useState<PaymentType[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -184,7 +187,14 @@ export default function PaymentTypeListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/payment-type/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'paymentType:store'])
+              ? '/dashboard'
+              : '/dashboard/payment-type/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -265,6 +275,9 @@ export default function PaymentTypeListView() {
                 onClick={() => {
                   navigate(`/dashboard/payment-type/${row.id}/edit`);
                 }}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'paymentType:update'])
+                }
               />
 
               <Button
@@ -273,6 +286,9 @@ export default function PaymentTypeListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'paymentType:destroy'])
+                }
               />
             </div>
           )}

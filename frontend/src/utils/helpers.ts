@@ -129,3 +129,22 @@ export function buildSalesChart(report: SaleReport) {
     },
   };
 }
+
+type AbilityMode = 'any' | 'all';
+
+export function hasAbilities(
+  userAbilities: string[],
+  requiredAbilities: string[],
+  mode: AbilityMode = 'any'
+): boolean {
+  if (userAbilities === null || userAbilities === undefined || !userAbilities.length) return false;
+  if (!requiredAbilities.length) return true;
+
+  return mode === 'all'
+    ? requiredAbilities.every((a) => userAbilities.includes(a))
+    : requiredAbilities.some((a) => userAbilities.includes(a));
+}
+
+export function capitalizeFirst(value: string): string {
+  return value ? value[0].toLocaleUpperCase('es-PE') + value.slice(1) : value;
+}

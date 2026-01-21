@@ -31,8 +31,11 @@ import { DeleteIcon, DetailsIcon, EditIcon, ReloadIcon, RestoreIcon } from '~/co
 import clsx from 'clsx';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
+import { useAuth } from '~/context/authContext';
 
 export default function RolesListView() {
+  const authStore = useAuth();
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
   const [dismissedWarning, setDismissedWarning] = useState(false);
@@ -129,7 +132,14 @@ export default function RolesListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-4 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/role/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:store'])
+              ? '/dashboard'
+              : '/dashboard/role/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
         <Button
@@ -138,6 +148,10 @@ export default function RolesListView() {
           title={ReloadText}
           width='w-full md:w-auto'
           onClick={() => loadRoles()}
+          disabled={
+            loading ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:index', 'role:list'])
+          }
         ></Button>
       </div>
 
@@ -157,6 +171,7 @@ export default function RolesListView() {
                 onClick={() => {
                   navigate(`/dashboard/role/${row.id}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:show'])}
               />
 
               <Button
@@ -167,6 +182,7 @@ export default function RolesListView() {
                 onClick={() => {
                   navigate(`/dashboard/role/${row.id}/edit`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:update'])}
               />
 
               <Button
@@ -175,6 +191,7 @@ export default function RolesListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:destroy'])}
               />
             </div>
           )}

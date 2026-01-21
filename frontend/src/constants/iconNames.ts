@@ -81,3 +81,4 @@ export const WarningIcon = 'ic:baseline-warning-amber';
 export const PdfIcon = 'ic:sharp-picture-as-pdf';
 export const ChartUpIcon = 'ic:outline-stacked-line-chart';
 export const ChartDownIcon = 'ic:sharp-ssid-chart';
+export const ChartIcon = 'ic:sharp-pie-chart-outline';

@@ -17,13 +17,16 @@ import type { VoucherSerie } from '~/types/voucherSerie';
 // --- 1. APP IDENTITY & AREA TEXTS ---
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
-export const AppVersion = 'Dev. Env.';
+export const AppVersion = 'Public v1.0';
 
 export const WelcomeAreaText = `Dashboard - ${AppName}`;
 export const LoginAreaText = `Inicio de Sesión - ${AppName}`;
 export const ProfileAreaText = `Mi Perfil - ${AppName}`;
 export const _404AreaText = `Módulo no encontrado - ${AppName}`;
 export const RecoverAccountAreaText = `Recuperación de Cuenta - ${AppName}`;
+export const AboutAreaText = `Información del Sistema - ${AppName}`;
+export const AboutSysText = 'Acerca de';
+export const UserInfoText = 'Información de la Cuenta';
 
 // --- 2. UI LABELS & NAVIGATION ---
 export const HomeText = 'Inicio';
@@ -106,6 +109,13 @@ export const RecoveryMailSentText =
   'Operación completada correctamente. Si el e-mail ingresado pertenece a un usuario las instrucciones para recuperar su cuenta seran enviadas.';
 export const InvalidOrExpiredTokenText =
   'El token de recuperación es inválido o ha expirado, vuelva a intentarlo. Si el problema persiste comuniquese con administración.';
+export const WelcomeMessage = (user: User) => {
+  return `¡Bienvenido ${user?.names ?? 'usuario'}! Cargando reporte de ventas...`;
+};
+export const DefaultWelcomeMessage = (user: User) => {
+  return `¡Bienvenido de vuelta ${user?.names ?? 'usuario'}!`;
+};
+export const DashboardText = 'Dashboard';
 
 // --- 5. USER & PROFILE ---
 export const ProfileText = 'Perfil';
@@ -465,6 +475,8 @@ export const StoreStatusUpdateFailedText =
   'Fallo la actualización de visibilidad de la tienda. Intente nuevamente o comuniquese con administración.';
 export const ProductSearchByBarcodeFailedText =
   'El producto no se encuentra asignado a la tienda o no existe, verifique los datos ingresados y vuelva a intentarlo. Si el problema persiste comuniquese con administración.';
+export const DisabledProductSale =
+  'El producto escaneado se encuentra marcado como no disponible para la venta, comuniquese con administración o habilite el producto desde su listado o detalle.';
 export const CustomerNotFoundByDniText =
   'El DNI ingresado no se encuentra asignado a ningún cliente del sistema o el mismo se encuentra deshabilitado. <br> <strong>Recuerde que puede realizar ventas ingresando el DNI 0.</strong><br> ¿Desea proceder con el registro del cliente?';
 export const PaymentTypeStatusUpdateFailedText =
@@ -565,7 +577,7 @@ export const PresentationStatusChangeMessage = (presentation: Presentation) => {
   return `¿Está seguro de <strong>${presentation.deletedAt != null ? 'restaurar' : 'deshabilitar'}</strong> la siguiente presentación de producto? <br> <strong>ID:</strong> ${presentation.id} <br> <strong>NOMBRE:</strong> ${presentation.name} <br> <strong>VAL. NUMÉRICO:</strong> ${presentation.numericValue} <br> <strong>DESCRIPCIÓN</strong> ${presentation.description}`;
 };
 export const SettingDeletionMessage = (setting: Setting) => {
-  return `¿Está seguro de <strong>eliminar</strong> la siguiente variable del sistema? <br> <strong>ID:</strong> ${setting.id} <br> <strong>CLAVE:</strong> ${setting.key} <br> <strong>VALOR:</strong> ${setting.value} <br> <strong>DESCRIPCIÓN</strong> ${setting.description} <br> <strong class='text-error'>Esta operación NO es reversible, deberá volver a crear la variable de ser requerida posteriormente.</strong>`;
+  return `¿Está seguro de <strong>eliminar</strong> la siguiente variable del sistema? <br> <strong>ID:</strong> ${setting.id} <br> <strong>CLAVE:</strong> ${setting.key} <br> <strong>VALOR:</strong> ${setting.value} <br> <strong>DESCRIPCIÓN</strong> ${setting.description} <br> <strong class='text-error'>Esta operación NO es reversible, deberá volver a crear la variable de ser requerida posteriormente. <br><br> El funcionamiento del sistema podría verse afectado.</strong>`;
 };
 export const BuyOrderStatusChangeMessage = (buyOrder: BuyOrder) => {
   return `¿Está seguro de <strong>${buyOrder.deletedAt != null ? 'restaurar' : 'eliminar'}</strong> la siguiente orden de compra? <br> <strong>ID:</strong> ${buyOrder.id} <br> <strong>PROVEEDOR:</strong> ${buyOrder.supplier?.name ?? ''} <br> <strong>TIENDA:</strong> ${buyOrder.store?.name ?? ''} <br> <strong>SUBTOTAL:</strong> ${buyOrder.subtotal} <br> <strong>TOTAL:</strong> ${buyOrder.total}`;
@@ -619,36 +631,36 @@ export const VoucherSeriesNotLoadedText =
 export const VoucherTypesNotLoadedText =
   'No se encontraron tipos de comprobantes de pago con el criterío ingresado.';
 export const VoucherTypeText = 'Tipo de Comp. Pago';
-export const VoucherTypeAltText = 'Tipo de comprobante de pago';
-export const VoucherTypesText = 'Tipos de comprobantes de pago';
-export const VoucherSeriesListAreaText = `Listado de Series de Comp. de Pago - ${AppName}`;
-export const VoucherTypesListAreaText = `Listado de Tipos de Comp. de Pago - ${AppName}`;
-export const SystemVoucherSeries = 'Gest. Series Comp. Pago';
-export const SystemVoucherTypes = 'Gest. Tipos Comp. Pago';
-export const VoucherSerieText = 'Serie de comprobante de pago';
-export const VoucherSeriesText = 'Series de comprobantes de pago';
-export const LoadingVoucherSeriesText = 'Cargando series de comprobantes de pago...';
-export const VoucherSerieCreatedText = 'Serie de comprobante de pago registrada correctamente.';
-export const VoucherSerieUpdatedText = 'Serie de comprobante de pago actualizada correctamente.';
+export const VoucherTypeAltText = 'Tipo de comprobante de venta';
+export const VoucherTypesText = 'Tipos de comprobantes de venta';
+export const VoucherSeriesListAreaText = `Listado de Series de Comp. de Venta - ${AppName}`;
+export const VoucherTypesListAreaText = `Listado de Tipos de Comp. de Venta - ${AppName}`;
+export const SystemVoucherSeries = 'Gest. Series Comp. Venta';
+export const SystemVoucherTypes = 'Gest. Tipos Comp. Venta';
+export const VoucherSerieText = 'Serie de comprobante de venta';
+export const VoucherSeriesText = 'Series de comprobantes de venta';
+export const LoadingVoucherSeriesText = 'Cargando series de comprobantes de venta...';
+export const VoucherSerieCreatedText = 'Serie de comprobante de venta registrada correctamente.';
+export const VoucherSerieUpdatedText = 'Serie de comprobante de venta actualizada correctamente.';
 export const DuplicatedVoucherSerieText =
   'La serie ingresada ya se encuentra registrada en el sistema o tiene formato inválido.';
 export const CorrelativeText = 'Correlativo';
-export const NewVoucherSerieText = 'Registro de serie de comp. de pago';
-export const EditVoucherSerieText = 'Modificar serie de comp. de pago';
+export const NewVoucherSerieText = 'Registro de serie de comp. de venta';
+export const EditVoucherSerieText = 'Modificar serie de comp. de venta';
 export const EnableText = 'Habilitar';
 export const VoucherSerieStatusChangedText =
-  'Serie de comprobantes de pago habilitada correctamente.';
+  'Serie de comprobantes de venta habilitada correctamente.';
 export const VoucherSerieStatusChangeFailedText =
-  'Fallo la modificación del estado de la serie de comprobante de pago. Intente nuevamente o comuniquese con administración.';
+  'Fallo la modificación del estado de la serie de comprobante de venta. Intente nuevamente o comuniquese con administración.';
 export const SeriesAmountText = 'Cant. Series';
-export const LoadingVoucherTypesText = 'Cargando tipos de comprobantes de pago...';
-export const VoucherTypeDetailText = 'Detalle de Tipo de Comp. de Pago';
+export const LoadingVoucherTypesText = 'Cargando tipos de comprobantes de venta...';
+export const VoucherTypeDetailText = 'Detalle de Tipo de Comp. de Venta';
 export const VoucherTypesRestorationCompText =
-  'Los tipos de comprobantes de pago han sido regenerados correctamente.';
+  'Los tipos de comprobantes de venta han sido regenerados correctamente.';
 export const VoucherTypesRestorationFailText =
-  'Error durante la regeneración de tipos de comprobantes de pago, esta opción solo puede realizarse cuando el sistema <strong>NO PRESENTA</strong> tipos de comprobantes de pago registrados. Comuniquese con administración.';
+  'Error durante la regeneración de tipos de comprobantes de venta, esta opción solo puede realizarse cuando el sistema <strong>NO PRESENTA</strong> tipos de comprobantes de pago registrados. Comuniquese con administración.';
 export const VoucherTypeRestorationMessage =
-  '¿Está seguro de que desea regenerar los tipos de comprobantes de pago? Está acción solo puede realizarse cuando el sistema <strong>NO</strong> cuenta con estos tipos registrados, caso contrario la operación sera cancelada. Comuniquese con administración.';
+  '¿Está seguro de que desea regenerar los tipos de comprobantes de venta? Está acción solo puede realizarse cuando el sistema <strong>NO</strong> cuenta con estos tipos registrados, caso contrario la operación sera cancelada. Comuniquese con administración.';
 export const CashReceivedText = 'Monto Recibido';
 export const PaymentHashText = 'Hash de Pago';
 export const ChangeText = 'Cambio';
@@ -713,3 +725,9 @@ export const BestSaleText = 'Mejor Venta';
 export const WorstSaleText = 'Peor Venta';
 export const GoToBestSaleText = 'Ir a mejor venta';
 export const GoToWorstSaleText = 'Ir a peor venta';
+export const DailyReportText = 'Reporte Diario';
+export const WeeklyReportText = 'Reporte Semanal';
+export const DailyReportNotLoadedText =
+  'No se realizaron ventas durante el día actual. ¡A trabajar!';
+export const WeeklyReportNotLoadedText =
+  'No se realizaron ventas durante la semana en curso. ¡A trabajar!';

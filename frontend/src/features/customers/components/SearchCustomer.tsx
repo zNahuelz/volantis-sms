@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router';
 import Input from '~/components/Input';
 import { DniIcon, SearchIcon } from '~/constants/iconNames';
 import Button from '~/components/Button';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 interface SearchCustomerProps {
   onCustomerResolved: (customer: Customer) => void;
@@ -25,6 +27,7 @@ interface SearchCustomerProps {
 
 export default function SearchCustomer({ onCustomerResolved }: SearchCustomerProps) {
   const navigate = useNavigate();
+  const authStore = useAuth();
   const {
     register,
     handleSubmit,
@@ -94,7 +97,10 @@ export default function SearchCustomer({ onCustomerResolved }: SearchCustomerPro
           icon={!isSubmitting ? SearchIcon : ''}
           isLoading={isSubmitting}
           type='submit'
-          disabled={isSubmitting}
+          disabled={
+            isSubmitting ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'customer:showByDni', 'sale:store'])
+          }
           title={SearchText.toUpperCase()}
         />
       </div>

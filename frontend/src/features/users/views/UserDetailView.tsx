@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import type { User } from '~/types/user';
-import { formatAsDatetime, isInteger } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger } from '~/utils/helpers';
 import { userService } from '../services/userService';
 import Loading from '~/components/Loading';
 import {
@@ -27,6 +27,7 @@ import {
   NameText,
   NamesText,
   OkTagText,
+  RecoveryMailSentText,
   RemoveProfilePictureMessage,
   RemoveProfilePictureText,
   ResetPasswordRemotelyMessage,
@@ -63,13 +64,19 @@ import {
   SendPasswordRecoveryIcon,
 } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
-import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import {
+  ErrorColor,
+  SuccessColor,
+  longSwalDismissalTime,
+  swalDismissalTime,
+} from '~/constants/values';
 import Modal from '~/components/Modal';
 import UserForm from '../components/UserForm';
 import { useAuth } from '~/context/authContext';
 import defaultPfp from '../../../assets/images/defaultPfp.png';
 import { Table, type Column } from '~/components/Table';
 import type { Ability } from '~/types/ability';
+import { sendRecoveryMailService } from '~/features/auth/services/authService';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function UserDetailView() {
@@ -78,7 +85,9 @@ export default function UserDetailView() {
   const [user, setUser] = useState<User | null>(null);
   const [editUserModalVisible, setEditUserModalVisible] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const columns: Column<Ability>[] = [
     { key: 'name', label: NameText },
@@ -234,6 +243,29 @@ export default function UserDetailView() {
     }
   };
 
+  const sendRecoveryMailRemotely = async (email: string) => {
+    try {
+      setIsSendingEmail(true);
+      const res = await sendRecoveryMailService(email);
+      showRecoveryMailModal('success', res);
+    } catch (error) {
+      showRecoveryMailModal('error', error);
+    }
+  };
+
+  const showRecoveryMailModal = (type: 'success' | 'error', object: any) => {
+    setIsSendingEmail(false);
+    Swal.fire({
+      icon: type,
+      title: type === 'success' ? OkTagText : ErrorTagText,
+      html: !object.message ? RecoveryMailSentText : object.message,
+      timer: longSwalDismissalTime,
+      showConfirmButton: false,
+    }).then((r) => {
+      if (r.dismiss) return;
+    });
+  };
+
   if (loading) {
     return <Loading loadMessage={LoadingUserText}></Loading>;
   }
@@ -331,23 +363,33 @@ export default function UserDetailView() {
             color='btn-primary'
             icon={RemoveProfilePictureIcon}
             onClick={() => showRemoveProfilePictureModal(user)}
+            disabled={
+              !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:removeProfilePicture'])
+            }
           ></Button>
           <Button
             label={ResetPasswordText}
             color='btn-secondary'
             icon={ResetPasswordIcon}
             onClick={() => showResetPasswordRemotelyModal(user)}
+            disabled={
+              !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'auth:remotePasswordReset'])
+            }
           ></Button>
           <Button
             label={SendPasswordRecoveryText}
             color='btn-info'
             icon={SendPasswordRecoveryIcon}
+            onClick={() => sendRecoveryMailRemotely(user.email)}
+            disabled={isSendingEmail || !hasAbilities(authStore?.abilityKeys, ['sys:admin'])}
           ></Button>
           <Button
             label={EditRoleText}
             color='btn-neutral'
             icon={EditRoleIcon}
-            disabled={!user.role}
+            disabled={
+              !user.role || !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:update'])
+            }
             onClick={() => {
               navigate(`/dashboard/role/${user.role?.id}/edit`);
             }}
@@ -378,6 +420,10 @@ export default function UserDetailView() {
               icon={EditIcon}
               className='join-item'
               onClick={() => setEditUserModalVisible(true)}
+              disabled={
+                editUserModalVisible ||
+                !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:update'])
+              }
             ></Button>
             <Button
               label={user.deletedAt ? RestoreText : DeleteText}
@@ -385,6 +431,7 @@ export default function UserDetailView() {
               color={user.deletedAt ? 'btn-info' : 'btn-error'}
               className='join-item'
               onClick={() => showStatusChangeModal(user)}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:destroy'])}
             ></Button>
           </div>
         </div>

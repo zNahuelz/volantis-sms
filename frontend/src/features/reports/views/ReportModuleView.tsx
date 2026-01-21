@@ -40,13 +40,19 @@ import {
 import { reportService, type SaleReport } from '../services/reportService';
 import Loading from '~/components/Loading';
 import { PaymentTypesChart } from '../components/PaymentTypesChart';
-import { buildSalesChart, formatReportDate, resolveReportType } from '~/utils/helpers';
+import {
+  buildSalesChart,
+  formatReportDate,
+  hasAbilities,
+  resolveReportType,
+} from '~/utils/helpers';
 import { VoucherTypesChart } from '../components/VoucherTypesChart';
 import { AverageSaleChart } from '../components/AverageSaleChart';
 import Swal from 'sweetalert2';
 import { longSwalDismissalTime } from '~/constants/values';
 import { Table } from '~/components/Table';
 import { useNavigate } from 'react-router';
+import { useAuth } from '~/context/authContext';
 
 export default function ReportModuleView() {
   type SalesCharts = ReturnType<typeof buildSalesChart>;
@@ -54,6 +60,7 @@ export default function ReportModuleView() {
   const [loading, setLoading] = useState(false);
   const [charts, setCharts] = useState<SalesCharts | null>(null);
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const summaryData = [
     { label: TotalSalesText, value: report?.totalSales },
@@ -175,7 +182,10 @@ export default function ReportModuleView() {
                     isLoading={isSubmitting}
                     label={!isSubmitting ? GenerateText : GeneratingText}
                     type='submit'
-                    disabled={isSubmitting}
+                    disabled={
+                      isSubmitting ||
+                      !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'report:sales'])
+                    }
                   ></Button>
                 </div>
               </div>

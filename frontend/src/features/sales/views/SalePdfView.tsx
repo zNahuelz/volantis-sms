@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import type { Sale } from '~/types/sale';
-import { isInteger } from '~/utils/helpers';
+import { hasAbilities, isInteger } from '~/utils/helpers';
 import { saleService } from '../services/saleService';
 import Loading from '~/components/Loading';
 import {
@@ -101,7 +101,7 @@ export default function SalePdfView() {
             <div className='join join-horizontal'>
               <Button
                 className='join-item md:btn-sm'
-                color='btn-error'
+                color='btn-secondary'
                 icon={GoBackIcon}
                 title={GoBackText.toUpperCase()}
                 disabled={loading || downloading}
@@ -112,7 +112,11 @@ export default function SalePdfView() {
                 color='btn-primary'
                 icon={DetailsIcon}
                 title={DetailsText.toUpperCase()}
-                disabled={loading || downloading}
+                disabled={
+                  loading ||
+                  downloading ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'sale:show'])
+                }
                 onClick={() => {
                   navigate(`/dashboard/sale/${sale.id}`);
                 }}
@@ -123,7 +127,11 @@ export default function SalePdfView() {
                 icon={!downloading ? DownloadIcon : ''}
                 isLoading={downloading}
                 title={!downloading ? DownloadPdfText.toUpperCase() : DownloadingText.toUpperCase()}
-                disabled={loading || downloading}
+                disabled={
+                  loading ||
+                  downloading ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'report:salePdf'])
+                }
                 onClick={() => downloadVoucherPdf()}
               ></Button>
             </div>

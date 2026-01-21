@@ -41,6 +41,8 @@ import clsx from 'clsx';
 import { Paginator } from '~/components/Paginator';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
+import { useAuth } from '~/context/authContext';
 
 export default function CustomerListView() {
   const [data, setData] = useState<Customer[]>([]);
@@ -56,6 +58,7 @@ export default function CustomerListView() {
     status: 'available',
   });
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const {
     register,
@@ -172,7 +175,14 @@ export default function CustomerListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/customer/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'customer:store'])
+              ? '/dashboard'
+              : '/dashboard/customer/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -241,6 +251,7 @@ export default function CustomerListView() {
                 onClick={() => {
                   navigate(`/dashboard/customer/${row.id}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'customer:show'])}
               />
 
               <Button
@@ -251,7 +262,14 @@ export default function CustomerListView() {
                 onClick={() => {
                   navigate(`/dashboard/customer/${row.id}/edit`);
                 }}
-                disabled={row.id === 1}
+                disabled={
+                  row.id === 1 ||
+                  !hasAbilities(authStore?.abilityKeys, [
+                    'sys:admin',
+                    'customer:update',
+                    'customer:updateDefault',
+                  ])
+                }
               />
 
               <Button
@@ -260,7 +278,14 @@ export default function CustomerListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
-                disabled={row.id === 1}
+                disabled={
+                  row.id === 1 ||
+                  !hasAbilities(authStore?.abilityKeys, [
+                    'sys:admin',
+                    'customer:destroy',
+                    'customer:destroyDefault',
+                  ])
+                }
               />
             </div>
           )}

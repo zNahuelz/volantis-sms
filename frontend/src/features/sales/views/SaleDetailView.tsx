@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import type { Sale } from '~/types/sale';
-import { formatAsDatetime, isInteger, sunatRound } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger, sunatRound } from '~/utils/helpers';
 import { saleService } from '../services/saleService';
 import Loading from '~/components/Loading';
 import {
@@ -204,7 +204,10 @@ export default function SaleDetailView() {
               value={`${sale.user?.names}, ${sale.user?.surnames} --- ${sale.user?.username}` ?? ''}
               onDoubleClick={() => navigate(`/dashboard/user/${sale.user?.id}`)}
               className='hover:text-primary hover:font-bold'
-              disabled={sale.user?.id === authStore.user?.id}
+              disabled={
+                sale.user?.id === authStore.user?.id ||
+                !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:show'])
+              }
               readOnly
             ></Input>
           </fieldset>

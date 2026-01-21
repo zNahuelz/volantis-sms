@@ -61,6 +61,7 @@ import Input from '~/components/Input';
 import { STORE_PRODUCT_SALE_STATUS } from '~/constants/arrays';
 import { storeProductService } from '../services/storeProductService';
 import { useNavigate } from 'react-router';
+import { hasAbilities } from '~/utils/helpers';
 
 interface StoreProductFormProps {
   storeProduct?: StoreProduct;
@@ -81,7 +82,7 @@ export default function StoreProductForm({ storeProduct, onSubmit }: StoreProduc
 
   const isEdit = Boolean(storeProduct);
 
-  const isAdmin = authStore.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
+  const isAdmin = authStore?.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
 
   const igvRate = usingDefaultTax
     ? DEFAULT_TAX_VALUE
@@ -361,7 +362,18 @@ export default function StoreProductForm({ storeProduct, onSubmit }: StoreProduc
             className='join-item'
             color='btn-success'
             onClick={() => setShowProductSearchModal(true)}
-            disabled={isSubmitting || isSearchingSp || isEdit}
+            disabled={
+              isSubmitting ||
+              isSearchingSp ||
+              isEdit ||
+              showProductSearchModal ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'storeProduct:store',
+                'storeProduct:update',
+                'product:index',
+              ])
+            }
           ></Button>
         </div>
       </fieldset>
@@ -508,7 +520,16 @@ export default function StoreProductForm({ storeProduct, onSubmit }: StoreProduc
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting || isSearchingSp || !selectedProduct}
+            disabled={
+              isSubmitting ||
+              isSearchingSp ||
+              !selectedProduct ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'storeProduct:store',
+                'storeProduct:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

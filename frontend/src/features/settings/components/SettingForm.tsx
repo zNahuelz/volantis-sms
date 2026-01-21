@@ -35,7 +35,9 @@ import {
   ValueText,
 } from '~/constants/strings';
 import { longSwalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import type { Setting } from '~/types/setting';
+import { hasAbilities } from '~/utils/helpers';
 
 interface SettingFormProps {
   setting?: Setting;
@@ -50,6 +52,7 @@ export default function SettingForm({
   onSubmittingChange,
   closeParentModal,
 }: SettingFormProps) {
+  const authStore = useAuth();
   const isEdit = Boolean(setting);
   const {
     register,
@@ -232,7 +235,13 @@ export default function SettingForm({
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'setting:store' || 'setting:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

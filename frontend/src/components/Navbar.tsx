@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router';
 import {
   AdminIcon,
   CustomRoleIcon,
-  EmptyNotificationsIcon,
   ManagerIcon,
   MenuIcon,
   SellerIcon,
@@ -13,11 +12,13 @@ import { ClosingSessionText, LogoutText, PleaseWaitText, SettingText } from '~/c
 import { useAuth } from '~/context/authContext';
 import defaultPfp from '../assets/images/defaultPfp.png';
 import Swal from 'sweetalert2';
+import { hasAbilities } from '~/utils/helpers';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Navbar() {
   const { logout } = useAuth();
   const { user } = useAuth();
+  const authStore = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -63,37 +64,6 @@ export default function Navbar() {
         </div>
 
         <div className='dropdown dropdown-end'>
-          <div tabIndex={0} role='button' className='btn btn-circle btn-ghost'>
-            <div className='indicator'>
-              <Icon icon={EmptyNotificationsIcon} className='h-5 w-5' />
-              <span className='indicator-item badge badge-sm badge-primary'>3</span>
-            </div>
-          </div>
-          <div className='card-compact dropdown-content card bg-base-100 z-1 mt-3 w-80 border shadow-lg'>
-            <div className='card-body'>
-              <h3 className='text-lg font-bold'>Notificaciones</h3>
-              <div className='space-y-2'>
-                <div className='hover:bg-base-200 rounded p-2'>
-                  <p className='text-sm font-medium'>Mensaje de Prueba #1</p>
-                  <p className='text-base-content/70 text-xs'>Hace 5 minutos</p>
-                </div>
-                <div className='hover:bg-base-200 rounded p-2'>
-                  <p className='text-sm font-medium'>Mensaje de Prueba #2</p>
-                  <p className='text-base-content/70 text-xs'>Hace 10 minutos</p>
-                </div>
-                <div className='hover:bg-base-200 rounded p-2'>
-                  <p className='text-sm font-medium'>Mensaje de Prueba #3</p>
-                  <p className='text-base-content/70 text-xs'>Hace 1 hora</p>
-                </div>
-              </div>
-              <div className='flex flex-col items-center'>
-                <button className='btn btn-wide btn-primary'>Ver todas</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='dropdown dropdown-end'>
           <div tabIndex={0} role='button' className='btn avatar btn-circle btn-ghost'>
             <div className='w-10 rounded-full'>
               <img
@@ -125,8 +95,12 @@ export default function Navbar() {
                 Perfil
               </button>
             </li>
-            <li>
-              <button type='button'>{SettingText}</button>
+            <li
+              className={`${!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'settings:index', 'sys:settings']) ? 'hidden' : ''}`}
+            >
+              <button type='button' onClick={() => navigate('/dashboard/settings')}>
+                {SettingText}
+              </button>
             </li>
             <li>
               <button type='button' onClick={handleLogout}>

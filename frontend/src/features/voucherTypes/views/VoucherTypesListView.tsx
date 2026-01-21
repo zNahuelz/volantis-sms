@@ -36,6 +36,8 @@ import Swal from 'sweetalert2';
 import Modal from '~/components/Modal';
 import VoucherTypeDetail from '../components/VoucherTypeDetail';
 import { ErrorColor, SuccessColor, longSwalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
+import { useAuth } from '~/context/authContext';
 
 export default function VoucherTypesListView() {
   const [data, setData] = useState<VoucherType[]>([]);
@@ -52,6 +54,7 @@ export default function VoucherTypesListView() {
     field: undefined,
     status: 'available',
   });
+  const authStore = useAuth();
 
   const {
     register,
@@ -175,7 +178,11 @@ export default function VoucherTypesListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => showRestoreTypesModal()}
-          disabled={data.length >= 2 || query.status === 'deleted'}
+          disabled={
+            data.length >= 2 ||
+            query.status === 'deleted' ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'voucherType:regenerate'])
+          }
         />
 
         <form
@@ -246,6 +253,15 @@ export default function VoucherTypesListView() {
                   setSelectedVoucherType(row);
                   setVoucherTypeDetailVisible(true);
                 }}
+                disabled={
+                  voucherTypeDetailVisible ||
+                  !hasAbilities(authStore?.abilityKeys, [
+                    'sys:admin',
+                    'voucherType:show',
+                    'voucherType:index',
+                    'voucherType:list',
+                  ])
+                }
               />
             </div>
           )}

@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import { useState, useEffect } from 'react';
 import type { Store } from '~/types/store';
 import { useNavigate } from 'react-router';
-import { formatAsDatetime, isInteger } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger } from '~/utils/helpers';
 import { storeService } from '../services/storeService';
 import Loading from '~/components/Loading';
 import {
@@ -37,12 +37,14 @@ import Button from '~/components/Button';
 import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 
 export default function StoreDetailView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [store, setStore] = useState<Store | null>(null);
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   useEffect(() => {
     const loadStore = async () => {
@@ -181,6 +183,7 @@ export default function StoreDetailView() {
               onClick={() => {
                 navigate(`/dashboard/store/${store.id}/edit`);
               }}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'store:update'])}
             ></Button>
             <Button
               label={store.deletedAt ? RestoreText : DeleteText}
@@ -188,6 +191,7 @@ export default function StoreDetailView() {
               color={store.deletedAt ? 'btn-info' : 'btn-error'}
               className='join-item'
               onClick={() => showStatusChangeModal(store)}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'store:destroy'])}
             ></Button>
           </div>
         </div>

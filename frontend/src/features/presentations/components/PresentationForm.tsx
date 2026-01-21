@@ -31,7 +31,9 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { longSwalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import type { Presentation } from '~/types/presentation';
+import { hasAbilities } from '~/utils/helpers';
 
 interface PresentationFormProps {
   presentation?: Presentation;
@@ -46,6 +48,7 @@ export default function PresentationForm({
   onSubmittingChange,
   closeParentModal,
 }: PresentationFormProps) {
+  const authStore = useAuth();
   const isEdit = Boolean(presentation);
   const {
     register,
@@ -189,7 +192,14 @@ export default function PresentationForm({
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'presentation:store',
+                'presentation:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

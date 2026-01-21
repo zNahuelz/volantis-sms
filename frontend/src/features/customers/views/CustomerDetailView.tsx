@@ -30,7 +30,7 @@ import {
   UpdatedAtText,
 } from '~/constants/strings';
 import type { Customer } from '~/types/customer';
-import { formatAsDatetime, isInteger } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger } from '~/utils/helpers';
 import { customerService } from '../services/customerService';
 import Loading from '~/components/Loading';
 import Swal from 'sweetalert2';
@@ -38,8 +38,10 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 import Input from '~/components/Input';
 import Button from '~/components/Button';
 import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
+import { useAuth } from '~/context/authContext';
 
 export default function CustomerDetailView() {
+  const authStore = useAuth();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -190,7 +192,9 @@ export default function CustomerDetailView() {
               onClick={() => {
                 navigate(`/dashboard/customer/${customer.id}/edit`);
               }}
-              disabled={customer.id === 1} //TODO: Create ability customer:editDefaultCustomer
+              disabled={
+                !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'customer:updateDefault'])
+              }
             ></Button>
             <Button
               label={customer.deletedAt ? RestoreText : DeleteText}
@@ -200,7 +204,14 @@ export default function CustomerDetailView() {
               onClick={() => {
                 showStatusChangeModal(customer);
               }}
-              disabled={customer.id === 1}
+              disabled={
+                customer.id === 1 ||
+                !hasAbilities(authStore?.abilityKeys, [
+                  'sys:admin',
+                  'customer:destroy',
+                  'customer:destroyDefault',
+                ])
+              }
             ></Button>
           </div>
         </div>

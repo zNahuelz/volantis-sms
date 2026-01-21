@@ -44,6 +44,8 @@ import {
 import clsx from 'clsx';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function SuppliersListView() {
   const [data, setData] = useState<Supplier[]>([]);
@@ -59,6 +61,7 @@ export default function SuppliersListView() {
     status: 'available',
   });
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const {
     register,
@@ -174,7 +177,14 @@ export default function SuppliersListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/supplier/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:store'])
+              ? '/dashboard'
+              : '/dashboard/supplier/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -243,6 +253,7 @@ export default function SuppliersListView() {
                 onClick={() => {
                   navigate(`/dashboard/supplier/${row.id}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:show'])}
               />
 
               <Button
@@ -253,6 +264,7 @@ export default function SuppliersListView() {
                 onClick={() => {
                   navigate(`/dashboard/supplier/${row.id}/edit`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:update'])}
               />
 
               <Button
@@ -261,6 +273,7 @@ export default function SuppliersListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:destroy'])}
               />
             </div>
           )}

@@ -21,7 +21,7 @@ export type SaleReport = {
 };
 
 class ReportService {
-  salesReport(type: 'by_month' | 'by_year', date: Date) {
+  salesReport(type: 'by_day' | 'by_week' | 'by_month' | 'by_year', date: Date | string) {
     return http.get(`report/sales/?type=${type}&date=${date}`).json<SaleReport>();
   }
 }

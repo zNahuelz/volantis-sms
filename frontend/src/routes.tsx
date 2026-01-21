@@ -3,6 +3,7 @@ import LoginView from './features/auth/views/LoginView';
 import GuestRoute from './features/auth/components/GuestRoute';
 import {
   AbilitiesListAreaText,
+  AboutAreaText,
   BuyOrderDetailAreaText,
   BuyOrdersListAreaText,
   CreateBuyOrderAreaText,
@@ -101,6 +102,7 @@ import SaleDetailView from './features/sales/views/SaleDetailView';
 import PasswordRecoveryView from './features/auth/views/PasswordRecoveryView';
 import SalePdfView from './features/sales/views/SalePdfView';
 import ReportModuleView from './features/reports/views/ReportModuleView';
+import AboutView from './features/shared/views/AboutView';
 
 export const router = createBrowserRouter([
   {
@@ -142,6 +144,12 @@ export const router = createBrowserRouter([
             handle: { title: ProfileAreaText },
             children: [{ index: true, Component: ProfileView }],
           },
+          //About view...
+          {
+            path: 'about',
+            handle: { title: AboutAreaText, abilities: ['sys:admin', 'sys:info'] },
+            children: [{ index: true, Component: AboutView }],
+          },
           //Buy order routes...
           {
             path: 'buy-order',
@@ -175,7 +183,10 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditBuyOrderAreaText, abilities: ['sys:admin', 'buyOrder:edit'] },
+                handle: {
+                  title: EditBuyOrderAreaText,
+                  abilities: ['sys:admin', 'buyOrder:update'],
+                },
                 children: [{ index: true, Component: BuyOrderEditView }],
               },
             ],
@@ -213,7 +224,10 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditCustomerAreaText, abilities: ['sys:admin', 'customer:edit'] },
+                handle: {
+                  title: EditCustomerAreaText,
+                  abilities: ['sys:admin', 'customer:update'],
+                },
                 children: [{ index: true, Component: CustomerEditView }],
               },
             ],
@@ -251,7 +265,10 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditSupplierAreaText, abilities: ['sys:admin', 'supplier:edit'] },
+                handle: {
+                  title: EditSupplierAreaText,
+                  abilities: ['sys:admin', 'supplier:update'],
+                },
                 children: [{ index: true, Component: SupplierEditView }],
               },
             ],
@@ -289,7 +306,7 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditStoreAreaText, abilities: ['sys:admin', 'store:edit'] },
+                handle: { title: EditStoreAreaText, abilities: ['sys:admin', 'store:update'] },
                 children: [{ index: true, Component: StoreEditView }],
               },
             ],
@@ -329,7 +346,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: StoreProductEditAreaText,
-                  abilities: ['sys:admin', 'storeProduct:edit'],
+                  abilities: ['sys:admin', 'storeProduct:update'],
                 },
                 children: [{ index: true, Component: StoreProductEditView }],
               },
@@ -361,7 +378,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: EditPaymentTypeAreaText,
-                  abilities: ['sys:admin', 'paymentType:edit'],
+                  abilities: ['sys:admin', 'paymentType:update'],
                 },
                 children: [{ index: true, Component: PaymentTypeEditView }],
               },
@@ -411,7 +428,7 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditProductAreaText, abilities: ['sys:admin', 'product:edit'] },
+                handle: { title: EditProductAreaText, abilities: ['sys:admin', 'product:update'] },
                 children: [{ index: true, Component: ProductEditView }],
               },
             ],
@@ -446,7 +463,7 @@ export const router = createBrowserRouter([
               {
                 path: ':id/edit',
                 element: <AbilityRoute />,
-                handle: { title: EditRoleAreaText, abilities: ['sys:admin', 'role:edit'] },
+                handle: { title: EditRoleAreaText, abilities: ['sys:admin', 'role:update'] },
                 children: [{ index: true, Component: RoleEditView }],
               },
             ],

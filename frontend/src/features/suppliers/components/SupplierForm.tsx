@@ -34,6 +34,8 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export interface SupplierFormData {
   name: string;
@@ -50,7 +52,7 @@ interface SupplierFormProps {
 
 export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormProps) {
   const isEdit = Boolean(defaultValues?.name);
-
+  const authStore = useAuth();
   const {
     register,
     handleSubmit,
@@ -212,7 +214,14 @@ export default function SupplierForm({ defaultValues, onSubmit }: SupplierFormPr
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'supplier:store',
+                'supplier:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

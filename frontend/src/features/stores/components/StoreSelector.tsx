@@ -3,7 +3,9 @@ import Button from '~/components/Button';
 import Select from '~/components/Select';
 import { SearchIcon } from '~/constants/iconNames';
 import { NoStoresAvailableText, SelectText } from '~/constants/strings';
+import { useAuth } from '~/context/authContext';
 import type { Store } from '~/types/store';
+import { hasAbilities } from '~/utils/helpers';
 
 interface StoreSelectorProps {
   onSelectionResolved: (store: Store) => void;
@@ -11,6 +13,7 @@ interface StoreSelectorProps {
 }
 
 export default function StoreSelector({ onSelectionResolved, stores }: StoreSelectorProps) {
+  const authStore = useAuth();
   const {
     register,
     handleSubmit,
@@ -49,7 +52,9 @@ export default function StoreSelector({ onSelectionResolved, stores }: StoreSele
           color='btn-success'
           icon={!isSubmitting ? SearchIcon : ''}
           type='submit'
-          disabled={isSubmitting}
+          disabled={
+            isSubmitting || !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'sale:store'])
+          }
           title={SelectText.toUpperCase()}
         />
       </div>

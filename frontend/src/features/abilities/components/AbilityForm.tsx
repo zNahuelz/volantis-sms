@@ -32,7 +32,9 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { longSwalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import type { Ability } from '~/types/ability';
+import { hasAbilities } from '~/utils/helpers';
 
 interface AbilityFormProps {
   ability?: Ability;
@@ -47,6 +49,7 @@ export default function AbilityForm({
   onSubmittingChange,
   closeParentModal,
 }: AbilityFormProps) {
+  const authStore = useAuth();
   const isEdit = Boolean(ability);
   const {
     register,
@@ -188,7 +191,14 @@ export default function AbilityForm({
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'ability:store',
+                'ability:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

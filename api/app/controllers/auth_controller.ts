@@ -103,7 +103,7 @@ export default class AuthController {
           .subject('SISTEMA VOLANTIS - CORREO ELECTRÓNICO ACTUALIZADO')
           .htmlView('emails/email_updated', {
             date: DateTime.utc().setLocale('es').toFormat('dd LLL yyyy'),
-            time: DateTime.utc().toFormat("HH 'horas con' mm 'minutos.'"),
+            time: DateTime.utc().setZone('America/Lima').toFormat('hh:mm:ss a'),
             user,
             oldEmail: oldEmail,
           });
@@ -156,9 +156,9 @@ export default class AuthController {
         message
           .to(user.email)
           .subject('SISTEMA VOLANTIS - CONTRASEÑA ACTUALIZADA')
-          .htmlView('emails/reset_password', {
-            date: DateTime.utc().setLocale('es').toFormat('dd LLL yyyy'),
-            time: DateTime.utc().toFormat("HH 'horas con' mm 'minutos.'"),
+          .htmlView('emails/password_updated', {
+            date: DateTime.utc().setZone('America/Lima').setLocale('es').toFormat('dd LLL yyyy'),
+            time: DateTime.utc().setZone('America/Lima').toFormat('hh:mm:ss a'),
             user,
           });
       });
@@ -185,14 +185,17 @@ export default class AuthController {
     }
 
     try {
+      let newPassword = '';
       await db.transaction(async (trx) => {
         user.useTransaction(trx);
         if (user.dni != null && user.dni.length >= 5 && user.dni.length <= 15) {
-          await user.merge({ password: user.dni.trim() }).save();
+          newPassword = user.dni.trim();
+          await user.merge({ password: newPassword }).save();
         } else {
+          newPassword = `${new Date().getDay().toString()}${(new Date().getMonth() + 1).toString()}${new Date().getFullYear().toString()}`;
           await user
             .merge({
-              password: `${new Date().getDay().toString()}${(new Date().getMonth() + 1).toString()}${new Date().getFullYear().toString()}`,
+              password: newPassword,
             })
             .save();
         }
@@ -203,6 +206,18 @@ export default class AuthController {
             User.accessTokens.delete(user, token.identifier);
           })
         );
+      });
+
+      await mail.sendLater((message) => {
+        message
+          .to(user.email)
+          .subject('SISTEMA VOLANTIS - CONTRASEÑA RESTABLECIDA')
+          .htmlView('emails/password_reset', {
+            date: DateTime.utc().setLocale('es').toFormat('dd LLL yyyy'),
+            time: DateTime.utc().setZone('America/Lima').toFormat('hh:mm:ss a'),
+            username: user.username,
+            password: newPassword,
+          });
       });
 
       return response.ok({

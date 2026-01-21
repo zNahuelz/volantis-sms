@@ -47,6 +47,7 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 import Modal from '~/components/Modal';
 import UserForm from '../components/UserForm';
 import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function UsersListView() {
   const [data, setData] = useState<User[]>([]);
@@ -68,6 +69,7 @@ export default function UsersListView() {
   const navigate = useNavigate();
 
   const { user } = useAuth();
+  const authStore = useAuth();
 
   const {
     register,
@@ -188,7 +190,10 @@ export default function UsersListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => setNewUserModalVisible(true)}
-          disabled={newUserModalVisible}
+          disabled={
+            newUserModalVisible ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:store'])
+          }
         ></Button>
 
         <form
@@ -258,7 +263,10 @@ export default function UsersListView() {
                 onClick={() => {
                   navigate(`/dashboard/user/${row.id}`);
                 }}
-                disabled={row.id === user?.id}
+                disabled={
+                  row.id === user?.id ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:show'])
+                }
               />
 
               <Button
@@ -270,7 +278,11 @@ export default function UsersListView() {
                   setSelectedUser(row);
                   setEditUserModalVisible(true);
                 }}
-                disabled={row.id === user?.id}
+                disabled={
+                  row.id === user?.id ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:update']) ||
+                  editUserModalVisible
+                }
               />
 
               <Button
@@ -279,7 +291,10 @@ export default function UsersListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
-                disabled={row.id === user?.id}
+                disabled={
+                  row.id === user?.id ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:destroy'])
+                }
               />
             </div>
           )}

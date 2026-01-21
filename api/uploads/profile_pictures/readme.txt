@@ -1,0 +1,1 @@
+System profile photo storage directory.

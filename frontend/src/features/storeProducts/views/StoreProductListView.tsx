@@ -41,8 +41,11 @@ import Input from '~/components/Input';
 import Select from '~/components/Select';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function StoreProductListView() {
+  const authStore = useAuth();
   const [data, setData] = useState<StoreProduct[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -171,7 +174,14 @@ export default function StoreProductListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/store-product/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'storeProduct:store'])
+              ? '/dashboard'
+              : '/dashboard/store-product/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -241,6 +251,7 @@ export default function StoreProductListView() {
                 onClick={() => {
                   navigate(`/dashboard/store-product/${row.storeId}/${row.productId}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'storeProduct:show'])}
               />
 
               <Button
@@ -251,6 +262,9 @@ export default function StoreProductListView() {
                 onClick={() => {
                   navigate(`/dashboard/store-product/${row.storeId}/${row.productId}/edit`);
                 }}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'storeProduct:update'])
+                }
               />
 
               <Button
@@ -259,6 +273,9 @@ export default function StoreProductListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'storeProduct:destroy'])
+                }
               />
             </div>
           )}

@@ -35,6 +35,8 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export interface CustomerFormData {
   names: string;
@@ -52,7 +54,7 @@ interface CustomerFormProps {
 
 export default function CustomerForm({ defaultValues, onSubmit }: CustomerFormProps) {
   const isEdit = Boolean(defaultValues?.names);
-
+  const authStore = useAuth();
   const {
     register,
     handleSubmit,
@@ -231,7 +233,14 @@ export default function CustomerForm({ defaultValues, onSubmit }: CustomerFormPr
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'customer:store',
+                'customer:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

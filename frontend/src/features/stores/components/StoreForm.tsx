@@ -32,6 +32,8 @@ import {
   UpdateIcon,
 } from '~/constants/iconNames';
 import Button from '~/components/Button';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export interface StoreFormData {
   name: string;
@@ -47,7 +49,7 @@ interface StoreFormProps {
 
 export default function StoreForm({ defaultValues, onSubmit }: StoreFormProps) {
   const isEdit = Boolean(defaultValues?.name);
-
+  const authStore = useAuth();
   const {
     register,
     handleSubmit,
@@ -192,7 +194,10 @@ export default function StoreForm({ defaultValues, onSubmit }: StoreFormProps) {
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'store:store', 'store:update'])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

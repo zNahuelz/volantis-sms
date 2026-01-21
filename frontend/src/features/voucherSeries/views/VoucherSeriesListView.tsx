@@ -46,6 +46,8 @@ import Modal from '~/components/Modal';
 import VoucherSerieForm from '../components/VoucherSerieForm';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function VoucherSeriesListView() {
   const [data, setData] = useState<VoucherSerie[]>([]);
@@ -64,6 +66,7 @@ export default function VoucherSeriesListView() {
     field: undefined,
     status: 'active',
   });
+  const authStore = useAuth();
 
   const {
     register,
@@ -189,7 +192,10 @@ export default function VoucherSeriesListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => setNewSerieModalVisible(true)}
-          disabled={newSerieModalVisible}
+          disabled={
+            newSerieModalVisible ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'voucherSerie:store'])
+          }
         />
 
         <form
@@ -261,6 +267,10 @@ export default function VoucherSeriesListView() {
                   setSelectedSerie(row);
                   setEditSerieModalVisible(true);
                 }}
+                disabled={
+                  editSerieModalVisible ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'voucherSerie:update'])
+                }
               />
 
               <Button
@@ -269,6 +279,9 @@ export default function VoucherSeriesListView() {
                 icon={row.isActive ? EnabledIcon : DisabledIcon}
                 title={row.isActive ? DisableText : EnableText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'voucherSerie:destroy'])
+                }
               />
             </div>
           )}

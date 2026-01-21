@@ -13,6 +13,7 @@ import {
   StateText,
   UpdatedAtText,
 } from '~/constants/strings';
+import { useAuth } from '~/context/authContext';
 import type { VoucherSerie } from '~/types/voucherSerie';
 import type { VoucherType } from '~/types/voucherType';
 import { formatAsDatetime } from '~/utils/helpers';
@@ -40,9 +41,11 @@ export default function VoucherTypeDetail({ voucherType }: Props) {
     { key: 'createdAt', label: CreatedAtText },
     { key: 'updatedAt', label: UpdatedAtText },
   ];
+
   if (!voucherType) {
     return null;
   }
+
   return (
     <div className='grid md:grid-cols-3 gap-2'>
       <fieldset className='fieldset'>

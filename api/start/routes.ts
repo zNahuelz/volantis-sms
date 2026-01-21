@@ -153,7 +153,12 @@ router
           .get('/', [ProductController, 'index'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'product:index', 'storeProduct:store']),
+            middleware.ability([
+              'sys:admin',
+              'product:index',
+              'storeProduct:store',
+              'storeProduct:update',
+            ]),
           ]);
         router
           .put('/:id', [ProductController, 'update'])
@@ -244,7 +249,7 @@ router
           .get('/index/all', [SupplierController, 'list'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'supplier:list', 'buyOrder:store']),
+            middleware.ability(['sys:admin', 'supplier:list', 'buyOrder:store', 'buyOrder:index']),
           ]);
         router
           .put('/:id', [SupplierController, 'update'])
@@ -315,7 +320,13 @@ router
           .get('/index/all', [StoreController, 'list'])
           .use([
             middleware.auth(),
-            middleware.ability(['sys:admin', 'store:list', 'user:store', 'buyOrder:store']),
+            middleware.ability([
+              'sys:admin',
+              'store:list',
+              'user:store',
+              'buyOrder:store',
+              'buyOrder:index',
+            ]),
           ]);
         router
           .put('/:id', [StoreController, 'update'])

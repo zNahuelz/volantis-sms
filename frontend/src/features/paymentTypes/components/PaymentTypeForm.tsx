@@ -31,6 +31,8 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export interface PaymentTypeFormData {
   name: string;
@@ -44,6 +46,7 @@ interface PaymentTypeFormProps {
 
 export default function PaymentTypeForm({ defaultValues, onSubmit }: PaymentTypeFormProps) {
   const isEdit = Boolean(defaultValues?.name);
+  const authStore = useAuth();
 
   const {
     register,
@@ -162,7 +165,14 @@ export default function PaymentTypeForm({ defaultValues, onSubmit }: PaymentType
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'paymentType:store',
+                'paymentType:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

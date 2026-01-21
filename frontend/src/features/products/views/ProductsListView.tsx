@@ -41,8 +41,11 @@ import clsx from 'clsx';
 import { Paginator } from '~/components/Paginator';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function ProductsListView() {
+  const authStore = useAuth();
   const [data, setData] = useState<Product[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -172,7 +175,14 @@ export default function ProductsListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/product/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'product:store'])
+              ? '/dashboard'
+              : '/dashboard/product/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -240,6 +250,7 @@ export default function ProductsListView() {
                 onClick={() => {
                   navigate(`/dashboard/product/${row.id}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'product:show'])}
               />
 
               <Button
@@ -250,6 +261,7 @@ export default function ProductsListView() {
                 onClick={() => {
                   navigate(`/dashboard/product/${row.id}/edit`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'product:update'])}
               />
 
               <Button
@@ -258,6 +270,7 @@ export default function ProductsListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'product:destroy'])}
               />
             </div>
           )}

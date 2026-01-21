@@ -31,6 +31,8 @@ import Modal from '~/components/Modal';
 import AbilityForm from '../components/AbilityForm';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
+import { useAuth } from '~/context/authContext';
 
 export default function AbilitiesListView() {
   const [data, setData] = useState<Ability[]>([]);
@@ -51,6 +53,7 @@ export default function AbilitiesListView() {
     status: 'available',
   });
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const {
     register,
@@ -152,7 +155,10 @@ export default function AbilitiesListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => setNewAbilityModalVisible(true)}
-          disabled={newAbilityModalVisible}
+          disabled={
+            newAbilityModalVisible ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'ability:store'])
+          }
         />
 
         <form
@@ -220,6 +226,10 @@ export default function AbilitiesListView() {
                   setSelectedAbility(row);
                   setEditAbilityModalVisible(true);
                 }}
+                disabled={
+                  editAbilityModalVisible ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'ability:update'])
+                }
               />
             </div>
           )}

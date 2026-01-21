@@ -18,12 +18,15 @@ import { productService } from '../services/productService';
 import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 interface BarcodeScannerProps {
   onBarcodeResolved: (barcode: string) => void;
 }
 
 export default function BarcodeScanner({ onBarcodeResolved }: BarcodeScannerProps) {
+  const authStore = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -103,14 +106,24 @@ export default function BarcodeScanner({ onBarcodeResolved }: BarcodeScannerProp
           icon={RandomizeIcon}
           title={RandomizeBarcodeText}
           onClick={generateRandomBarcode}
-          disabled={isSubmitting}
+          disabled={
+            isSubmitting ||
+            !hasAbilities(authStore?.abilityKeys, [
+              'sys:admin',
+              'product:store',
+              'utils:generateRandomBarcode',
+              'product:generateRandomBarcode',
+            ])
+          }
         />
         <Button
           className='join-item'
           color='btn-info'
           label={AssignText}
           type='submit'
-          disabled={isSubmitting}
+          disabled={
+            isSubmitting || !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'product:store'])
+          }
         />
       </div>
     </form>

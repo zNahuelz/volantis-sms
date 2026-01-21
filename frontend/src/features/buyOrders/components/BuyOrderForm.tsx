@@ -51,6 +51,7 @@ import ProductSearchComponent from './ProductSearchComponent';
 import type { Product } from '~/types/product';
 import Swal from 'sweetalert2';
 import { ADMIN_ABILITY_KEY, swalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
 
 interface BuyOrderFormProps {
   buyOrder?: BuyOrder;
@@ -58,6 +59,7 @@ interface BuyOrderFormProps {
 }
 
 export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) {
+  const auth = useAuth();
   const [loading, setLoading] = useState(true);
   const [stores, setStores] = useState<Store[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -67,7 +69,7 @@ export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) 
 
   const isEdit = Boolean(buyOrder);
 
-  const isAdmin = authStore.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
+  const isAdmin = authStore?.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
 
   const defaultStoreId =
     !isEdit && !isAdmin ? authStore.user?.store?.id : (buyOrder?.storeId ?? stores[0]?.id ?? '');
@@ -339,6 +341,15 @@ export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) 
           className='btn-sm'
           label={AddProductText.toUpperCase()}
           onClick={() => setShowProductSearchModal(true)}
+          disabled={
+            showProductSearchModal ||
+            !hasAbilities(authStore?.abilityKeys, [
+              'sys:admin',
+              'storeProduct:store',
+              'storeProduct:update',
+              'product:index',
+            ])
+          }
         ></Button>
       </div>
 
@@ -561,7 +572,14 @@ export default function BuyOrderForm({ buyOrder, onSubmit }: BuyOrderFormProps) 
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'storeProduct:store',
+                'storeProduct:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

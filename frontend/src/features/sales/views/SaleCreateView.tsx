@@ -104,7 +104,7 @@ export default function SaleCreateView() {
 
   const authStore = useAuth();
 
-  const isAdmin = authStore.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
+  const isAdmin = authStore?.abilityKeys?.includes(ADMIN_ABILITY_KEY) ?? false;
 
   const columns: Column<CartItem>[] = [
     { key: 'productId', label: IdText },

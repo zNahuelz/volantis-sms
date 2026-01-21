@@ -42,6 +42,8 @@ import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values'
 import Modal from '~/components/Modal';
 import SettingForm from '../components/SettingForm';
 import SettingDetails from '../components/SettingDetails';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function SettingsListView() {
   const [data, setData] = useState<Setting[]>([]);
@@ -63,6 +65,7 @@ export default function SettingsListView() {
     status: 'available',
   });
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const {
     register,
@@ -207,7 +210,10 @@ export default function SettingsListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => setNewSettingModalVisible(true)}
-          disabled={newSettingModalVisible}
+          disabled={
+            newSettingModalVisible ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'setting:store'])
+          }
         />
 
         <form
@@ -281,6 +287,10 @@ export default function SettingsListView() {
                   setSelectedSetting(row);
                   setSettingDetailModalVisible(true);
                 }}
+                disabled={
+                  settingDetailModalVisible ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'setting:show'])
+                }
               />
 
               <Button
@@ -292,6 +302,10 @@ export default function SettingsListView() {
                   setSelectedSetting(row);
                   setEditSettingModalVisible(true);
                 }}
+                disabled={
+                  editSettingModalVisible ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'setting:update'])
+                }
               />
 
               <Button
@@ -300,6 +314,7 @@ export default function SettingsListView() {
                 icon={DeleteIcon}
                 title={DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'setting:destroy'])}
               />
             </div>
           )}

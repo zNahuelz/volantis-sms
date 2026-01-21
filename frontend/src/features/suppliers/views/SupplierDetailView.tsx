@@ -30,7 +30,7 @@ import {
   UpdatedAtText,
 } from '~/constants/strings';
 import type { Supplier } from '~/types/supplier';
-import { formatAsDatetime, isInteger } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger } from '~/utils/helpers';
 import { supplierService } from '../services/supplierService';
 import { useEffect, useState } from 'react';
 
@@ -39,12 +39,14 @@ import Button from '~/components/Button';
 import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 
 export default function SupplierDetailView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [supplier, setSupplier] = useState<Supplier | null>(null);
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   const showStatusChangeModal = async (supplier: Supplier) => {
     const result = await Swal.fire({
@@ -187,6 +189,7 @@ export default function SupplierDetailView() {
               onClick={() => {
                 navigate(`/dashboard/supplier/${supplier.id}/edit`);
               }}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:update'])}
             ></Button>
             <Button
               label={supplier.deletedAt ? RestoreText : DeleteText}
@@ -196,6 +199,7 @@ export default function SupplierDetailView() {
               onClick={() => {
                 showStatusChangeModal(supplier);
               }}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:destroy'])}
             ></Button>
           </div>
         </div>

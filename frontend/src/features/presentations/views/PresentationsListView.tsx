@@ -46,8 +46,11 @@ import Modal from '~/components/Modal';
 import PresentationForm from '../components/PresentationForm';
 import Swal from 'sweetalert2';
 import { ErrorColor, SuccessColor, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function PresentationsListView() {
+  const authStore = useAuth();
   const [data, setData] = useState<Presentation[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -184,7 +187,10 @@ export default function PresentationsListView() {
           color='btn-success'
           width='w-full md:w-auto'
           onClick={() => setNewPresentationModalVisible(true)}
-          disabled={newPresentationModalVisible}
+          disabled={
+            newPresentationModalVisible ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'presentation:store'])
+          }
         />
 
         <form
@@ -248,6 +254,10 @@ export default function PresentationsListView() {
                   setSelectedPresentation(row);
                   setEditPresentationModalVisible(true);
                 }}
+                disabled={
+                  editPresentationModalVisible ||
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'presentation:update'])
+                }
               />
 
               <Button
@@ -256,6 +266,9 @@ export default function PresentationsListView() {
                 icon={row.deletedAt ? RestoreIcon : DeleteIcon}
                 title={row.deletedAt ? RestoreText : DeleteText}
                 onClick={() => showStatusChangeModal(row)}
+                disabled={
+                  !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'presentation:destroy'])
+                }
               />
             </div>
           )}

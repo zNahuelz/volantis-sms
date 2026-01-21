@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import type { BuyOrder } from '~/types/buyOrder';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { formatAsDatetime, isInteger } from '~/utils/helpers';
+import { formatAsDatetime, hasAbilities, isInteger } from '~/utils/helpers';
 import { buyOrderService } from '../services/buyOrderService';
 import Loading from '~/components/Loading';
 import {
@@ -36,12 +36,14 @@ import {
 import Button from '~/components/Button';
 import { DeleteIcon, EditIcon, GoBackIcon, RestoreIcon } from '~/constants/iconNames';
 import Input from '~/components/Input';
+import { useAuth } from '~/context/authContext';
 
 export default function BuyOrderDetailView() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [buyOrder, setBuyOrder] = useState<BuyOrder | null>(null);
   const navigate = useNavigate();
+  const authStore = useAuth();
 
   useEffect(() => {
     const loadBuyOrder = async () => {
@@ -89,7 +91,10 @@ export default function BuyOrderDetailView() {
               value={buyOrder.store?.name ?? 'N/A'}
               className='hover:text-primary hover:font-bold'
               readOnly
-              onDoubleClick={() => navigate(`/dashboard/store/${buyOrder.store?.id}`)}
+              onDoubleClick={() => {
+                if (hasAbilities(authStore?.abilityKeys, ['sys:admin', 'store:show']))
+                  navigate(`/dashboard/store/${buyOrder.store?.id}`);
+              }}
             ></Input>
           </fieldset>
 
@@ -98,7 +103,10 @@ export default function BuyOrderDetailView() {
             <Input
               value={buyOrder.supplier?.name ?? 'N/A'}
               className='hover:text-primary hover:font-bold'
-              onDoubleClick={() => navigate(`/dashboard/supplier/${buyOrder.supplier?.id}`)}
+              onDoubleClick={() => {
+                if (hasAbilities(authStore?.abilityKeys, ['sys:admin', 'supplier:show']))
+                  navigate(`/dashboard/supplier/${buyOrder.supplier?.id}`);
+              }}
               readOnly
             ></Input>
           </fieldset>
@@ -229,12 +237,14 @@ export default function BuyOrderDetailView() {
               onClick={() => {
                 navigate(`/dashboard/buy-order/${buyOrder.id}/edit`);
               }}
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'buyOrder:update'])}
             ></Button>
             <Button
               label={buyOrder.deletedAt ? RestoreText : DeleteText}
               icon={buyOrder.deletedAt ? RestoreIcon : DeleteIcon}
               color={buyOrder.deletedAt ? 'btn-info' : 'btn-error'}
               className='join-item'
+              disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'buyOrder:destroy'])}
             ></Button>
           </div>
         </div>

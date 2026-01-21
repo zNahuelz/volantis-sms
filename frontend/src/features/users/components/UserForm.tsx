@@ -41,11 +41,13 @@ import {
   UsernameChangeDisabledOnEditText,
 } from '~/constants/strings';
 import { longSwalDismissalTime, swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import { roleService } from '~/features/roles/services/roleService';
 import { storeService } from '~/features/stores/services/storeService';
 import type { Role } from '~/types/role';
 import type { Store } from '~/types/store';
 import type { User } from '~/types/user';
+import { hasAbilities } from '~/utils/helpers';
 
 interface UserFormProps {
   user?: User;
@@ -64,7 +66,7 @@ export default function UserForm({
   const [stores, setStores] = useState<Store[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLocked, setIsLocked] = useState(false);
-
+  const authStore = useAuth();
   const isEdit = Boolean(user);
 
   const {
@@ -322,7 +324,9 @@ export default function UserForm({
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting || !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'user:store'])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

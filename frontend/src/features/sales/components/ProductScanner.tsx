@@ -5,12 +5,15 @@ import Input from '~/components/Input';
 import { BarcodeIcon, SearchIcon } from '~/constants/iconNames';
 import {
   BarcodeText,
+  DisabledProductSale,
   ProductSearchByBarcodeFailedText,
   SearchText,
   ServerConnErrorText,
 } from '~/constants/strings';
+import { useAuth } from '~/context/authContext';
 import { storeProductService } from '~/features/storeProducts/services/storeProductService';
 import type { StoreProduct } from '~/types/storeProduct';
+import { hasAbilities } from '~/utils/helpers';
 
 interface ProductScannerProps {
   storeId: number;
@@ -25,6 +28,7 @@ export default function ProductScanner({
   onSubmittingChange,
   isDisabled = false,
 }: ProductScannerProps) {
+  const authStore = useAuth();
   const [errorMessage, setErrorMessage] = useState('');
   const {
     register,
@@ -38,7 +42,11 @@ export default function ProductScanner({
   const searchProduct = async (barcode: string) => {
     try {
       const product = await storeProductService.showByBarcode(barcode, storeId);
-      onProductResolved(product);
+      if (!product.salable) {
+        reset();
+        onProductResolved(undefined);
+        setErrorMessage(DisabledProductSale);
+      } else onProductResolved(product);
     } catch (error: any) {
       if (error?.status === 404) {
         reset();
@@ -85,7 +93,11 @@ export default function ProductScanner({
           icon={!isSubmitting ? SearchIcon : ''}
           isLoading={isSubmitting}
           type='submit'
-          disabled={isSubmitting || isDisabled}
+          disabled={
+            isSubmitting ||
+            isDisabled ||
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'sale:store'])
+          }
           title={SearchText.toUpperCase()}
         />
       </div>

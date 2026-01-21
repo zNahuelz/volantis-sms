@@ -26,8 +26,10 @@ import {
   UpdatingText,
 } from '~/constants/strings';
 import { swalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import { abilityService } from '~/features/abilities/services/abilityService';
 import type { Ability } from '~/types/ability';
+import { hasAbilities } from '~/utils/helpers';
 
 export interface RoleFormData {
   name: string;
@@ -41,6 +43,7 @@ export interface RoleFormProps {
 }
 
 export default function RoleForm({ defaultValues, onSubmit }: RoleFormProps) {
+  const authStore = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [abilities, setAbilities] = useState<
@@ -265,7 +268,10 @@ export default function RoleForm({ defaultValues, onSubmit }: RoleFormProps) {
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'role:store', 'role:update'])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

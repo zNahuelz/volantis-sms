@@ -12,6 +12,7 @@ import {
   ClearIcon,
   DescriptionIcon,
   NameIcon,
+  RandomizeIcon,
   SaveIcon,
   UpdateIcon,
 } from '~/constants/iconNames';
@@ -30,6 +31,7 @@ import {
   ProductBarcodeTaken,
   ProductCreatedText,
   ProductUpdatedText,
+  RandomizeBarcodeText,
   SaveText,
   SavingText,
   UpdateProductWarning,
@@ -41,6 +43,9 @@ import { presentationService } from '~/features/presentations/services/presentat
 import type { Presentation } from '~/types/presentation';
 import BarcodeScanner from './BarcodeScanner';
 import Alert from '~/components/Alert';
+import { useAuth } from '~/context/authContext';
+import { hasAbilities } from '~/utils/helpers';
+import { productService } from '../services/productService';
 
 export interface ProductFormData {
   name: string;
@@ -61,6 +66,8 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
   const [presentations, setPresentations] = useState<Presentation[]>([]);
   const [isLocked, setIsLocked] = useState(false);
   const [barcodeLocked, setBarcodeLocked] = useState(isEdit);
+  const [randomizingBarcode, setRandomizingBarcode] = useState(false);
+  const authStore = useAuth();
 
   const {
     register,
@@ -68,6 +75,8 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
     reset,
     formState: { errors, isSubmitting },
     setError,
+    setValue,
+    resetField,
   } = useForm<ProductFormData>({
     defaultValues,
   });
@@ -144,6 +153,19 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
     setBarcodeLocked(true);
   };
 
+  const generateRandomBarcode = async () => {
+    if (!isEdit) return;
+    try {
+      setRandomizingBarcode(true);
+      const response = await productService.generateRandomBarcode();
+      setValue('barcode', response.barcode);
+    } catch {
+      resetField('barcode');
+    } finally {
+      setRandomizingBarcode(false);
+    }
+  };
+
   if (!barcodeLocked)
     return (
       <div className='w-full'>
@@ -199,19 +221,41 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
         errorMessage={errors.name?.message}
       />
 
-      <Input
-        disabled={isSubmitting || barcodeLocked}
-        placeholder={BarcodeText}
-        icon={BarcodeIcon}
-        {...register('barcode', {
-          required: 'Debe ingresar un código de barras o generar uno aleatorio.',
-          pattern: {
-            value: /^[A-Za-z0-9]{8,30}$/,
-            message: 'El código de barras debe tener entre 8 y 30 carácteres.',
-          },
-        })}
-        errorMessage={errors.barcode?.message}
-      />
+      <div className='join join-vertical md:join-horizontal'>
+        <Input
+          className='join-item'
+          width='w-full'
+          disabled={isSubmitting || barcodeLocked}
+          placeholder={BarcodeText}
+          icon={BarcodeIcon}
+          {...register('barcode', {
+            required: 'Debe ingresar un código de barras o generar uno aleatorio.',
+            pattern: {
+              value: /^[A-Za-z0-9]{8,30}$/,
+              message: 'El código de barras debe tener entre 8 y 30 carácteres.',
+            },
+          })}
+          errorMessage={errors.barcode?.message}
+        />
+        <Button
+          className='join-item'
+          icon={RandomizeIcon}
+          title={RandomizeBarcodeText}
+          color='btn-warning'
+          disabled={
+            !isEdit ||
+            isSubmitting ||
+            !hasAbilities(authStore?.abilityKeys, [
+              'sys:admin',
+              'product:update',
+              'utils:generateRandomBarcode',
+              'product:generateRandomBarcode',
+            ]) ||
+            randomizingBarcode
+          }
+          onClick={() => generateRandomBarcode()}
+        ></Button>
+      </div>
 
       <div className='col-span-full'>
         <Select
@@ -271,7 +315,14 @@ export default function ProductForm({ defaultValues, onSubmit }: ProductFormProp
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'product:store',
+                'product:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

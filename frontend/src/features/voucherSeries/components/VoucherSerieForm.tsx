@@ -32,10 +32,11 @@ import {
   VoucherSerieUpdatedText,
 } from '~/constants/strings';
 import { longSwalDismissalTime } from '~/constants/values';
+import { useAuth } from '~/context/authContext';
 import { voucherTypeService } from '~/features/voucherTypes/services/voucherTypeService';
 import type { VoucherSerie } from '~/types/voucherSerie';
 import type { VoucherType } from '~/types/voucherType';
-import { generateSerie } from '~/utils/helpers';
+import { generateSerie, hasAbilities } from '~/utils/helpers';
 
 interface VoucherSerieFormProps {
   voucherSerie?: VoucherSerie;
@@ -54,6 +55,7 @@ export default function VoucherSerieForm({
   const [voucherTypes, setVoucherTypes] = useState<VoucherType[]>([]);
   const [isLocked, setIsLocked] = useState(false);
   const isEdit = Boolean(voucherSerie);
+  const authStore = useAuth();
 
   const {
     register,
@@ -252,7 +254,14 @@ export default function VoucherSerieForm({
           <Button
             type='submit'
             className='join-item'
-            disabled={isSubmitting}
+            disabled={
+              isSubmitting ||
+              !hasAbilities(authStore?.abilityKeys, [
+                'sys:admin',
+                'voucherSerie:store',
+                'voucherSerie:update',
+              ])
+            }
             label={
               isSubmitting ? (isEdit ? UpdatingText : SavingText) : isEdit ? UpdateText : SaveText
             }

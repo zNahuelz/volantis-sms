@@ -35,6 +35,7 @@ import { voucherTypeService } from '~/features/voucherTypes/services/voucherType
 import { useAuth } from '~/context/authContext';
 import Swal from 'sweetalert2';
 import { longSwalDismissalTime } from '~/constants/values';
+import { hasAbilities } from '~/utils/helpers';
 
 export default function SalesListView() {
   const [data, setData] = useState<Sale[]>([]);
@@ -251,7 +252,14 @@ export default function SalesListView() {
   return (
     <div className='p-0 md:p-4'>
       <div className='mb-2 flex flex-col items-center space-y-2 md:flex md:flex-row md:items-center md:justify-between'>
-        <NavLink to='/dashboard/sale/create' className='btn btn-success w-full md:w-auto'>
+        <NavLink
+          to={
+            !hasAbilities(authStore?.abilityKeys, ['sys:admin', 'sale:store'])
+              ? '/dashboard'
+              : '/dashboard/sale/create'
+          }
+          className='btn btn-success w-full md:w-auto'
+        >
           {NewText}
         </NavLink>
 
@@ -366,6 +374,7 @@ export default function SalesListView() {
                 onClick={() => {
                   navigate(`/dashboard/sale/${row.id}`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'sale:show'])}
               />
               <Button
                 className='join-item btn-sm'
@@ -375,6 +384,7 @@ export default function SalesListView() {
                 onClick={() => {
                   navigate(`/dashboard/sale/${row.id}/pdf`);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'report:salePdf'])}
               />
               <Button
                 className='join-item btn-sm'
@@ -385,6 +395,7 @@ export default function SalesListView() {
                 onClick={() => {
                   downloadVoucherPdf(row);
                 }}
+                disabled={!hasAbilities(authStore?.abilityKeys, ['sys:admin', 'report:salePdf'])}
               />
             </div>
           )}
