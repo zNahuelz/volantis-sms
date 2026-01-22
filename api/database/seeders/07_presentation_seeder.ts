@@ -7,6 +7,7 @@ export default class extends BaseSeeder {
     if (hasRecords) {
       return;
     }
+
     await Presentation.createMany([
       { name: 'Unidad', numericValue: 1, description: 'Producto por unidad' },
       { name: 'Bolsa 50 g', numericValue: 50, description: 'Bolsa pequeña de 50 gramos' },

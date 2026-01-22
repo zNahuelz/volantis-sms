@@ -1,6 +1,7 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders';
 import StoreProduct from '../../app/models/store_product.js';
 import Product from '../../app/models/product.js';
+import app from '@adonisjs/core/services/app';
 
 const IGV_RATE = 0.18;
 const IGV_ENABLED = true;
@@ -42,7 +43,9 @@ export default class extends BaseSeeder {
 
       const { igv, profit } = calculateIgvAndProfit(buyPrice, sellPrice);
 
-      for (const storeId of [1, 2]) {
+      const stores = app.inDev || app.inTest ? [1, 2] : [1];
+
+      for (const storeId of stores) {
         storeProducts.push({
           storeId,
           productId: product.id,

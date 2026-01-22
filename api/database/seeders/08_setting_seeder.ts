@@ -19,7 +19,7 @@ export default class extends BaseSeeder {
         value: 'free',
         valueType: 'string',
         description:
-          'Módulo de ventas: "strict" => No permite vender productos con stock <= 0 | "free" => Permite vender productos con stock <= 0',
+          'Módulo de ventas: strict:: No permite vender productos con stock <= 0 | free :: Permite vender productos con stock <= 0',
       },
     ]);
   }

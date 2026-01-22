@@ -8,6 +8,7 @@ export default class extends BaseSeeder {
     if (hasRecords) {
       return;
     }
+
     const adminRole = await Role.findBy('name', 'ADMINISTRADOR');
     const managerRole = await Role.findBy('name', 'GERENTE');
     const sellerRole = await Role.findBy('name', 'VENDEDOR');

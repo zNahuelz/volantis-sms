@@ -1,6 +1,7 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders';
 import Customer from '../../app/models/customer.js';
 import { CustomerFactory } from '../factories/customer_factory.js';
+import app from '@adonisjs/core/services/app';
 
 export default class extends BaseSeeder {
   async run() {
@@ -8,6 +9,7 @@ export default class extends BaseSeeder {
     if (hasRecords) {
       return;
     }
+
     await Customer.create({
       names: 'CLIENTE',
       surnames: 'ORDINARIO',
@@ -16,6 +18,9 @@ export default class extends BaseSeeder {
       email: 'default-customer@volantis.com',
       address: 'Av. Globo Terraqueo 102',
     });
-    await CustomerFactory.createMany(99);
+
+    if (app.inDev || app.inTest) {
+      await CustomerFactory.createMany(99);
+    }
   }
 }

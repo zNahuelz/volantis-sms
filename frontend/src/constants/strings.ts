@@ -14,6 +14,13 @@ import type { Supplier } from '~/types/supplier';
 import type { User } from '~/types/user';
 import type { VoucherSerie } from '~/types/voucherSerie';
 
+/**
+ * ====>>> Abandon all hope, ye who enter here <<<====
+ * Welcome to the wall of shame where you can cry over 700 lines of important vars.
+ * Good luck trying to find anything or translating the vars to your preferred language.
+ * (I'll fix this someday, or not)
+ */
+
 // --- 1. APP IDENTITY & AREA TEXTS ---
 export const AppName = 'Volantis';
 export const AppDescription = 'Sis. Gestión de Ventas';
@@ -229,8 +236,8 @@ export const EditStoreText = 'Modificar Tienda';
 export const StoreDetailText = 'Detalle de Tienda';
 
 // --- 11. BUY ORDERS ---
-export const BuyOrderText = 'Ordene de Compra';
-export const BuyOrdersText = 'Ordenes de Compra';
+export const BuyOrderText = 'Orden de Compra';
+export const BuyOrdersText = 'Órdenes de Compra';
 export const NewSaleText = 'Nueva venta';
 export const BuyOrdersListAreaText = `Listado de Ordenes de Compra - ${AppName}`;
 export const CreateBuyOrderText = 'Registro de Orden de Compra';

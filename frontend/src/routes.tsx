@@ -176,7 +176,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: BuyOrderDetailAreaText,
-                  abilities: ['sys:admin', 'buyOrder:detail'],
+                  abilities: ['sys:admin', 'buyOrder:show'],
                 },
                 children: [{ index: true, Component: BuyOrderDetailView }],
               },
@@ -217,7 +217,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: CustomerDetailAreaText,
-                  abilities: ['sys:admin', 'customer:detail'],
+                  abilities: ['sys:admin', 'customer:show'],
                 },
                 children: [{ index: true, Component: CustomerDetailView }],
               },
@@ -258,7 +258,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: SupplierDetailAreaText,
-                  abilities: ['sys:admin', 'supplier:detail'],
+                  abilities: ['sys:admin', 'supplier:show'],
                 },
                 children: [{ index: true, Component: SupplierDetailView }],
               },
@@ -299,7 +299,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: StoreDetailAreaText,
-                  abilities: ['sys:admin', 'store:detail'],
+                  abilities: ['sys:admin', 'store:show'],
                 },
                 children: [{ index: true, Component: StoreDetailView }],
               },
@@ -337,7 +337,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: StoreProductDetailAreaText,
-                  abilities: ['sys:admin', 'storeProduct:detail'],
+                  abilities: ['sys:admin', 'storeProduct:show'],
                 },
                 children: [{ index: true, Component: StoreProductDetailView }],
               },
@@ -421,7 +421,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: ProductDetailAreaText,
-                  abilities: ['sys:admin', 'product:detail'],
+                  abilities: ['sys:admin', 'product:show'],
                 },
                 children: [{ index: true, Component: ProductDetailView }],
               },
@@ -456,7 +456,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: RoleDetailAreaText,
-                  abilities: ['sys:admin', 'role:detail'],
+                  abilities: ['sys:admin', 'role:show'],
                 },
                 children: [{ index: true, Component: RoleDetailView }],
               },
@@ -511,7 +511,7 @@ export const router = createBrowserRouter([
                 element: <AbilityRoute />,
                 handle: {
                   title: SaleDetailAreaText,
-                  abilities: ['sys:admin', 'sale:detail'],
+                  abilities: ['sys:admin', 'sale:show'],
                 },
                 children: [{ index: true, Component: SaleDetailView }],
               },
@@ -549,7 +549,7 @@ export const router = createBrowserRouter([
               {
                 path: ':id',
                 element: <AbilityRoute />,
-                handle: { title: UserDetailAreaText, abilities: ['sys:admin', 'user:detail'] },
+                handle: { title: UserDetailAreaText, abilities: ['sys:admin', 'user:show'] },
                 children: [{ index: true, Component: UserDetailView }],
               },
             ],

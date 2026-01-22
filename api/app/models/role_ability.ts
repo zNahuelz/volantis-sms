@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { BaseModel, column } from '@adonisjs/lucid/orm';
-//TODO: Delete this.
+
 export default class RoleAbility extends BaseModel {
   @column({ isPrimary: true })
   declare id: number;
