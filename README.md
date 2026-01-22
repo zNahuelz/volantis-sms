@@ -35,11 +35,17 @@ Volantis-SMS es un sistema web para la gestión centralizada de ventas de múlti
 - [AdonisJS v6](https://adonisjs.com/) (Backend)
 - [Tailwind](https://tailwindcss.com/) (Interfaces)
 - [DaisyUI](https://daisyui.com/) (Interfaces)
+- [@fontsource/roboto](https://www.npmjs.com/package/@fontsource/roboto) (Tipografía)
+- [@iconify/react](https://iconify.design/) (Iconos)
 - [SweerAlert2](https://sweetalert2.github.io/) (Alertas)
 - [chart.js](https://www.chartjs.org/) (Librería graficos)
 - [react-chartjs-2](https://react-chartjs-2.js.org/) (Librería graficos)
 - [sindresorhus/ky](https://github.com/sindresorhus/ky) (Peticiones HTTP)
 - [playwright](https://playwright.dev/) (Librería para PDF)
+- [react-hook-form](https://react-hook-form.com/) (Librería para formularios)
+- [js-cookie](https://www.npmjs.com/package/js-cookie) (Librería para cookies)
+- [Day.js](https://day.js.org/) (Librería para fechas/horas)
+- [Edje.js](https://edgejs.dev/docs/introduction) (Motor de plantillas para emails)
 
 ## Requisitos
 
