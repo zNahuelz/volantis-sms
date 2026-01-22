@@ -45,7 +45,7 @@ Volantis-SMS es un sistema web para la gestión centralizada de ventas de múlti
 - [react-hook-form](https://react-hook-form.com/) (Librería para formularios)
 - [js-cookie](https://www.npmjs.com/package/js-cookie) (Librería para cookies)
 - [Day.js](https://day.js.org/) (Librería para fechas/horas)
-- [Edje.js](https://edgejs.dev/docs/introduction) (Motor de plantillas para emails)
+- [Edge.js](https://edgejs.dev/docs/introduction) (Motor de plantillas para emails)
 
 ## Requisitos
 
